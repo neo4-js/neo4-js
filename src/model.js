@@ -128,6 +128,7 @@ export default class Model {
         .ret(m)
         .execute()
         .then(rawResult => {
+          console.log(rawResult);
           const result = _extractProperties(rawResult);
           if (result.length > 0) {
             resolve(result[0]);

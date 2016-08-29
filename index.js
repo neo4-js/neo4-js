@@ -30,9 +30,16 @@ const User = neo4js.define('User', {
   }
 });
 
-neo4js.sync({ force: true })
+neo4js.sync({ force: false })
   .catch(err => {
     console.log(err);
+  })
+  .then(result => {
+    return User.create({
+        name: 'Jan',
+        password: 'jan95',
+        email: 'j.schlacher@trisoft.at',
+      });
   })
   .then(result => {
     return User.create({
@@ -60,7 +67,7 @@ neo4js.sync({ force: true })
   .then(users => {
     console.log(users.records.map(r => r._fields[0].properties));
   })
-  .then(() => {
+  /*.then(() => {
     const query = neo4js.Query();
     return query.match('n')
       .detach('n')
@@ -73,7 +80,7 @@ neo4js.sync({ force: true })
     query.match('n')
       .ret('n')
       .execute()
-  });
+  });*/
 
 /*
 User.findOne({
