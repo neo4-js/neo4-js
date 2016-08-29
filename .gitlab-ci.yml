@@ -3,6 +3,9 @@
 # https://hub.docker.com/r/library/node/tags/
 image: node:latest
 
+variables:
+  NEO4J_AUTH: neo4j/jan95
+
 # Pick zero or more services to be used on all builds.
 # Only needed when using a docker container to run your tests in.
 # Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-service
