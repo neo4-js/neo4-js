@@ -5,19 +5,50 @@ import Utils from './Utils';
 const CharGenerator = Utils.CharGenerator;
 
 function _makeArray(a) {
+  if (!a) {
+    return [];
+  }
+
   if (!a.sort) {
     return [ a ];
   }
+
   return a;
 }
 
 function _createMatchCmd(cmds, params, part) {
-  const paramsChar = CharGenerator.next();
-  const { properties } = part.options;
-  const propKeys = Object.keys(properties);
-  const propCmd = propKeys.map((p) => `${p}: {${paramsChar}}.${p}`).join(', ');
-  cmds.push(`MATCH (${part.options.key}:${part.options.labels.join(':')} { ${propCmd} })`);
-  params[paramsChar] = part.options.properties;
+  const char = CharGenerator.next();
+  const { key, labels, properties } = part.options;
+  let propCmd = '';
+  if (properties) {
+    const propKeys = Object.keys(properties);
+    propCmd = propKeys.map((p) => `${p}: {${char}}.${p}`).join(', ');
+    propCmd = `{${propCmd}}`;
+    params[char] = properties;
+  }
+
+  let labelsPart = '';
+  if (labels.length) {
+    labelsPart = `:${labels.join(':')}`;
+  }
+
+  cmds.push(`MATCH (${part.options.key}${labelsPart} ${propCmd})`);
+}
+
+function _runSequenceRecursive(cmds, resolve, i = 0, results = []) {
+  if (i < cmds.length) {
+    cmds[i].execute()
+      .then(result => {
+        results.push({ result });
+        _runSequenceRecursive(cmds, resolve, ++i, results);
+      })
+      .catch(err => {
+        results.push({ err });
+        _runSequenceRecursive(cmds, resolve, ++i, results);
+      });
+  } else {
+    resolve(results);
+  }
 }
 
 export default class Query {
@@ -26,16 +57,62 @@ export default class Query {
     this.parts = [];
   }
 
+  static runSequence(cmds) {
+    return new Promise((resolve, reject) => {
+      _runSequenceRecursive(cmds, resolve);
+    });
+  }
+
   match(key, labels, properties) {
     labels = _makeArray(labels);
 
     this.parts.push(new QueryPart(
       'match',
-      {
-        key,
-        labels,
-        properties,
-      },
+      { key, labels, properties, },
+    ));
+
+    return this;
+  }
+
+  createIndex(labels, property) {
+    labels = _makeArray(labels);
+
+    this.parts.push(new QueryPart(
+      'create-index',
+      { labels, property, },
+    ));
+
+    return this;
+  }
+
+  dropIndex(labels, property) {
+    labels = _makeArray(labels);
+
+    this.parts.push(new QueryPart(
+      'drop-index',
+      { labels, property, },
+    ));
+
+    return this;
+  }
+
+  createConstraint(labels, property, type) {
+    labels = _makeArray(labels);
+
+    this.parts.push(new QueryPart(
+      'create-constraint',
+      { labels, property, type, },
+    ));
+
+    return this;
+  }
+
+  dropConstraint(labels, property, type) {
+    labels = _makeArray(labels);
+
+    this.parts.push(new QueryPart(
+      'drop-constraint',
+      { labels, property, type, },
     ));
 
     return this;
@@ -46,12 +123,9 @@ export default class Query {
 
     this.parts.push(new QueryPart(
       'create',
-      {
-        key,
-        labels,
-        properties,
-      }
+      { key, labels, properties, },
     ));
+
     return this;
   }
 
@@ -64,6 +138,7 @@ export default class Query {
       'linkRight',
       { relationName, properties },
     ));
+
     return this;
   }
 
@@ -72,35 +147,74 @@ export default class Query {
       'linkLeft',
       { relationName, properties },
     ));
+
     return this;
   }
 
   ret(key) {
     this.parts.push(new QueryPart(
       'return',
-      { key }
+      { key, },
     ));
+
     return this;
   }
 
   limit(n) {
     this.parts.push(new QueryPart(
       'limit',
-      { n },
+      { n, },
     ));
+
+    return this;
+  }
+
+  delete(key) {
+    this.parts.push(new QueryPart(
+      'delete',
+      { key, },
+    ));
+
+    return this;
+  }
+
+  detach(key) {
+    this.parts.push(new QueryPart(
+      'detach',
+      { key, },
+    ));
+
     return this;
   }
 
   execute() {
     const cmds = [];
     const params = {};
-    let paramsChar;
+    let char;
     for (const part of this.parts) {
       switch (part.type) {
         case 'create':
-          paramsChar = CharGenerator.next();
-          cmds.push(`CREATE (${part.options.key}:${part.options.labels.join(':')} { ${paramsChar} })`);
-          params[paramsChar] = part.options.properties;
+          char = CharGenerator.next();
+          cmds.push(`CREATE (${part.options.key}:${part.options.labels.join(':')} { ${char} })`);
+          params[char] = part.options.properties;
+          break;
+        case 'create-index':
+          cmds.push(`CREATE INDEX ON :${part.options.labels.join(':')}(${part.options.property})`);
+          break;
+        case 'create-constraint':
+          char = CharGenerator.next();
+          if (part.options.type === 'unique') {
+            cmds.push(`CREATE CONSTRAINT ON (${char}:${part.options.labels.join(':')}) ASSERT ${char}.${part.options.property} IS UNIQUE`);
+          }
+          break;
+        case 'drop-index':
+          cmds.push(`DROP INDEX ON :${part.options.labels.join(':')}(${part.options.property})`);
+          break;
+        case 'drop-constraint':
+          char = CharGenerator.next();
+          if (part.options.type === 'unique') {
+            cmds.push(`DROP CONSTRAINT ON (${char}:${part.options.labels.join(':')}) ASSERT ${char}.${part.options.property} IS UNIQUE`);
+          }
           break;
         case 'match':
           _createMatchCmd(cmds, params, part);
@@ -123,9 +237,9 @@ export default class Query {
 
       let paramCmd = '';
       if (link.options.properties) {
-        paramsChar = CharGenerator.next();
-        params[paramsChar] = link.options.properties;
-        paramCmd = ` { ${paramsChar} }`;
+        char = CharGenerator.next();
+        params[char] = link.options.properties;
+        paramCmd = ` { ${char} }`;
       }
 
       switch (this.parts[i].type) {
@@ -134,6 +248,14 @@ export default class Query {
           cmds[i + 1] = `CREATE (${a})-[:${link.options.relationName}${paramCmd}]->(${b})`;
           break;
       }
+    }
+
+    const del = this.parts.find(p => p.type === 'delete');
+    const detach = this.parts.find(p => p.type === 'detach');
+    if (detach) {
+      cmds.push(`DETACH DELETE ${detach.options.key}`);
+    } else if (del) {
+      cmds.push(`DELETE ${del.options.key}`);
     }
 
     const returns = this.parts.filter(p => p.type === 'return');
@@ -146,6 +268,7 @@ export default class Query {
       cmds.push(`LIMIT ${limit.options.n}`);
     }
 
-    return this.neo4js.run(cmds.join(' '), params);
+    this.parts = [];
+    return  this.neo4js.run(cmds.join(' '), params);
   }
 }

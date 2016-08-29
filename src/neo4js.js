@@ -5,6 +5,7 @@ import uuid from 'node-uuid';
 import neo4jsErrors from './errors';
 import Model from './model';
 import ModelManager from './model-manager';
+import Query from './query';
 import { getSchemaInfo } from './schema-info';
 
 class Neo4js {
@@ -59,8 +60,50 @@ class Neo4js {
     return getSchemaInfo(this.options.rest.url, this.options.rest.port, this.auth);
   }
 
-  sync(options) {
+  drop() {
+    return this.getSchemaInfo()
+      .then(result => {
+        const cmds = [];
+        for (const label in result) {
+          for (const p in result[label]) {
+            if (result[label][p].index) {
+              cmds.push(new Query(this).dropIndex(label, p));
+            }
+            if (result[label][p].unique) {
+              cmds.push(new Query(this).dropConstraint(label, p, 'unique'));
+            }
+          }
+        }
+        return Query.runSequence(cmds);
+      });
+  }
 
+  sync(options) {
+    return Promise.start()
+      .then(() => {
+        if (options.force) {
+          return this.drop();
+        }
+      })
+      .then(() => {
+        const promises = this.modelManager.all.map(m => m.sync());
+        return Promise.all(promises);
+      })
+      .then(syncResults => {
+        const errors = [];
+        for (const results of syncResults) {
+          for (const result of results) {
+            if (result.err) {
+              errors.push(result.err);
+            }
+          }
+        }
+        return errors;
+      });
+  }
+
+  Query() {
+    return new Query(this);
   }
 
   run(cmd, params) {

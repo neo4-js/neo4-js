@@ -52,7 +52,23 @@ export default class Model {
   }
 
   sync() {
+    return Promise.start()
+      .then(() => {
+        const cmds = [];
+        for (const p of this.properties) {
+          const prop = this.schema[p];
+          if (prop.index) {
+            const query = new Query(this.neo4js);
+            cmds.push(query.createIndex(this.labels, p));
+          }
+          if (prop.unique) {
+            const query = new Query(this.neo4js);
+            cmds.push(query.createConstraint(this.labels, p, 'unique'));
+          }
+        }
 
+        return Query.runSequence(cmds);
+      });
   }
 
   find(properties) {

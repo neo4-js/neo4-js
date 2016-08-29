@@ -23,6 +23,6 @@ export default class ModelManager {
   }
 
   get all() {
-    this.models;
+    return this.models;
   }
 }

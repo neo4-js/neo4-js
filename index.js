@@ -30,30 +30,52 @@ const User = neo4js.define('User', {
   }
 });
 
-/*User.create({
-    name: 'Jan',
-    password: 'jan95',
-    email: 'j.schlacher@trisoft.at',
+neo4js.sync({ force: true })
+  .catch(err => {
+    console.log(err);
   })
-  .then(newUser => {
-    console.log(newUser);
+  .then(result => {
+    return User.create({
+        name: 'Jan',
+        password: 'jan95',
+        email: 'j.schlacher@trisoft.at',
+      });
+  })
+  .then(() => {
+    return User.create({
+        name: 'Hubert',
+        password: 'ubzrbhj',
+        email: 'h.alfonsos@trisoft.at',
+      });
   })
   .catch(err => {
     console.log(err);
+  })
+  .then(() => {
+    const query = neo4js.Query();
+    return query.match('n', 'User')
+      .ret('n')
+      .execute();
+  })
+  .then(users => {
+    console.log(users.records.map(r => r._fields[0].properties));
+  })
+  .then(() => {
+    const query = neo4js.Query();
+    return query.match('n')
+      .detach('n')
+      .execute();
+  })
+  .catch(err => {
+    console.log(err);
+  })
+  .then(results => {
+    query.match('n')
+      .ret('n')
+      .execute()
   });
 
-User.create({
-    name: 'Hubert',
-    password: 'ubzrbhj',
-    email: 'h.alfonsos@trisoft.at',
-  })
-  .then(newUser => {
-    console.log(newUser);
-  })
-  .catch(err => {
-    console.log(err);
-  });*/
-
+/*
 User.findOne({
     name: 'Jan',
   })
@@ -71,3 +93,4 @@ User.find({})
   .catch(err => {
     console.log(err);
   });
+*/
