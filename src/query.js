@@ -2,11 +2,22 @@ import QueryGenerator from './query-generator';
 import QueryPart from './query-part';
 import Utils from './Utils';
 
+const CharGenerator = Utils.CharGenerator;
+
 function _makeArray(a) {
   if (!a.sort) {
     return [ a ];
   }
   return a;
+}
+
+function _createMatchCmd(cmds, params, part) {
+  const paramsChar = CharGenerator.next();
+  const { properties } = part.options;
+  const propKeys = Object.keys(properties);
+  const propCmd = propKeys.map((p) => `${p}: {${paramsChar}}.${p}`).join(', ');
+  cmds.push(`MATCH (${part.options.key}:${part.options.labels.join(':')} { ${propCmd} })`);
+  params[paramsChar] = part.options.properties;
 }
 
 export default class Query {
@@ -81,21 +92,18 @@ export default class Query {
   }
 
   execute() {
-    const charGenerator = new Utils.CharGenerator('params');
     const cmds = [];
     const params = {};
     let paramsChar;
     for (const part of this.parts) {
       switch (part.type) {
         case 'create':
-          paramsChar = charGenerator.next;
+          paramsChar = CharGenerator.next();
           cmds.push(`CREATE (${part.options.key}:${part.options.labels.join(':')} { ${paramsChar} })`);
           params[paramsChar] = part.options.properties;
           break;
         case 'match':
-          paramsChar = charGenerator.next;
-          cmds.push(`MATCH (${part.options.key}:${part.options.labels.join(':')} { ${paramsChar} })`);
-          params[paramsChar] = part.options.properties;
+          _createMatchCmd(cmds, params, part);
           break;
         case 'linkRight':
           cmds.push(`link`);
@@ -115,9 +123,9 @@ export default class Query {
 
       let paramCmd = '';
       if (link.options.properties) {
-          paramsChar = charGenerator.next;
-          params[paramsChar] = link.options.properties;
-          paramCmd = ` { ${paramsChar} }`;
+        paramsChar = CharGenerator.next();
+        params[paramsChar] = link.options.properties;
+        paramCmd = ` { ${paramsChar} }`;
       }
 
       switch (this.parts[i].type) {
@@ -138,7 +146,6 @@ export default class Query {
       cmds.push(`LIMIT ${limit.options.n}`);
     }
 
-    console.log(cmds.join(' '), params);
     return this.neo4js.run(cmds.join(' '), params);
   }
 }

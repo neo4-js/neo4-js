@@ -30,7 +30,7 @@ const User = neo4js.define('User', {
   }
 });
 
-User.create({
+/*User.create({
     name: 'Jan',
     password: 'jan95',
     email: 'j.schlacher@trisoft.at',
@@ -42,11 +42,31 @@ User.create({
     console.log(err);
   });
 
+User.create({
+    name: 'Hubert',
+    password: 'ubzrbhj',
+    email: 'h.alfonsos@trisoft.at',
+  })
+  .then(newUser => {
+    console.log(newUser);
+  })
+  .catch(err => {
+    console.log(err);
+  });*/
+
 User.findOne({
     name: 'Jan',
   })
   .then(user => {
     console.log(user);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
+User.find({})
+  .then(users => {
+    console.log(users);
   })
   .catch(err => {
     console.log(err);
