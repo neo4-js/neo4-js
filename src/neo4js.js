@@ -79,6 +79,8 @@ class Neo4js {
   }
 
   sync(options) {
+    options = options || {};
+
     return Promise.start()
       .then(() => {
         if (options.force) {
@@ -129,5 +131,6 @@ class Neo4js {
 }
 
 Neo4js.prototype.Error = Neo4js.Error = neo4jsErrors.BaseError;
+Neo4js.prototype.Model = Neo4js.Model = Model;
 
 export default Neo4js;

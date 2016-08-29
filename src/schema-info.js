@@ -9,12 +9,14 @@ function getInfo(routes, key, options) {
 }
 
 function objectifyIndexes(indexes) {
-  return Object.assign({}, ...indexes.map(i => {
-    return { [i.label]: Object.assign({}, ...i.property_keys.map(p => {
-        return { [p]: { index: true } }
-      }))
-    };
-  }));
+  let o = {};
+  for (let i of indexes) {
+    o[i.label] = o[i.label] || {};
+    for (let k of i.property_keys) {
+      o[i.label][k] = { index: true };
+    }
+  }
+  return o;
 }
 
 function objectifyConstraints(constraints) {
@@ -45,14 +47,14 @@ export function getSchemaInfo(url, port, auth) {
   return axios.get(baseURL, { auth })
     .then(({ data }) => data)
     .then(routes => {
-      return Promise.all(infos.map(i => getInfo(routes, i, { auth })))
-        .then(results => {
-          let o = {};
-          for (const result of results) {
-            o = { ...o, ...result };
-          }
-          return o;
-        });
+      return Promise.all(infos.map(i => getInfo(routes, i, { auth })));
+    })
+    .then(results => {
+      let o = {};
+      for (const result of results) {
+        o = { ...o, ...result };
+      }
+      return o;
     })
     .then(({ indexes, constraints }) => {
       indexes = objectifyIndexes(indexes);

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-register --ui tdd --reporter spec --grep \"$GREP\" 'test/**/*.test.js'",
+    "test": "mocha --compilers js:babel-register --reporter spec test/**/*.test.js --watch",
     "dev": "nodemon --exec \"babel-node index.js\"",
     "cover": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha test/**/*.test.js"
   },

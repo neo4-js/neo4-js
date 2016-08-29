@@ -12,6 +12,10 @@ const neo4js = new Neo4js('neo4j', 'jan95', {
 
 describe('Model', function() {
   describe('create', function() {
+    beforeEach(() => {
+      return neo4js.sync({ force: true });
+    });
+
     it('should return a model when created', function() {
       expect(1).to.equal(1);
     });
