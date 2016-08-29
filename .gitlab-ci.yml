@@ -18,4 +18,4 @@ cache:
 test:
   script:
    - npm install
-   - npm test
+   - BOLT_PORT=7687 REST_PORT=7474 npm test

@@ -1,15 +1,12 @@
 var chai = require('chai');
 var expect = chai.expect;
 
+import serverHelper from './server-helper';
+
 import Neo4js from '../src/neo4js';
 const Model = Neo4js.Model;
 
-const neo4js = new Neo4js('neo4j', 'jan95', {
-  port: 32700,
-  rest: {
-    port: 32701,
-  }
-});
+const neo4js = serverHelper.getNeo4jsInstance();
 
 const userSchema = {
   guid: {
