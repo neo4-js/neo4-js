@@ -1,17 +1,31 @@
 {
-  "name": "neo4js",
+  "name": "neo4-js",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple neo4j-driver orm wrapper (inspired by sequelize)",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JanPeter/neo4js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JanPeter/neo4js/issues"
+  },
+  "keywords": [
+    "neo4j",
+    "orm",
+    "nodejs",
+    "object relational mapper"
+  ],
+  "author": "Jan Schlacher <j.schlacher@student.tugraz.at>",
+  "license": "ISC",
   "scripts": {
+    "build": "babel -d lib/ src/",
+    "prepublish": "npm run build",
     "test": "mocha --compilers js:babel-register --reporter spec test/**/*.test.js test/*.test.js",
     "test:watch": "npm test -- --watch",
     "dev": "nodemon --exec \"babel-node index.js\"",
     "cover": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha test/**/*.test.js test/*.test.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "axios": "^0.13.1",
     "lodash": "^4.15.0",

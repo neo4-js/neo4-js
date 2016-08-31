@@ -1,5 +1,7 @@
+lib/
 node_modules/
 .nyc_output/
 coverage/
 .idea/
 jsconfig.json
+npm-debug.log
