@@ -56,6 +56,11 @@ class Neo4js {
     return model;
   }
 
+  getModel(label) {
+    const model = this.modelManager.getModel(label);
+    return model;
+  }
+
   getSchemaInfo() {
     return getSchemaInfo(this.options.rest.url, this.options.rest.port, this.auth);
   }
@@ -74,6 +79,7 @@ class Neo4js {
             }
           }
         }
+        cmds.push(new Query(this).match('n').detach('n'));
         return Query.runSequence(cmds);
       });
   }

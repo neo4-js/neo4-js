@@ -128,7 +128,10 @@ export default class Model {
         .ret(m)
         .execute()
         .then(rawResult => {
-          console.log(rawResult);
+          if (rawResult.signature === 127) {
+            throw new Error(rawResult);
+          }
+
           const result = _extractProperties(rawResult);
           if (result.length > 0) {
             resolve(result[0]);

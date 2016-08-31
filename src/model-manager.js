@@ -16,7 +16,7 @@ export default class ModelManager {
     delete this.neo4js.models[model.name];
   }
 
-  getModel(against, attribute) {
+  getModel(against, attribute = 'name') {
     const model = this.models.find(m => m[attribute] === against);
 
     return model;

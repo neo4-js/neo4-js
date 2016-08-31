@@ -1,17 +1,14 @@
 var chai = require('chai');
 var expect = chai.expect;
 
+import serverHelper from './server-helper';
+
 import Neo4js from '../src/neo4js';
 const Model = Neo4js.Model;
 
-const neo4js = new Neo4js('neo4j', 'jan95', {
-  port: 32700,
-  rest: {
-    port: 32701,
-  }
-});
+const neo4js = serverHelper.getNeo4jsInstance();
 
-const userSchema = {
+const model1Schema = {
   guid: {
     index: true,
     defaultValue: neo4js.uuid4,
@@ -25,7 +22,7 @@ const userSchema = {
 describe('Neo4js', () => {
   describe('define', () => {
     it ('should return a Model object', () => {
-      const User = neo4js.define('User', userSchema);
+      const User = neo4js.define('Model1', model1Schema);
 
       expect(User).to.be.instanceof(Model);
       expect(User).to.have.property('name');
@@ -36,30 +33,13 @@ describe('Neo4js', () => {
   });
 
   describe('getSchemaInfo', () => {
-    beforeEach(() => {
-      return neo4js.drop();
-    });
-
-    it('should return no schema at all', () => {
-      return neo4js.getSchemaInfo()
-        .then((schemaInfo) => {
-          expect(schemaInfo).to.eql({});
-        });
-    });
-
     it('should return the schema synced', () => {
-      const User = neo4js.define('User', userSchema);
-      return neo4js.sync()
-        .then(() => {
-          return neo4js.getSchemaInfo();
-        })
+      const User = neo4js.define('Model1', model1Schema);
+      return User.sync()
+        .then(() => neo4js.getSchemaInfo())
         .then(schemaInfo => {
-          expect(schemaInfo).to.eql({ User: { guid: { index: true }, name: { index: true, unique: true } } });
+          expect(schemaInfo.Model1).to.eql({ guid: { index: true }, name: { index: true, unique: true } });
         });
-    })
-  })
-
-  describe('sync', () => {
-
+    });
   });
 });
