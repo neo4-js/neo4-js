@@ -1,0 +1,12 @@
+{
+  "opts": {
+    "template": "node_modules/docdash",
+    "destination": "./docs",
+    "recurse": true,
+    "readme": "README.md"
+  },
+  "plugins": ["node_modules/jsdoc-babel"],
+  "babel": {
+    "plugins": ["transform-object-rest-spread"]
+  }
+}
