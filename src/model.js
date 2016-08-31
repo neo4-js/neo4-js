@@ -3,7 +3,7 @@ import Utils from './Utils';
 
 const CharGenerator = Utils.CharGenerator;
 
-/**
+/*
  * For now this function only checks for the exists() constraint.
  * We need to check this manually because the neo4j exists()
  * function only works with the enterprise version.
@@ -34,6 +34,11 @@ function _extractProperties(rawResult) {
 }
 
 export default class Model {
+  /**
+   * @param {String | String[]} labels
+   * @param {Object} schema
+   * @param {Neo4js} neo4js
+   */
   constructor(labels, schema, neo4js) {
     if (!labels.sort) {
       labels = [ labels ];
@@ -51,6 +56,9 @@ export default class Model {
     _extractProperties = _extractProperties.bind(this);
   }
 
+  /**
+   * @returns {Promise}
+   */
   sync() {
     return Promise.start()
       .then(() => {
@@ -71,6 +79,10 @@ export default class Model {
       });
   }
 
+  /**
+   * @param {Object} properties
+   * @returns {Promise}
+   */
   find(properties) {
     return new Promise((resolve, reject) => {
       const m = CharGenerator.next();
@@ -93,6 +105,10 @@ export default class Model {
     })
   }
 
+  /**
+   * @param {Object} properties
+   * @returns {Promise}
+   */
   findOne(properties) {
     return new Promise((resolve, reject) => {
       const m = CharGenerator.next();
@@ -121,6 +137,10 @@ export default class Model {
     })
   }
 
+  /**
+   * @param {Object} properties
+   * @returns {Promise}
+   */
   count(properties) {
     return new Promise((resolve, reject) => {
       const m = CharGenerator.next();
@@ -136,6 +156,10 @@ export default class Model {
     });
   }
 
+  /**
+   * @param {Object} properties
+   * @returns {Promise}
+   */
   create(properties) {
     return new Promise((resolve, reject) => {
       const errors = _checkProperties(properties);
