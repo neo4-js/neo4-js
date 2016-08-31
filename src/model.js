@@ -80,8 +80,12 @@ export default class Model {
         .match(m, this.labels, properties)
         .ret(m)
         .execute()
-        .then(result => {
-          resolve(_extractProperties(result));
+        .then(rawResult => {
+          if (rawResult.signature === 127) {
+            throw new Error(rawResult);
+          }
+
+          resolve(_extractProperties(rawResult));
         })
         .catch(err => {
           reject(err);
@@ -100,6 +104,10 @@ export default class Model {
         .limit(1)
         .execute()
         .then(rawResult => {
+          if (rawResult.signature === 127) {
+            return reject(rawResult);
+          }
+
           const result = _extractProperties(rawResult);
           if (result.length > 0) {
             resolve(result[0]);
@@ -129,7 +137,7 @@ export default class Model {
         .execute()
         .then(rawResult => {
           if (rawResult.signature === 127) {
-            throw new Error(rawResult);
+            return reject(rawResult);
           }
 
           const result = _extractProperties(rawResult);
