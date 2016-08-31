@@ -66,7 +66,7 @@ neo4js.sync({ force: false })
   })
   .then(users => {
     console.log(users.records.map(r => r._fields[0].properties));
-  })
+  });
   /*.then(() => {
     const query = neo4js.Query();
     return query.match('n')
