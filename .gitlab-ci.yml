@@ -20,5 +20,6 @@ cache:
 
 test:
   script:
+   - echo 'neo4j' >> /root/.neo4j/known_hosts
    - npm install
    - BOLT_URL='bolt://neo4j' BOLT_PORT=7687 REST_URL='http://neo4j' REST_PORT=7474 npm test
