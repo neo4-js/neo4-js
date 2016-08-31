@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-register --reporter spec test/**/*.test.js",
+    "test": "mocha --compilers js:babel-register --reporter spec test/**/*.test.js test/*.test.js",
     "test:watch": "npm test -- --watch",
     "dev": "nodemon --exec \"babel-node index.js\"",
-    "cover": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha test/**/*.test.js"
+    "cover": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text mocha test/**/*.test.js test/*.test.js"
   },
   "keywords": [],
   "author": "",
