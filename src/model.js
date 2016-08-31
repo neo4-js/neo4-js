@@ -121,6 +121,21 @@ export default class Model {
     })
   }
 
+  count(properties) {
+    return new Promise((resolve, reject) => {
+      const m = CharGenerator.next();
+      const query = new Query(this.neo4js);
+
+      query
+        .match(m, this.labels, properties)
+        .ret(`count(${m})`)
+        .execute()
+        .then(rawResult => {
+          resolve(rawResult.records[0]._fields[0].low);
+        });
+    });
+  }
+
   create(properties) {
     return new Promise((resolve, reject) => {
       const errors = _checkProperties(properties);
