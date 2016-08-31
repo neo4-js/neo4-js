@@ -74,6 +74,7 @@ class Neo4js {
             }
           }
         }
+        cmds.push(new Query(this).match('n').detach('n'));
         return Query.runSequence(cmds);
       });
   }
