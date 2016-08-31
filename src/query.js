@@ -52,6 +52,9 @@ function _runSequenceRecursive(cmds, resolve, i = 0, results = []) {
 }
 
 export default class Query {
+  /**
+   * @param {Neo4js} neo4js - Instance of Neo4js class
+   */
   constructor(neo4js) {
     this.neo4js = neo4js;
     this.parts = [];
@@ -63,6 +66,12 @@ export default class Query {
     });
   }
 
+  /**
+   * @param {String} key - Cypher key to use in statement
+   * @param {String | String[]} labels - The label(s) to use
+   * @param {Object} properties
+   * @returns {Query} The same query instance is returned to chain commands
+   */
   match(key, labels, properties) {
     labels = _makeArray(labels);
 
@@ -74,6 +83,12 @@ export default class Query {
     return this;
   }
 
+  /**
+   *
+   * @param {String | String[]} labels - The label(s) to user
+   * @param {Object} property
+   * @returns {Query} The same query instance is returned to chain commands
+   */
   createIndex(labels, property) {
     labels = _makeArray(labels);
 
@@ -85,6 +100,11 @@ export default class Query {
     return this;
   }
 
+  /**
+   * @param {String | String[]} labels
+   * @param {Object} property
+   * @returns {Query} The same query instance is returned to chain commands
+   */
   dropIndex(labels, property) {
     labels = _makeArray(labels);
 
@@ -96,6 +116,12 @@ export default class Query {
     return this;
   }
 
+  /**
+   * @param {String | String[]} labels
+   * @param {Object} property
+   * @param {"unique" | "exists"} type
+   * @returns {Query} The same query instance is returned to chain commands
+   */
   createConstraint(labels, property, type) {
     labels = _makeArray(labels);
 
@@ -107,6 +133,12 @@ export default class Query {
     return this;
   }
 
+  /**
+   * @param {String | String[]} labels
+   * @param {Object} property
+   * @param {"unique" | "exists"} type
+   * @returns {Query} The same query instance is returned to chain commands
+   */
   dropConstraint(labels, property, type) {
     labels = _makeArray(labels);
 
@@ -118,6 +150,12 @@ export default class Query {
     return this;
   }
 
+  /**
+   * @param {String} key
+   * @param {String | String[]} labels
+   * @param {Object} property
+   * @returns {Query} The same query instance is returned to chain commands
+   */
   create(key, labels, properties) {
     labels = _makeArray(labels);
 
@@ -151,6 +189,10 @@ export default class Query {
     return this;
   }
 
+  /**
+   * @param {String} key
+   * @returns {Query} The same query instance is returned to chain commands
+   */
   ret(key) {
     this.parts.push(new QueryPart(
       'return',
@@ -160,6 +202,10 @@ export default class Query {
     return this;
   }
 
+  /**
+   * @param {Int} n
+   * @returns {Query} The same query instance is returned to chain commands
+   */
   limit(n) {
     this.parts.push(new QueryPart(
       'limit',
@@ -169,6 +215,10 @@ export default class Query {
     return this;
   }
 
+  /**
+   * @param {String} key
+   * @returns {Query} The same query instance is returned to chain commands
+   */
   delete(key) {
     this.parts.push(new QueryPart(
       'delete',
@@ -178,6 +228,10 @@ export default class Query {
     return this;
   }
 
+  /**
+   * @param {String} key
+   * @returns {Query} The same query instance is returned to chain commands
+   */
   detach(key) {
     this.parts.push(new QueryPart(
       'detach',
@@ -187,6 +241,9 @@ export default class Query {
     return this;
   }
 
+  /**
+   * @returns {Promise}
+   */
   execute() {
     const cmds = [];
     const params = {};

@@ -10,7 +10,7 @@ import { getSchemaInfo } from './schema-info';
 
 class Neo4js {
   /**
-   *
+   * Constructor to create a new instance of the Neo4js class
    * @param {String}  username The username which is used to authenticate against the database
    * @param {String}  password The password which is used to authenticate against the database
    * @param {Object}  [options={}] An object with options
@@ -50,17 +50,32 @@ class Neo4js {
     this.modelManager = new ModelManager(this);
   }
 
-  define(label, schema) {
-    const model = new Model(label, schema, this);
+  /**
+   * @param {String | String[]} labels
+   * @param {Object} schema
+   * @param {Object} schema.{propertyName}
+   * @param {Boolean} schema.{propertyName}.index
+   * @param {Boolean} schema.{propertyName}.unique
+   * @param {Boolean} schema.{propertyName}.exists
+   * @param {Function} schema.{propertyName}.defaultValue
+   */
+  define(labels, schema) {
+    const model = new Model(labels, schema, this);
     this.modelManager.add(model);
     return model;
   }
 
+  /**
+   * @param {String} label
+   */
   getModel(label) {
     const model = this.modelManager.getModel(label);
     return model;
   }
 
+  /**
+   * @returns {Promise}
+   */
   getSchemaInfo() {
     return getSchemaInfo(this.options.rest.url, this.options.rest.port, this.auth);
   }
@@ -84,6 +99,10 @@ class Neo4js {
       });
   }
 
+  /**
+   * @param {Object} options
+   * @param {Boolean} options.force
+   */
   sync(options) {
     options = options || {};
 
@@ -110,10 +129,20 @@ class Neo4js {
       });
   }
 
+  /**
+   * This method creates a new instance of a Query
+   * @return {Query}
+   */
   Query() {
     return new Query(this);
   }
 
+  /**
+   * This method runs a command with params
+   * @param {String} cmd - Cypher statement to execute
+   * @param {Object} params - Map with parameters to use in statement
+   * @return {Promise} Resolves either with the result or the error message
+   */
   run(cmd, params) {
     const session = this.driver.session();
     return session.run(cmd, params)
@@ -127,10 +156,16 @@ class Neo4js {
       });
   }
 
+  /**
+   * @returns {UUIDv4}
+   */
   static uuid4() {
     return uuid.v4();
   }
 
+  /**
+   * @returns {UUIDv1}
+   */
   static uuid1() {
     return uuid.v1();
   }
