@@ -34,5 +34,15 @@ describe('Model', function() {
           expect(err).to.be.null;
         })
     });
+
+    it('should return an error when breaking the unique constraint', function() {
+      return User.create({ name: 'Jan' })
+        .then(user => {
+          return User.create(user)
+        })
+        .catch(err => {
+          expect(err).to.be.instanceof(Error);
+        })
+    })
   });
 });
