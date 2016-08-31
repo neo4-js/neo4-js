@@ -2,7 +2,6 @@ var chai = require('chai');
 var expect = chai.expect;
 
 import serverHelper from '../server-helper';
-import Neo4js from '../../src/neo4js';
 
 const schema = {
   text: {}
