@@ -1,3 +1,1 @@
-import Neo4js from './lib/neo4js';
-
-export default Neo4js;
+module.exports = require('./lib/neo4js').default;
