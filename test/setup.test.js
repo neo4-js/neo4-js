@@ -8,8 +8,5 @@ import Neo4js from '../src/neo4js';
 const neo4js = serverHelper.getNeo4jsInstance();
 
 before(() => {
-  return neo4js.sync({ force: true })
-    .then(() => {
-      console.log('database cleaned');
-    });
+  return neo4js.sync({ force: true });
 });
