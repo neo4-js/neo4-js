@@ -52,6 +52,23 @@ Use it via queries
         console.log(err);
       });
 
+Run cypher queries directly
+
+    var Neo4js = require('Neo4js');
+
+    const neo4js = Neo4js('neo4j', 'neo4j');
+    neo4js.run("MATCH (a:Person { name: 'John' })-[:KNOWS]-(b:Person) RETURN b")
+      .then((rawResult) => {
+        console.log(rawResult);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+# Roadmap
+
+[Trello Board](https://trello.com/b/wvCHHEcc/roadmap)
+
 # Docs
 
 [Rudimentary docs](https://janpeter.github.io/neo4js/)
