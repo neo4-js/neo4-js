@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Class: Model</title>
+	<title>Documentation Class: ModelObject</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -63,13 +63,13 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: Model</h1>
+	<h1 class="page-title">Class: ModelObject</h1>
 <section>
 
 <header>
     
         <h2>
-        Model
+        ModelObject
         </h2>
         
     
@@ -82,7 +82,7 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="Model"><span class="type-signature"></span>new Model(labels, schema, neo4js)</h4>
+    <h4 class="name" id="ModelObject"><span class="type-signature"></span>new ModelObject(properties, model)</h4>
     
     
 </dt>
@@ -121,34 +121,7 @@
 
         <tr>
             
-                <td class="name"><code>labels</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-|
-
-<span class="param-type">Array.&lt;String></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>schema</code></td>
+                <td class="name"><code>properties</code></td>
             
 
             <td class="type">
@@ -172,13 +145,13 @@
 
         <tr>
             
-                <td class="name"><code>neo4js</code></td>
+                <td class="name"><code>model</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Neo4js.html">Neo4js</a></span>
+<span class="param-type"><a href="Model.html">Model</a></span>
 
 
 
@@ -275,7 +248,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="count"><span class="type-signature"></span>count(properties)</h4>
+    <h4 class="name" id="relate"><span class="type-signature"></span>relate(relationName, properties)</h4>
     
     
 </dt>
@@ -310,606 +283,6 @@
     </thead>
 
     <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>properties</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="create"><span class="type-signature"></span>create(properties)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>properties</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;<a href="ModelObject.html">ModelObject</a>></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="find"><span class="type-signature"></span>find(properties)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>properties</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Array.&lt;<a href="ModelObject.html">ModelObject</a>>></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="findOne"><span class="type-signature"></span>findOne(properties)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>properties</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;<a href="ModelObject.html">ModelObject</a>></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="relate"><span class="type-signature"></span>relate(from, relationName, to)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>from</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="ModelObject.html">ModelObject</a></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
     
 
         <tr>
@@ -938,13 +311,13 @@
 
         <tr>
             
-                <td class="name"><code>to</code></td>
+                <td class="name"><code>properties</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="ModelObject.html">ModelObject</a></span>
+<span class="param-type">Object</span>
 
 
 
@@ -1015,6 +388,26 @@
     
 
     
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="ModelObject.html">ModelObject</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
 
     
 </dd>
@@ -1023,7 +416,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="sync"><span class="type-signature"></span>sync()</h4>
+    <h4 class="name" id="to"><span class="type-signature"></span>to(to)</h4>
     
     
 </dt>
@@ -1036,6 +429,56 @@
     
 
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="ModelObject.html">ModelObject</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Object to relate to</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -1092,6 +535,10 @@
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    Returns if the db query worked or not
+</div>
+
 
 
 <dl>
@@ -1100,7 +547,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise</span>
+<span class="param-type">Promise.&lt;Boolean></span>
 
 
 

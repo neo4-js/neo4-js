@@ -167,23 +167,80 @@ export default class Query {
     return this;
   }
 
-  link(relationName, properties) {
-    return this.linkRight(relationName, properties);
-  }
-
-  linkRight(relationName, properties) {
+  /**
+   * Generates (a)-[:relationName]-(b). TODO: Also generate (a)--(b) if no params given
+   * @param {String} relationName
+   * @param {Object} properties
+   */
+  relates(relationName, properties) {
     this.parts.push(new QueryPart(
-      'linkRight',
-      { relationName, properties },
+      'relates',
+      { relationName, properties, },
     ));
 
     return this;
   }
 
-  linkLeft(relationName, properties) {
+  /**
+   * Generates (a)-[:relationName]->(b). TODO: Also generate (a)-->(b) if no params given
+   * @param {String} relationName
+   * @param {Object} properties
+   */
+  relatesRight(relationName, properties) {
     this.parts.push(new QueryPart(
-      'linkLeft',
-      { relationName, properties },
+      'relates-right',
+      { relationName, properties, },
+    ));
+
+    return this;
+  }
+
+  /**
+   * Generates (a)<-[:relationName]-(b). TODO: Also generate (a)<--(b) if no params given
+   * @param {String} relationName
+   * @param {Object} properties
+   */
+  relatesLeft(relationName, properties) {
+    this.parts.push(new QueryPart(
+      'relates-left',
+      { relationName, properties, },
+    ));
+
+    return this;
+  }
+
+  /**
+   * Creates a new relation within two nodes. Alias for relateRight().
+   * @param {String} relationName
+   * @param {Object} properties
+   */
+  relate(relationName, properties) {
+    return this.relateRight(relationName, properties);
+  }
+
+  /**
+   * Creates a new relation within two nodes. (a)-[:relationName]->(b)
+   * @param {String} relationName
+   * @param {Object} properties
+   */
+  relateRight(relationName, properties) {
+    this.parts.push(new QueryPart(
+      'relate-right',
+      { relationName, properties, },
+    ));
+
+    return this;
+  }
+
+  /**
+   * Creates a new relation within two nodes. (a)<-[:relationName]-(b)
+   * @param {String} relationName
+   * @param {Object} properties
+   */
+  relateLeft(relationName, properties) {
+    this.parts.push(new QueryPart(
+      'relate-left',
+      { relationName, properties, },
     ));
 
     return this;
@@ -276,33 +333,50 @@ export default class Query {
         case 'match':
           _createMatchCmd(cmds, params, part);
           break;
-        case 'linkRight':
-          cmds.push(`link`);
-          break;
-        case 'linkLeft':
-          cmds.push(`link`);
+        case 'relate-right':
+        case 'relate-left':
+        case 'relates':
+        case 'relates-right':
+        case 'relates-left':
+          cmds.push(`relation`);
           break;
       }
     }
 
     for (let i = 0; i < this.parts.length - 1; i++) {
-      if (cmds[i] !== 'link') { continue; }
+      if (cmds[i] !== 'relation') { continue; }
 
       const a = this.parts[i - 1].options.key;
       const b = this.parts[i + 1].options.key;
-      const link = this.parts[i];
+      const relation = this.parts[i];
 
       let paramCmd = '';
-      if (link.options.properties) {
+      if (relation.options.properties) {
         char = CharGenerator.next();
-        params[char] = link.options.properties;
+        params[char] = relation.options.properties;
         paramCmd = ` { ${char} }`;
       }
 
       switch (this.parts[i].type) {
-        case 'linkRight':
+        case 'relate-right':
           cmds[i] = cmds[i + 1];
-          cmds[i + 1] = `CREATE (${a})-[:${link.options.relationName}${paramCmd}]->(${b})`;
+          cmds[i + 1] = `CREATE (${a})-[:${relation.options.relationName}${paramCmd}]->(${b})`;
+          break;
+        case 'relate-left':
+          cmds[i] = cmds[i + 1];
+          cmds[i + 1] = `CREATE (${a})<-[:${relation.options.relationName}${paramCmd}]-(${b})`;
+          break;
+        case 'relates':
+          cmds[i] = cmds[i + 1];
+          cmds[i + 1] = `MATCH (${a})-[:${relation.options.relationName}${paramCmd}]-(${b})`;
+          break;
+        case 'relates-right':
+          cmds[i] = cmds[i + 1];
+          cmds[i + 1] = `MATCH (${a})-[:${relation.options.relationName}${paramCmd}]->(${b})`;
+          break;
+        case 'relates-left':
+          cmds[i] = cmds[i + 1];
+          cmds[i + 1] = `MATCH (${a})<-[:${relation.options.relationName}${paramCmd}]-(${b})`;
           break;
       }
     }

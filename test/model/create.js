@@ -22,7 +22,7 @@ describe('create', function() {
   it('should return an object with keys text', function() {
     return DbModel.create({ text: 'asdf' })
       .then(object => {
-        expect(object).to.have.keys(['text']);
+        expect(object.text).to.equal('asdf');
       })
       .catch(err => {
         expect(err).to.be.null;
@@ -41,5 +41,44 @@ describe('create', function() {
 
   it('should return a promise', function() {
     expect(DbModel.create({ text: 'bar' })).to.be.instanceof(Promise);
+  });
+
+  it('should create a new relation between 2 new nodes', function() {
+    const Person = neo4js.define('Create2', {
+      name: {
+        unique: true
+      },
+      relations: {
+        'knows': {
+          direction: 'any',
+          labels: 'knows',
+          to: Person,
+          properties: {
+            since: {
+              exists: true,
+            },
+          },
+        },
+      },
+    });
+
+    let john;
+    return Person.create({ name: 'John' })
+      .then((result) => {
+        john = result;
+        return Person.create({ name: 'Clara' });
+      })
+      .then((clara) => {
+        return john
+          .relate('knows', { since: 2000 })
+          .to(clara)
+          .then(result => {
+            expect(result).to.be.true;
+          })
+          .catch(err => {
+            expect(err).to.be.false;
+            expect(err).to.not.be.instanceof(Error);
+          });
+      });
   });
 });

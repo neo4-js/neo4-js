@@ -44,4 +44,51 @@ describe('find', function() {
         expect(objects.length).to.equal(2);
       });
   });
+
+  it('should return all found objects with all of their relations', function() {
+    const Person = neo4js.define('Find2', {
+      name: {
+        unique: true
+      },
+      relations: {
+        'knows': {
+          to: 'Find2'
+        },
+      },
+    });
+
+    let john;
+    return Person.create({ name: 'John' })
+      .then((result) => {
+        john = result;
+        return Person.create({ name: 'Clara' });
+      })
+      .then((clara) => {
+        return john
+          .relate('knows', { since: 2000 })
+          .to(clara)
+          .catch(err => {
+            expect(err).to.be.false;
+            expect(err).to.not.be.instanceof(Error);
+          })
+          .then(result => {
+            expect(result).to.be.true;
+            return Person.find();
+          })
+          .then(persons => {
+            expect(persons).to.be.instanceof(Array);
+            persons.forEach(person => {
+              expect(person.r).to.be.instanceof(Object);
+              expect(person.r.knows).to.be.instanceof(Array);
+              expect(person.r.knows.length).to.equal(1);
+              expect(person.r.knows[0]).to.be.instanceof(Neo4js.ModelObject);
+              if (person.p.name === 'John') {
+                expect(person.r.knows[0].name).to.equal('Clara');
+              } else {
+                expect(person.r.knows[0].name).to.equal('John');
+              }
+            })
+          });
+      });
+  });
 });
