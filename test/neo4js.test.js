@@ -8,7 +8,7 @@ const Model = Neo4js.Model;
 
 const neo4js = serverHelper.getNeo4jsInstance();
 
-const model1Schema = {
+const userSchema = {
   guid: {
     index: true,
     defaultValue: neo4js.uuid4,
@@ -17,16 +17,31 @@ const model1Schema = {
     unique: true,
     exists: true,
   },
+  relations: {
+    knows: {
+      direction: 'any',
+      to: 'Model1',
+      labels: 'knows',
+      properties: {
+        since: {
+          exists: true,
+        },
+      },
+    },
+  },
 };
 
 describe('Neo4js', () => {
   describe('define', () => {
     it ('should return a Model object', () => {
-      const User = neo4js.define('Model1', model1Schema);
+      const User = neo4js.define('Model1', userSchema);
 
       expect(User).to.be.instanceof(Model);
       expect(User).to.have.property('name');
       expect(User).to.have.property('labels');
+      expect(User.schema).to.be.ok;
+      expect(User.schema.relations).to.be.ok;
+      expect(User.schema.relations.knows).to.be.ok;
       expect(User.labels).to.be.instanceof(Array);
       expect(typeof User.create).to.equal('function');
     });
@@ -34,7 +49,7 @@ describe('Neo4js', () => {
 
   describe('getSchemaInfo', () => {
     it('should return the schema synced', () => {
-      const User = neo4js.define('Model1', model1Schema);
+      const User = neo4js.define('Model1', userSchema);
       return User.sync()
         .then(() => neo4js.getSchemaInfo())
         .then(schemaInfo => {

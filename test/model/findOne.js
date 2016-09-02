@@ -36,7 +36,7 @@ describe('findOne', function() {
   it('should return exactly one object', function() {
     return DbModel.findOne()
       .then(object => {
-        expect(object).to.have.keys(['text']);
+        expect(object.text).to.exist;
       });
   });
 
@@ -44,6 +44,46 @@ describe('findOne', function() {
     return DbModel.findOne({ text: 'foo' })
       .then(object => {
         expect(object.text).to.equal('foo');
+      });
+  });
+
+  it('should return the found object with all of its relations', function() {
+    const Person = neo4js.define('FindOne2', {
+      name: {
+        unique: true
+      },
+      relations: {
+        'knows': {
+          to: 'FindOne2'
+        },
+      },
+    });
+
+    let john;
+    return Person.create({ name: 'John' })
+      .then((result) => {
+        john = result;
+        return Person.create({ name: 'Clara' });
+      })
+      .then((clara) => {
+        return john
+          .relate('knows', { since: 2000 })
+          .to(clara)
+          .catch(err => {
+            expect(err).to.be.false;
+            expect(err).to.not.be.instanceof(Error);
+          })
+          .then(result => {
+            expect(result).to.be.true;
+            return Person.findOne({ name: 'John' });
+          })
+          .then(person => {
+            expect(person.r).to.be.instanceof(Object);
+            expect(person.r.knows).to.be.instanceof(Array);
+            expect(person.r.knows.length).to.equal(1);
+            expect(person.r.knows[0]).to.be.instanceof(Neo4js.ModelObject);
+            expect(person.r.knows[0].name).to.equal('Clara');
+          });
       });
   });
 });
