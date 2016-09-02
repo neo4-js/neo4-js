@@ -5,6 +5,7 @@ import uuid from 'node-uuid';
 import neo4jsErrors from './errors';
 import Model from './model';
 import ModelManager from './model-manager';
+import ModelObject from './model-object';
 import Query from './query';
 import { getSchemaInfo } from './schema-info';
 
@@ -173,5 +174,6 @@ class Neo4js {
 
 Neo4js.prototype.Error = Neo4js.Error = neo4jsErrors.BaseError;
 Neo4js.prototype.Model = Neo4js.Model = Model;
+Neo4js.prototype.ModelObject = Neo4js.ModelObject = ModelObject;
 
 export default Neo4js;

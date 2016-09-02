@@ -1,6 +1,6 @@
 {
   "name": "neo4-js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Simple neo4j-driver orm wrapper (inspired by sequelize)",
   "main": "index.js",
   "repository": {
@@ -20,6 +20,8 @@
   "license": "ISC",
   "scripts": {
     "build": "babel -d lib/ src/",
+    "watch": "gulp watch",
+    "nodemon": "gulp nodemon",
     "prepublish": "npm run build",
     "test": "mocha --compilers js:babel-register --reporter spec test/**/*.test.js test/*.test.js",
     "test:watch": "npm test -- --watch",
@@ -29,6 +31,7 @@
   },
   "dependencies": {
     "axios": "^0.13.1",
+    "immutable": "^3.8.1",
     "lodash": "^4.15.0",
     "neo4j-driver": "^1.1.0-M01",
     "node-uuid": "^1.4.7"
@@ -46,7 +49,9 @@
     "cross-env": "^2.0.0",
     "docdash": "^0.4.0",
     "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
     "gulp-jsdoc3": "^0.3.0",
+    "gulp-nodemon": "^2.1.0",
     "istanbul": "^0.4.5",
     "jsdoc-babel": "^0.2.1",
     "mocha": "^3.0.2",
