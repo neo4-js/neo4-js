@@ -33,6 +33,49 @@ Use it via models
         console.log(err);
       });
 
+Use relations
+
+    var Neo4js = require('Neo4js');
+
+    const neo4js = new Neo4js('neo4j', 'neo4j');
+    const User = neo4js.define('User', {
+      guid: {
+        index: true,
+        defaultValue: Neo4js.uuid4,
+      },
+      name: {
+        unique: true,
+        exists: true,
+      },
+      email: {
+        unqiue: true,
+      },
+      relations: {
+        'knows': {
+          to: 'User'
+        },
+      },
+    });
+
+    User.create({ name: 'John' })
+      .then((result) => {
+        john = result;
+        return User.create({ name: 'Clara' });
+      })
+      .then((clara) => {
+        return john
+          .relate('knows', { since: 2000 })
+          .to(clara)
+          .then(result => {
+            return Person.find();
+          })
+          .then(persons => {
+            persons.forEach(person => {
+              console.log(person.r.knows);
+            })
+          });
+      });
+
 Use it via queries
 
     var Neo4js = require('Neo4js');
