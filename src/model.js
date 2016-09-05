@@ -47,15 +47,15 @@ export default class Model {
     return rawResult.records.map(r => r._fields[0].properties);
   }
 
-  _getRelation(o, rel) {
+  _getRelation(o, { to }, rel) {
     const query = new Query(this.neo4js);
     const m = CharGenerator.next();
     const n = CharGenerator.next();
 
     return query
       .match(m, this.labels, o)
-      .relates('knows')
-      .match(n, rel.to)
+      .relates(rel)
+      .match(n, to)
       .ret(n)
       .execute()
       .then((rawResult) => {
@@ -74,7 +74,7 @@ export default class Model {
     const promises = [];
 
     for (const rel of this.relationNames) {
-      promises.push(this._getRelation(o, this.schema.relations[rel])
+      promises.push(this._getRelation(o, this.schema.relations[rel], rel)
         .then((relationObjects) => {
           Utils._.assign(relations, { [rel]: relationObjects });
         }));
