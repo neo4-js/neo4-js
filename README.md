@@ -50,28 +50,36 @@ Use relations
       email: {
         unqiue: true,
       },
-      relations: {
-        'knows': {
-          to: 'User'
-        },
+    });
+
+    const Task = neo4js.define('Task', {
+      guid: {
+        index: true,
+        defaultValue: Neo4js.uuid4,
+      },
+      title: {
+        exists: true,
       },
     });
+
+    User.hasMany(Task, 'tasks');
+    Task.belongsTo(User, 'user');
 
     User.create({ name: 'John' })
       .then((result) => {
         john = result;
-        return User.create({ name: 'Clara' });
+        return Task.create({ title: 'Buy milk' });
       })
-      .then((clara) => {
+      .then((newTask) => {
         return john
-          .relate('knows', { since: 2000 })
-          .to(clara)
+          .relate('does')
+          .to(newTask)
           .then(result => {
             return Person.find();
           })
           .then(persons => {
             persons.forEach(person => {
-              console.log(person.r.knows);
+              console.log(person.p.tasks);
             })
           });
       });
