@@ -32,17 +32,6 @@ export default class Model {
     return newProperties;
   }
 
-  _addDefaultRelationProperties(relName, properties) {
-    const newProperties = { ...properties };
-    const defaultProperties = this.relationNames.filter(r => this.schema.relations[r].defaultValue && !properties[p]);
-
-    for (const p of defaultProperties) {
-      newProperties[p] = this.schema.relations[p].defaultValue();
-    }
-
-    return newProperties;
-  }
-
   _extractProperties(rawResult) {
     return rawResult.records.map(r => r._fields[0].properties);
   }
@@ -53,9 +42,9 @@ export default class Model {
     const n = CharGenerator.next();
 
     return query
-      .match(m, this.labels, o)
-      .relates('knows')
-      .match(n, rel.to)
+      .match(m, this.labels, { guid: o.guid })
+      .relates(rel.relationLabel)
+      .match(n, rel.model.labels)
       .ret(n)
       .execute()
       .then((rawResult) => {
@@ -64,7 +53,7 @@ export default class Model {
         }
 
         const properties = this._extractProperties(rawResult);
-        return properties.map(r => new ModelObject(r, this));
+        return properties.map(r => new ModelObject(r, rel.model));
       });
   }
 
@@ -73,16 +62,16 @@ export default class Model {
     const relations = {};
     const promises = [];
 
-    for (const rel of this.relationNames) {
-      promises.push(this._getRelation(o, this.schema.relations[rel])
-        .then((relationObjects) => {
-          Utils._.assign(relations, { [rel]: relationObjects });
+    for (const rel of this.relations) {
+      promises.push(this._getRelation(o, rel)
+        .then((result) => {
+          Utils._.assign(relations, { [rel.propName]: result });
         }));
     }
 
     return Promise.all(promises)
       .then(() => {
-        Utils._.assign(o, { r: relations });
+        Utils._.assign(o, relations);
         return new ModelObject(o, this);
       });
   }
@@ -100,15 +89,9 @@ export default class Model {
     this.labels = labels;
     this.schema = Utils._.cloneDeep(schema);
 
-    if (!this.schema.relations) {
-      this.schema.relations = {};
-    }
-
-    if (schema.relations) delete schema.relations;
-
     this.properties = Object.keys(schema);
-    this.relationNames = Object.keys(this.schema.relations);
     this.neo4js = neo4js;
+    this.relations = [];
   }
 
   /**
@@ -165,6 +148,34 @@ export default class Model {
   }
 
   /**
+   * @param {Model} model
+   * @param {String} propertyName
+   * @param {String} relationLabel
+   */
+  hasMany(model, propName, relationLabel) {
+    this.relations.push({
+      model,
+      propName,
+      relationLabel,
+      type: 'hasMany',
+    });
+  }
+
+  /**
+   * @param {Model} model
+   * @param {String} propertyName
+   * @param {String} relationLabel
+   */
+  belongsTo(model, propName, relationLabel) {
+    this.relations.push({
+      model,
+      propName,
+      relationLabel,
+      type: 'belongsTo',
+    });
+  }
+
+  /**
    * @param {Object} properties
    * @returns {Promise<ModelObject>}
    */
@@ -191,7 +202,6 @@ export default class Model {
           }
         })
         .catch(err => {
-          console.log(err);
           reject(err);
         });
     })
@@ -218,23 +228,21 @@ export default class Model {
 
   /**
    * @param {ModelObject} from
-   * @param {String} relationName
+   * @param {Object} relation
+   * @param {String} relation.relationName
+   * @param {Object} relation.properties
    * @param {ModelObject} to
    */
   relate(from, rel, to) {
     return new Promise((resolve, reject) => {
-      const properties = this._addDefaultRelationProperties(rel.relationName, rel.properties);
-
-      const schemaRelation = this.schema.relations[rel.relationName];
-
       const a = CharGenerator.next();
       const b = CharGenerator.next();
       const query = new Query(this.neo4js);
 
       query
-        .match(a, this.labels, from.p)
-        .relateRight(rel.relationName, properties)
-        .match(b, to.model.labels, to.p)
+        .match(a, this.labels, { guid: from.p.guid })
+        .relateRight(rel.relationName, rel.properties)
+        .match(b, to.model.labels, { guid: to.p.guid })
         .execute()
         .then(rawResult => {
           if (rawResult.signature === 127) {
