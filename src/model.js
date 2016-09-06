@@ -64,7 +64,7 @@ export default class Model {
         }
 
         const properties = this._extractProperties(rawResult);
-        return properties.map(r => new ModelObject(r, this));
+        return properties.map(r => new ModelObject(r, this.neo4js.getModel(to)));
       });
   }
 
@@ -218,7 +218,9 @@ export default class Model {
 
   /**
    * @param {ModelObject} from
-   * @param {String} relationName
+   * @param {Object} relation
+   * @param {String} relation.relationName
+   * @param {Object} relation.properties
    * @param {ModelObject} to
    */
   relate(from, rel, to) {

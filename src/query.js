@@ -400,6 +400,6 @@ export default class Query {
     }
 
     this.parts = [];
-    return  this.neo4js.run(cmds.join(' '), params);
+    return this.neo4js.run(cmds.join(' '), params);
   }
 }

@@ -12,6 +12,7 @@ export default class ModelObject {
     this.model = model;
     Object.assign(this, properties);
     this.p = properties;
+    delete this.p.r;
     const keys = Object.keys(this.model.schema.relations);
     keys.forEach(k => {
       this[k] = (o) => this.link(k, o);
