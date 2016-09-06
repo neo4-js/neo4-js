@@ -357,26 +357,31 @@ export default class Query {
         paramCmd = ` { ${char} }`;
       }
 
+      let relCmd = '';
+      if (relation.options.relationName) {
+        relCmd = `[:${relation.options.relationName}${paramCmd}]`;
+      }
+
       switch (this.parts[i].type) {
         case 'relate-right':
           cmds[i] = cmds[i + 1];
-          cmds[i + 1] = `CREATE (${a})-[:${relation.options.relationName}${paramCmd}]->(${b})`;
+          cmds[i + 1] = `CREATE (${a})-${relCmd}->(${b})`;
           break;
         case 'relate-left':
           cmds[i] = cmds[i + 1];
-          cmds[i + 1] = `CREATE (${a})<-[:${relation.options.relationName}${paramCmd}]-(${b})`;
+          cmds[i + 1] = `CREATE (${a})<-${relCmd}-(${b})`;
           break;
         case 'relates':
           cmds[i] = cmds[i + 1];
-          cmds[i + 1] = `MATCH (${a})-[:${relation.options.relationName}${paramCmd}]-(${b})`;
+          cmds[i + 1] = `MATCH (${a})-${relCmd}-(${b})`;
           break;
         case 'relates-right':
           cmds[i] = cmds[i + 1];
-          cmds[i + 1] = `MATCH (${a})-[:${relation.options.relationName}${paramCmd}]->(${b})`;
+          cmds[i + 1] = `MATCH (${a})-${relCmd}->(${b})`;
           break;
         case 'relates-left':
           cmds[i] = cmds[i + 1];
-          cmds[i + 1] = `MATCH (${a})<-[:${relation.options.relationName}${paramCmd}]-(${b})`;
+          cmds[i + 1] = `MATCH (${a})<-${relCmd}-(${b})`;
           break;
       }
     }
