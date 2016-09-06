@@ -22,7 +22,6 @@
     "build": "babel -d lib/ src/",
     "watch": "gulp watch",
     "nodemon": "gulp nodemon",
-    "prepublish": "npm run build",
     "test": "mocha --compilers js:babel-register --reporter spec test/**/*.test.js test/*.test.js",
     "test:watch": "npm test -- --watch",
     "dev": "nodemon --exec \"babel-node index.js\"",
