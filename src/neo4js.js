@@ -145,8 +145,6 @@ class Neo4js {
    * @return {Promise} Resolves either with the result or the error message
    */
   run(cmd, params) {
-    console.log('command: ', cmd);
-    console.log('params: ', params);
     const session = this.driver.session();
     return session.run(cmd, params)
       .then(result => {
