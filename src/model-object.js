@@ -4,14 +4,22 @@ import Utils from './Utils';
 const CharGenerator = Utils.CharGenerator;
 
 export default class ModelObject {
+  constructor() { }
+
   /**
    * @param {Object} properties
    * @param {Model} model
    */
-  constructor(properties, model) {
+  init(properties, model) {
     this.model = model;
     Object.assign(this, properties);
     this.p = properties;
+
+    for(let i in model.instanceMethods) {
+      model.instanceMethods[i] = model.instanceMethods[i].bind(this);
+    }
+
+    Utils._.assign(this, model.instanceMethods);
   }
 
   /**

@@ -17,18 +17,6 @@ const userSchema = {
     unique: true,
     exists: true,
   },
-  relations: {
-    knows: {
-      direction: 'any',
-      to: 'Model1',
-      labels: 'knows',
-      properties: {
-        since: {
-          exists: true,
-        },
-      },
-    },
-  },
 };
 
 describe('Neo4js', () => {
@@ -40,8 +28,6 @@ describe('Neo4js', () => {
       expect(User).to.have.property('name');
       expect(User).to.have.property('labels');
       expect(User.schema).to.be.ok;
-      expect(User.schema.relations).to.be.ok;
-      expect(User.schema.relations.knows).to.be.ok;
       expect(User.labels).to.be.instanceof(Array);
       expect(typeof User.create).to.equal('function');
     });

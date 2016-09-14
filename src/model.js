@@ -53,7 +53,7 @@ export default class Model {
         }
 
         const properties = this._extractProperties(rawResult);
-        return properties.map(r => new ModelObject(r, rel.model));
+        return properties.map(r => this._createModelObject(r, rel.model));
       });
   }
 
@@ -72,8 +72,15 @@ export default class Model {
     return Promise.all(promises)
       .then(() => {
         Utils._.assign(o, relations);
-        return new ModelObject(o, this);
+        return this._createModelObject(o);
       });
+  }
+
+  _createModelObject(properties, model) {
+    model = model || this;
+    const o = new ModelObject();
+    o.init(properties, this);
+    return o;
   }
 
   /**
@@ -88,6 +95,9 @@ export default class Model {
     this.name = labels.sort().join(',');
     this.labels = labels;
     this.schema = Utils._.cloneDeep(schema);
+
+    this.instanceMethods = this.schema.instanceMethods || {};
+    delete schema.instanceMethods;
 
     this.properties = Object.keys(schema);
     this.neo4js = neo4js;
@@ -139,7 +149,7 @@ export default class Model {
           return Promise.all(properties.map(p => this._getAllRelations(p)));
         })
         .then((properties) => {
-          resolve(properties.map(r => new ModelObject(r, this)));
+          resolve(properties.map(r => this._createModelObject(r)));
         })
         .catch(err => {
           reject(err);
@@ -281,7 +291,7 @@ export default class Model {
 
           const result = this._extractProperties(rawResult);
           if (result.length > 0) {
-            resolve(new ModelObject(result[0], this));
+            resolve(this._createModelObject(result[0]));
           } else {
             reject(new Error('No user inserted'));
           }
