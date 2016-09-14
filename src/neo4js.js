@@ -1,6 +1,8 @@
 import { v1 as neo4j } from 'neo4j-driver';
 import Utils from './Utils';
 import uuid from 'node-uuid';
+import Debug from 'debug';
+const debug = Debug('neo4js');
 
 import neo4jsErrors from './errors';
 import Model from './model';
@@ -105,15 +107,20 @@ class Neo4js {
    * @param {Boolean} options.force
    */
   sync(options) {
+    debug(`sync start`);
     options = options || {};
 
-    return Promise.start()
+    return Promise.resolve()
       .then(() => {
         if (options.force) {
+          debug(`cleanup database start`);
           return this.drop();
         }
       })
       .then(() => {
+        if (options.force) {
+          debug(`cleanup database end`);
+        }
         const promises = this.modelManager.all.map(m => m.sync());
         return Promise.all(promises);
       })
@@ -127,6 +134,14 @@ class Neo4js {
           }
         }
         return errors;
+      })
+      .then(result => {
+        debug(`sync end`);
+        return result;
+      })
+      .catch(err => {
+        debug(`sync end with errors`, err);
+        return err;
       });
   }
 
