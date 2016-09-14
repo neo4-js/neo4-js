@@ -16,7 +16,7 @@ const userSchema = {
   firstname: { },
   lastname: { },
   instanceMethods: {
-    getFullName: () => {
+    getFullName: function() {
       return [this.firstname, this.lastname].join(' ');
     },
     compareLastname: function(lastname) {
