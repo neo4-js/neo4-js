@@ -1,6 +1,6 @@
 {
   "name": "neo4-js",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Simple neo4j-driver orm wrapper (inspired by sequelize)",
   "main": "index.js",
   "repository": {
