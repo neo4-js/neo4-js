@@ -79,7 +79,7 @@ export default class Model {
   _createModelObject(properties, model) {
     model = model || this;
     const o = new ModelObject();
-    o.init(properties, this);
+    o.init(properties, model);
     return o;
   }
 
