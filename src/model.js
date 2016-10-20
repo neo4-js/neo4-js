@@ -33,7 +33,10 @@ export default class Model {
   }
 
   _extractProperties(rawResult) {
-    return rawResult.records.map(r => r._fields[0].properties);
+    if (rawResult && rawResult.records && rawResult.records.map) {
+      return rawResult.records.map(r => r._fields[0].properties);
+    }
+    return [];
   }
 
   _getRelation(o, rel) {
