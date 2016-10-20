@@ -8,7 +8,7 @@ Install it via npm
 
 Use it via models
 
-    var Neo4js = require('Neo4js');
+    var Neo4js = require('Neo4-js');
 
     const neo4js = new Neo4js('neo4j', 'neo4j');
     const User = neo4js.define('User', {
@@ -35,7 +35,7 @@ Use it via models
 
 Use relations
 
-    var Neo4js = require('Neo4js');
+    var Neo4js = require('Neo4-js');
 
     const neo4js = new Neo4js('neo4j', 'neo4j');
     const User = neo4js.define('User', {
@@ -86,7 +86,7 @@ Use relations
 
 Use it via queries
 
-    var Neo4js = require('Neo4js');
+    var Neo4js = require('Neo4-js');
 
     const neo4js = new Neo4js('neo4j', 'neo4j');
     const query = neo4js.Query();
@@ -105,7 +105,7 @@ Use it via queries
 
 Run cypher queries directly
 
-    var Neo4js = require('Neo4js');
+    var Neo4js = require('Neo4-js');
 
     const neo4js = Neo4js('neo4j', 'neo4j');
     neo4js.run("MATCH (a:Person { name: 'John' })-[:KNOWS]-(b:Person) RETURN b")
