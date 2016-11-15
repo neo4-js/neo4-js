@@ -1,4 +1,3 @@
-import QueryGenerator from './query-generator';
 import QueryPart from './query-part';
 import Utils from './Utils';
 
