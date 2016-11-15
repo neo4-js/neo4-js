@@ -43,4 +43,24 @@ describe('Neo4js', () => {
         });
     });
   });
+
+  describe('getModel', () => {
+    it('should return the model instance', () => {
+      const Player = neo4js.define(['getModel1', 'getModel2'], {
+        id: {
+          index: true,
+          defaultValue: Neo4js.uuid4
+        },
+        name: { },
+        email: {
+          unique: true
+        },
+        password: {
+          exists: true
+        }
+      });
+      const getPlayer = neo4js.getModel('getModel2');
+      expect(Player).to.eql(getPlayer);
+    })
+  })
 });

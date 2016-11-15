@@ -69,10 +69,10 @@ class Neo4js {
   }
 
   /**
-   * @param {String} label
+   * @param {String | String[]} labels
    */
-  getModel(label) {
-    const model = this.modelManager.getModel(label);
+  getModel(labels) {
+    const model = this.modelManager.getModel(labels);
     return model;
   }
 
