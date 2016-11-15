@@ -1,6 +1,7 @@
 import ModelObject from './model-object';
 import Query from './query';
 import Utils from './Utils';
+import Hooks from './hooks';
 import Immutable from 'immutable';
 
 const CharGenerator = Utils.CharGenerator;
@@ -86,12 +87,26 @@ export default class Model {
     return o;
   }
 
+  _applyHook(type, properties) {
+    const newProperties = this.hooks.execute(type, properties);
+    if (newProperties) {
+      return newProperties;
+    }
+    return properties;
+  }
+
   /**
    * @param {String | String[]} labels
    * @param {Object} schema
+   * @param {Object} hooks
+   * @param {Function} hooks.validate
+   * @param {Function} hooks.beforeCreate
+   * @param {Function} hooks.beforeFind
+   * @param {Function} hooks.afterCreate
+   * @param {Function} hooks.afterFind
    * @param {Neo4js} neo4js
    */
-  constructor(labels, schema, neo4js) {
+  constructor(labels, schema, hooks, neo4js) {
     if (!labels.sort) {
       labels = [ labels ];
     }
@@ -105,6 +120,8 @@ export default class Model {
     this.properties = Object.keys(schema);
     this.neo4js = neo4js;
     this.relations = [];
+    this.hooks = new Hooks();
+    this.hooks.init(hooks, this);
   }
 
   /**
@@ -135,6 +152,9 @@ export default class Model {
    * @returns {Promise<ModelObject[]>}
    */
   find(properties) {
+    properties = this._applyHook('validate', properties);
+    properties = this._applyHook('beforeFind', properties);
+
     return new Promise((resolve, reject) => {
       const m = CharGenerator.next();
       const query = new Query(this.neo4js);
@@ -149,7 +169,10 @@ export default class Model {
           }
 
           let properties = this._extractProperties(rawResult);
-          return Promise.all(properties.map(p => this._getAllRelations(p)));
+          return Promise.all(properties.map(p => {
+            const newProps = this._applyHook('afterFind', p);
+            return this._getAllRelations(newProps);
+          }));
         })
         .then((properties) => {
           resolve(properties.map(r => this._createModelObject(r)));
@@ -193,6 +216,9 @@ export default class Model {
    * @returns {Promise<ModelObject>}
    */
   findOne(properties) {
+    properties = this._applyHook('validate', properties);
+    properties = this._applyHook('beforeFind', properties);
+
     return new Promise((resolve, reject) => {
       const m = CharGenerator.next();
       const query = new Query(this.neo4js);
@@ -209,7 +235,8 @@ export default class Model {
 
           const result = this._extractProperties(rawResult);
           if (result.length > 0) {
-            resolve(this._getAllRelations(result[0]));
+            const newProps = this._applyHook('afterFind', result[0]);
+            resolve(this._getAllRelations(newProps));
           } else {
             reject(new Error('No node found'));
           }
@@ -274,6 +301,9 @@ export default class Model {
    * @returns {Promise<ModelObject>}
    */
   create(properties) {
+    properties = this._applyHook('validate', properties);
+    properties = this._applyHook('beforeCreate', properties);
+
     return new Promise((resolve, reject) => {
       const errors = this._checkProperties(properties);
       if (errors) reject(errors);
@@ -294,7 +324,8 @@ export default class Model {
 
           const result = this._extractProperties(rawResult);
           if (result.length > 0) {
-            resolve(this._createModelObject(result[0]));
+            const newProps = this._applyHook('afterCreate', result[0]);
+            resolve(this._createModelObject(newProps));
           } else {
             reject(new Error('No user inserted'));
           }

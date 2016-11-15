@@ -4,4 +4,5 @@ describe('Model', function() {
   require('./find');
   require('./findOne');
   require('./count');
+  require('./hooks');
 });
