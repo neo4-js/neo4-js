@@ -98,5 +98,23 @@ describe('Neo4js', () => {
       const getPlayer = neo4js.getModel(['getModel5']);
       expect(Player).to.eql(getPlayer);
     });
+
+    it('should return undefined', () => {
+      neo4js.define(['getModel6', 'getModel7'], {
+        id: {
+          index: true,
+          defaultValue: Neo4js.uuid4
+        },
+        name: { },
+        email: {
+          unique: true
+        },
+        password: {
+          exists: true
+        }
+      });
+      const player = neo4js.getModel(['getModel7', 'asdtfgubhjftbz']);
+      expect(player).to.equal(undefined);
+    });
   });
 });
