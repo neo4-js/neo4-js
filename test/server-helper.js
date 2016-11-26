@@ -6,7 +6,7 @@ const helper = {
   restUrl: () => process.env.REST_URL || 'http://localhost',
   restPort: () => process.env.REST_PORT || 32769,
   getNeo4jsInstance: () => {
-    return new Neo4js('neo4j', 'neo4js', {
+    return new Neo4js('neo4j', 'knast', {
       url: helper.boltUrl(),
       port: helper.boltPort(),
       rest: {

@@ -173,6 +173,21 @@ class Neo4js {
   }
 
   /**
+   * This method returns a transaction promise (tx = session.beginTransaction())
+   * @return {Promise} Returns an object with { run, commit, rollback }
+   */
+  beginTransaction() {
+    return new Promise((resolve, reject) => {
+      const session = this.driver.session();
+      const tx = session.beginTransaction();
+      const run = tx.run.bind(tx);
+      const rollback = tx.rollback.bind(tx);
+      const commit = tx.commit.bind(tx);
+      resolve({ run, commit, rollback });
+    });
+  }
+
+  /**
    * @returns {UUIDv4}
    */
   static uuid4() {

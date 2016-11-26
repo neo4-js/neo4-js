@@ -151,13 +151,13 @@ export default class Model {
    * @param {Object} properties
    * @returns {Promise<ModelObject[]>}
    */
-  find(properties) {
+  find(properties, run) {
     properties = this._applyHook('validate', properties);
     properties = this._applyHook('beforeFind', properties);
 
     return new Promise((resolve, reject) => {
       const m = CharGenerator.next();
-      const query = new Query(this.neo4js);
+      const query = new Query(this.neo4js, run);
 
       query
         .match(m, this.labels, properties)
@@ -215,13 +215,13 @@ export default class Model {
    * @param {Object} properties
    * @returns {Promise<ModelObject>}
    */
-  findOne(properties) {
+  findOne(properties, run) {
     properties = this._applyHook('validate', properties);
     properties = this._applyHook('beforeFind', properties);
 
     return new Promise((resolve, reject) => {
       const m = CharGenerator.next();
-      const query = new Query(this.neo4js);
+      const query = new Query(this.neo4js, run);
 
       query
         .match(m, this.labels, properties)
@@ -251,10 +251,10 @@ export default class Model {
    * @param {Object} properties
    * @returns {Promise}
    */
-  count(properties) {
+  count(properties, run) {
     return new Promise((resolve, reject) => {
       const m = CharGenerator.next();
-      const query = new Query(this.neo4js);
+      const query = new Query(this.neo4js, run);
 
       query
         .match(m, this.labels, properties)
@@ -273,11 +273,11 @@ export default class Model {
    * @param {Object} relation.properties
    * @param {ModelObject} to
    */
-  relate(from, rel, to) {
+  relate(from, rel, to, run) {
     return new Promise((resolve, reject) => {
       const a = CharGenerator.next();
       const b = CharGenerator.next();
-      const query = new Query(this.neo4js);
+      const query = new Query(this.neo4js, run);
 
       query
         .match(a, this.labels, { guid: from.p.guid })
@@ -300,7 +300,7 @@ export default class Model {
    * @param {Object} properties
    * @returns {Promise<ModelObject>}
    */
-  create(properties) {
+  create(properties, run) {
     properties = this._applyHook('validate', properties);
     properties = this._applyHook('beforeCreate', properties);
 
@@ -311,7 +311,7 @@ export default class Model {
       properties = this._addDefaultProperties(properties);
 
       const m = CharGenerator.next();
-      const query = new Query(this.neo4js);
+      const query = new Query(this.neo4js, run);
 
       query
         .create(m, this.labels, properties)

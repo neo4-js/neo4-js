@@ -17,6 +17,7 @@ const userSchema = {
     unique: true,
     exists: true,
   },
+  age: { }
 };
 
 describe('Neo4js', () => {
@@ -35,7 +36,7 @@ describe('Neo4js', () => {
 
   describe('getSchemaInfo', () => {
     it('should return the schema synced', () => {
-      const User = neo4js.define('Model1', userSchema);
+      const User = neo4js.define(['Model1'], userSchema);
       return User.sync()
         .then(() => neo4js.getSchemaInfo())
         .then(schemaInfo => {
