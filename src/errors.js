@@ -1,5 +1,4 @@
-
-class BaseError extends Error {
+export class BaseError extends Error {
   constructor(message) {
     super(message);
     this.name = 'Neo4jsBaseError';
@@ -7,9 +6,8 @@ class BaseError extends Error {
     Error.captureStackTrace(this, this.constructor);
   }
 }
-exports.BaseError = BaseError;
 
-class ValidationError extends BaseError {
+export class ValidationError extends BaseError {
   constructor(message, errors) {
     super(message);
     this.name = 'Neo4jsValidationError';
@@ -23,15 +21,14 @@ class ValidationError extends BaseError {
     }
   }
 }
-exports.ValidationError = ValidationError;
 
-class UniqueConstraintError extends ValidationError {
+export class UniqueConstraintError extends ValidationError {
   constructor(options) {
     options = options || {};
     super(options.message, options.errors);
   }
 }
 
-class ExistsConstraintError extends ValidationError {
+export class ExistsConstraintError extends ValidationError {
 
 }

@@ -16,10 +16,8 @@ export default class ModelObject {
     this.p = properties;
 
     for(let i in model.instanceMethods) {
-      model.instanceMethods[i] = model.instanceMethods[i].bind(this);
+      this[i] = model.instanceMethods[i].bind(this);
     }
-
-    Utils._.assign(this, model.instanceMethods);
   }
 
   /**

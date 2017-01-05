@@ -4,7 +4,7 @@ import uuid from 'node-uuid';
 import Debug from 'debug';
 const debug = Debug('neo4js');
 
-import neo4jsErrors from './errors';
+import * as neo4jsErrors from './errors';
 import Model from './model';
 import ModelManager from './model-manager';
 import ModelObject from './model-object';
@@ -62,17 +62,17 @@ class Neo4js {
    * @param {Boolean} schema.{propertyName}.exists
    * @param {Function} schema.{propertyName}.defaultValue
    */
-  define(labels, schema) {
-    const model = new Model(labels, schema, this);
+  define(labels, schema, hooks) {
+    const model = new Model(labels, schema, hooks, this);
     this.modelManager.add(model);
     return model;
   }
 
   /**
-   * @param {String} label
+   * @param {String | String[]} labels
    */
-  getModel(label) {
-    const model = this.modelManager.getModel(label);
+  getModel(labels) {
+    const model = this.modelManager.getModel(labels);
     return model;
   }
 
@@ -170,6 +170,21 @@ class Neo4js {
         session.close();
         return err;
       });
+  }
+
+  /**
+   * This method returns a transaction promise (tx = session.beginTransaction())
+   * @return {Promise} Returns an object with { run, commit, rollback }
+   */
+  beginTransaction() {
+    return new Promise((resolve, reject) => {
+      const session = this.driver.session();
+      const tx = session.beginTransaction();
+      const run = tx.run.bind(tx);
+      const rollback = tx.rollback.bind(tx);
+      const commit = tx.commit.bind(tx);
+      resolve({ run, commit, rollback });
+    });
   }
 
   /**

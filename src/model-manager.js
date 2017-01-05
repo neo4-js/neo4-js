@@ -17,9 +17,21 @@ export default class ModelManager {
   }
 
   getModel(against, attribute = 'name') {
-    const model = this.models.find(m => m[attribute] === against);
+    return this.models.find(m => {
 
-    return model;
+      let values = m[attribute];
+      if (attribute === 'name') {
+        values = values.split(',');
+      }
+
+      if (Array.isArray(values)) {
+        if (Array.isArray(against)) {
+          return values.filter(a => against.find(p => p === a)).length === against.length; 
+        }
+        return values.find(a => a === against);
+      }
+      return values === against;
+    });
   }
 
   get all() {

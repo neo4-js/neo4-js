@@ -1,4 +1,3 @@
-import QueryGenerator from './query-generator';
 import QueryPart from './query-part';
 import Utils from './Utils';
 
@@ -54,10 +53,12 @@ function _runSequenceRecursive(cmds, resolve, i = 0, results = []) {
 export default class Query {
   /**
    * @param {Neo4js} neo4js - Instance of Neo4js class
+   * @param {function} run - optional run function from beginTransaction callback
    */
-  constructor(neo4js) {
+  constructor(neo4js, run) {
     this.neo4js = neo4js;
     this.parts = [];
+    this.run = run;
   }
 
   static runSequence(cmds) {
@@ -405,6 +406,9 @@ export default class Query {
     }
 
     this.parts = [];
+    if (this.run) {
+      return this.run(cmds.join(' '), params);
+    }
     return this.neo4js.run(cmds.join(' '), params);
   }
 }

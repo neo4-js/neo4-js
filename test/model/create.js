@@ -32,7 +32,7 @@ describe('create', function() {
   it('should return an error when breaking the unique constraint', function() {
     return DbModel.create({ text: 'foo' })
       .then(object => {
-        return DbModel.create(object)
+        return DbModel.create(object.p)
       })
       .catch(err => {
         expect(err).to.be.instanceof(Error);
