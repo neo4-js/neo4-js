@@ -1,6 +1,6 @@
 {
   "name": "neo4js",
-  "version": "0.1.0",
+  "version": "2.0.0-beta",
   "description": "Neo4j graphdb object graph mapper for javascript",
   "main": "src/index.js",
   "author": "Jan Schlacher <j.schlacher@trisoft.at>",
