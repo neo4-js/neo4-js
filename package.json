@@ -1,5 +1,5 @@
 {
-  "name": "neo4js",
+  "name": "neo4-js",
   "version": "2.0.0-beta",
   "description": "Neo4j graphdb object graph mapper for javascript",
   "main": "src/index.js",
