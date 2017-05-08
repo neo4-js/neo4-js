@@ -4,7 +4,7 @@ import { v1 as neo4j } from 'neo4j-driver';
 import { autobind } from 'core-decorators';
 import idx from 'idx';
 
-export type TrineoOptions = {
+export type Neo4jsOptions = {
   boltUri?: string,
   boltPort?: number,
   restUri?: string,
@@ -13,11 +13,11 @@ export type TrineoOptions = {
   password?: string,
 }
 
-class trineo {
-  options: TrineoOptions;
+class neo4js {
+  options: Neo4jsOptions;
   driver: any;
 
-  init(options: TrineoOptions) {
+  init(options: Neo4jsOptions) {
     this.options = { ...options };
 
     // TODO: at least some verification...
@@ -62,7 +62,7 @@ class trineo {
   }
 }
 
-export default new trineo();
+export default new neo4js();
 
 export * from './Model';
 export * from './ModelInstance';
