@@ -1,12 +1,12 @@
 // @flow
 
 type HasManyActions<Properties, ModelInstance, Labels/*: string*/> = {
-  get: (label: Labels, props?: Properties) => Promise<ModelInstance[]>,
-  update: (label: Labels, props: Properties, where?: Properties) => Promise<ModelInstance[]>,
-  create: (label: Labels, props: Properties[]) => Promise<ModelInstance[]>,
-  add: (label: Labels, instances: ModelInstance[]) => Promise<number>,
-  remove: (label: Labels, props?: Properties) => Promise<number>,
-  count: (label: Labels, props?: Properties) => Promise<number>,
+  get: (props?: Properties, label?: Labels) => Promise<ModelInstance[]>,
+  update: (props: Properties, where?: Properties, label?: Labels) => Promise<ModelInstance[]>,
+  create: (props: Properties[], label?: Labels) => Promise<ModelInstance[]>,
+  add: (instances: ModelInstance[], label?: Labels) => Promise<number>,
+  remove: (props?: Properties, label?: Labels) => Promise<number>,
+  count: (props?: Properties, label?: Labels) => Promise<number>,
 };
 
 type HasOneActions<Properties, ModelInstance, Labels/*: string = ''*/> = {

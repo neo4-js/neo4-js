@@ -129,8 +129,8 @@ export class Model<P, I: ModelInstance<P>> {
     return result;
   }
 
-  hasMany(model: Model<*, *>, propertyName: string) {
-    this.relations.push(new Relation('hasMany', this, model, propertyName));
+  hasMany(model: Model<*, *>, propertyName: string, defaultLabel?: string) {
+    this.relations.push(new Relation('hasMany', this, model, propertyName, defaultLabel));
   }
 
   hasOne(model: Model<*, *>, propertyName: string, defaultLabel?: string) {

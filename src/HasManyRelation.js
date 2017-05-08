@@ -1,7 +1,11 @@
 // @flow
 import trineo, { ModelInstance } from './index';
 
-export async function get(instance: ModelInstance<*>, label: string, props: any): Promise<any> {
+export async function get(instance: ModelInstance<*>, label: ?string, props: any): Promise<any> {
+  if (!label) {
+    return Promise.reject(new Error('No relation label given'));
+  }
+
   const matchPropsStr = props ? this.src.prepareMatchProps(props) : '';
 
   const result = await trineo.run(`
@@ -12,7 +16,11 @@ export async function get(instance: ModelInstance<*>, label: string, props: any)
   return Promise.resolve(result.map(p => this.dest._createModelInstance(p.b)));
 }
 
-export async function create(instance: ModelInstance<*>, label: string, propsArray: any[]): Promise<any> {
+export async function create(instance: ModelInstance<*>, label: ?string, propsArray: any[]): Promise<any> {
+  if (!label) {
+    return Promise.reject(new Error('No relation label given'));
+  }
+
   const destInstances = [];
 
   for (const props of propsArray) {
@@ -29,7 +37,11 @@ export async function create(instance: ModelInstance<*>, label: string, propsArr
   return Promise.resolve(destInstances);
 }
 
-export async function add(instance: ModelInstance<*>, label: string, instances: ModelInstance<*>[]): Promise<number> {
+export async function add(instance: ModelInstance<*>, label: ?string, instances: ModelInstance<*>[]): Promise<number> {
+  if (!label) {
+    return Promise.reject(new Error('No relation label given'));
+  }
+
   let relationshipsCreated = 0;
   for (const destInstance of instances) {
     const result = await trineo.run(`
@@ -45,7 +57,11 @@ export async function add(instance: ModelInstance<*>, label: string, instances: 
   return Promise.resolve(relationshipsCreated);
 }
 
-export async function count(instance: ModelInstance<*>, label: string, props: any): Promise<number> {
+export async function count(instance: ModelInstance<*>, label: ?string, props: any): Promise<number> {
+  if (!label) {
+    return Promise.reject(new Error('No relation label given'));
+  }
+  
   const matchPropsStr = props ? this.src.prepareMatchProps(props) : '';
 
   const result = await trineo.run(`
@@ -58,7 +74,11 @@ export async function count(instance: ModelInstance<*>, label: string, props: an
   return Promise.resolve(low);
 }
 
-export async function update(instance: ModelInstance<*>, label: string, props: any, where: any): Promise<any> {
+export async function update(instance: ModelInstance<*>, label: ?string, props: any, where: any): Promise<any> {
+  if (!label) {
+    return Promise.reject(new Error('No relation label given'));
+  }
+
   const matchPropsStr = where ? this.src.prepareMatchProps(where) : '';
   const { str: setPropsStr, newProps } = this.src.prepareSetProps('b', props);
 

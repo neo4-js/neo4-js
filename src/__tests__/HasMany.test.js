@@ -20,9 +20,9 @@ const Task: TaskModel = new TaskModel('Task');
 
 @model(Person)
 class PersonInstance extends ModelInstance<PersonProps> {
-  @hasMany(Task)
+  @hasMany(Task, 'created')
   tasks: HasManyActions<TaskProps, TaskInstance, 'created' | 'assignedTo'>;
-  @hasMany(Person)
+  @hasMany(Person, 'friend')
   friends: HasManyActions<PersonProps, PersonInstance, 'friend'>;
 }
 
@@ -63,8 +63,8 @@ describe('HasMany', () => {
         done: false
       }];
 
-      const tasks: TaskInstance[] = await paul.tasks.create('created', propsArray);
-      paul.tasks.get('created');
+      const tasks: TaskInstance[] = await paul.tasks.create(propsArray);
+      paul.tasks.get();
 
       expect(tasks.map(t => { delete t.props.guid; return t; })).toMatchSnapshot();
     });
@@ -83,33 +83,33 @@ describe('HasMany', () => {
     beforeEach(async () => {
       paul = await Person.create({ name: 'Paul' });
       const hubert: PersonInstance = await Person.create({ name: 'Hubert' });
-      hubert.tasks.create('created', [{ title: 'Learn to drive a car' }]);
+      hubert.tasks.create([{ title: 'Learn to drive a car' }]);
     });
 
     it('should find all tasks to instance', async () => {
-      await paul.tasks.create('created', tasksProps);
-      const tasks: TaskInstance[] = await paul.tasks.get('created');
+      await paul.tasks.create(tasksProps);
+      const tasks: TaskInstance[] = await paul.tasks.get();
 
       expect(tasks.map(t => { delete t.props.guid; return t; })).toMatchSnapshot();
     });
 
     it('should find all tasks to instance where task property done equals true', async () => {
-      await paul.tasks.create('created', tasksProps);
-      const tasks: TaskInstance[] = await paul.tasks.get('created', { done: true });
+      await paul.tasks.create(tasksProps);
+      const tasks: TaskInstance[] = await paul.tasks.get({ done: true });
 
       expect(tasks.map(t => { delete t.props.guid; return t; })).toMatchSnapshot();
     });
 
     it('should find all tasks to instance', async () => {
-      await paul.tasks.create('assignedTo', tasksProps);
-      const tasks: TaskInstance[] = await paul.tasks.get('assignedTo');
+      await paul.tasks.create(tasksProps, 'assignedTo');
+      const tasks: TaskInstance[] = await paul.tasks.get(undefined, 'assignedTo');
 
       expect(tasks.map(t => { delete t.props.guid; return t; })).toMatchSnapshot();
     });
 
     it('should find nothing', async () => {
-      await paul.tasks.create('created', tasksProps);
-      const tasks: TaskInstance[] = await paul.tasks.get('assignedTo');
+      await paul.tasks.create(tasksProps);
+      const tasks: TaskInstance[] = await paul.tasks.get(undefined, 'assignedTo');
 
       expect(tasks).toMatchSnapshot();
     });
@@ -128,18 +128,18 @@ describe('HasMany', () => {
     beforeEach(async () => {
       paul = await Person.create({ name: 'Paul' });
       const hubert: PersonInstance = await Person.create({ name: 'Hubert' });
-      hubert.tasks.create('created', [{ title: 'Learn to drive a car' }]);
+      hubert.tasks.create([{ title: 'Learn to drive a car' }]);
     });
 
     it('should count all tasks to instance', async () => {
-      await paul.tasks.create('created', tasksProps);
-      const tasks: number = await paul.tasks.count('created');
+      await paul.tasks.create(tasksProps);
+      const tasks: number = await paul.tasks.count();
       expect(tasks).toMatchSnapshot();
     });
 
     it('should count all tasks with property done equals true to instance', async () => {
-      await paul.tasks.create('assignedTo', tasksProps);
-      const tasks: number = await paul.tasks.count('assignedTo', { done: true });
+      await paul.tasks.create(tasksProps, 'assignedTo');
+      const tasks: number = await paul.tasks.count({ done: true }, 'assignedTo');
       expect(tasks).toMatchSnapshot();
     });
   });
@@ -158,10 +158,10 @@ describe('HasMany', () => {
       for (const props of tasksProps) {
         tasks.push(await Task.create(props));
       }
-      const t: number = await paul.tasks.add('assignedTo', tasks);
+      const t: number = await paul.tasks.add(tasks, 'assignedTo');
       expect(t).toMatchSnapshot();
 
-      const relatedTasks = await paul.tasks.get('assignedTo');
+      const relatedTasks = await paul.tasks.get(undefined, 'assignedTo');
       // $FlowFixMe
       const mapSort = (t) => (t.map(a => a.props).sort((a, b) => a.title.localeCompare(b.title)));
       expect(mapSort(relatedTasks)).toEqual(mapSort(tasks));
@@ -179,8 +179,8 @@ describe('HasMany', () => {
 
     it('should set tasks to done', async () => {
       const paul: PersonInstance = await Person.create({ name: 'Paul' });
-      const tasks: TaskInstance[] = await paul.tasks.create('assignedTo', tasksProps);
-      const result: TaskInstance[] = await paul.tasks.update('assignedTo', { done: true }, { done: false });
+      const tasks: TaskInstance[] = await paul.tasks.create(tasksProps, 'assignedTo');
+      const result: TaskInstance[] = await paul.tasks.update({ done: true }, { done: false }, 'assignedTo');
 
       expect(result.map(r => { delete r.props.guid; return r; })).toMatchSnapshot();
     });

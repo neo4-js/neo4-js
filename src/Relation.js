@@ -14,17 +14,17 @@ export const hasOne = (model: Model<*, *>, defaultLabel?: string) => (target: an
   target._hasOne.push({ name, model, defaultLabel });
 }
 
-export const hasMany = (model: Model<*, *>) => (target: any, name: string) => {
+export const hasMany = (model: Model<*, *>, defaultLabel?: string) => (target: any, name: string) => {
   if (!target._hasMany) {
     target._hasMany = [];
   }
-  target._hasMany.push({ name, model });
+  target._hasMany.push({ name, model, defaultLabel });
 }
 
 export const model = (model: Model<*, *>) => (target: any, name: string) => {
   if (target.prototype._hasMany) {
     for (const t of target.prototype._hasMany) {
-      model.hasMany(t.model, t.name);
+      model.hasMany(t.model, t.name, t.defaultLabel);
     }
   }
   if (target.prototype._hasOne) {
@@ -62,11 +62,11 @@ export class Relation {
   addHasManyToInstance(instance: ModelInstance<*>): any {
     const accessors = {
       [this.propertyName]: {
-        get: HasMany.get.bind(this, instance),
-        update: HasMany.update.bind(this, instance),
-        create: HasMany.create.bind(this, instance),
-        add: HasMany.add.bind(this, instance),
-        count: HasMany.count.bind(this, instance),
+        get: (props: any, label?: string) => HasMany.get.bind(this, instance, label ? label : this.defaultLabel)(props),
+        update: (newProps: any, props: any, label?: string) => HasMany.update.bind(this, instance, label ? label : this.defaultLabel)(newProps, props),
+        create: (props: any, label?: string) => HasMany.create.bind(this, instance, label ? label : this.defaultLabel)(props),
+        add: (instances: any, label?: string) => HasMany.add.bind(this, instance, label ? label : this.defaultLabel)(instances),
+        count: (props: any, label?: string) => HasMany.count.bind(this, instance, label ? label : this.defaultLabel)(props),
       },
     };
 
