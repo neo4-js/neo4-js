@@ -5,7 +5,7 @@ export async function get(instance: ModelInstance<*>, label: string, props: any)
   const matchPropsStr = props ? this.src.prepareMatchProps(props) : '';
 
   const result = await trineo.run(`
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[c:${label}]->(b:${this.dest.label} {${matchPropsStr}})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[c:${label}]-(b:${this.dest.label} {${matchPropsStr}})
     RETURN b
   `, { _srcGuid: instance.props.guid, ...props });
   

@@ -1,6 +1,6 @@
 // @flow
 
-type HasManyActions<Properties, ModelInstance, Labels: string> = {
+type HasManyActions<Properties, ModelInstance, Labels/*: string*/> = {
   get: (label: Labels, props?: Properties) => Promise<ModelInstance[]>,
   update: (label: Labels, props: Properties, where?: Properties) => Promise<ModelInstance[]>,
   create: (label: Labels, props: Properties[]) => Promise<ModelInstance[]>,
@@ -9,7 +9,7 @@ type HasManyActions<Properties, ModelInstance, Labels: string> = {
   count: (label: Labels, props?: Properties) => Promise<number>,
 };
 
-type HasOneActions<Properties, ModelInstance, Labels, Labels/*: string = ''*/> = {
+type HasOneActions<Properties, ModelInstance, Labels/*: string = ''*/> = {
   get: (label?: Labels) => Promise<ModelInstance | null>,
   update: (props: Properties, label?: Labels) => Promise<ModelInstance | null>,
   create: (props: Properties, label?: Labels) => Promise<ModelInstance>,

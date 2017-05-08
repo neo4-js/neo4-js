@@ -7,7 +7,7 @@ export async function get(instance: ModelInstance<*>, label: ?string): Promise<a
   }
 
   const result = await trineo.run(`
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[:${label}]->(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[:${label}]-(b:${this.dest.label})
     RETURN b
   `, { _srcGuid: instance.props.guid });
 
