@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`trineo should create a bunch of persons and select them 1`] = `
+Array [
+  Object {
+    "n": Object {
+      "name": "Hanns",
+    },
+  },
+  Object {
+    "n": Object {
+      "name": "Huber",
+    },
+  },
+]
+`;
+
+exports[`trineo should create a person 1`] = `
+Array [
+  Object {
+    "n": Object {
+      "name": "Hanns",
+    },
+  },
+]
+`;
+
+exports[`trineo should create a person with params 1`] = `
+Array [
+  Object {
+    "n": Object {
+      "name": "Hanns",
+    },
+  },
+]
+`;
+
+exports[`trineo should produce an error 1`] = `
+[Error: Unexpected end of input: expected whitespace, CONSTRAINT, INDEX, UNIQUE or a pattern (line 1, column 7 (offset: 6))
+"CREATE"
+       ^]
+`;

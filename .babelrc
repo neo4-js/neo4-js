@@ -1,11 +1,8 @@
 {
-  "presets": [
-    "es2015",
-    "stage-0"
-  ],
-  "env": {
-    "test": {
-      "plugins": [ "istanbul" ]
-    }
-  }
+  "presets": ["stage-3", "es2015", "flow"],
+  "plugins": [
+    "idx",
+    "transform-decorators-legacy",
+    "transform-class-properties"
+  ]
 }

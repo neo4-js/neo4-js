@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Hooks create should call after create hook once and change props of instance 1`] = `
+ModelInstance {
+  "props": Object {
+    "age": 21,
+    "name": "Paul",
+  },
+}
+`;
+
+exports[`Hooks find should call after find hook twice and change props of instances 1`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "done": false,
+      "title": "Buy milk",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "done": false,
+      "title": "Read a book",
+    },
+  },
+]
+`;
+
+exports[`Hooks find should call before find hook once and change props 1`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "done": true,
+      "title": "Read a book",
+    },
+  },
+]
+`;

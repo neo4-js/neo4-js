@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HasOne add should add created supervisor 1`] = `true`;
+
+exports[`HasOne create should create one supervisor 1`] = `
+Object {
+  "props": Object {
+    "name": "Hubert",
+  },
+  "supervisor": Object {
+    "add": [Function],
+    "create": [Function],
+    "get": [Function],
+    "hasOne": [Function],
+    "remove": [Function],
+    "update": [Function],
+  },
+  "tasks": Object {
+    "add": [Function],
+    "count": [Function],
+    "create": [Function],
+    "get": [Function],
+    "update": [Function],
+  },
+}
+`;
+
+exports[`HasOne create should throw an error when creating a relation without a relation label 1`] = `[Error: No relation label given]`;
+
+exports[`HasOne hasOne should return true 1`] = `true`;
+
+exports[`HasOne remove should remove supervisor 1`] = `
+Object {
+  "constraintsAdded": 0,
+  "constraintsRemoved": 0,
+  "indexesAdded": 0,
+  "indexesRemoved": 0,
+  "labelsAdded": 0,
+  "labelsRemoved": 0,
+  "nodesCreated": 0,
+  "nodesDeleted": 1,
+  "propertiesSet": 0,
+  "relationshipsCreated": 0,
+  "relationshipsDeleted": 1,
+}
+`;
+
+exports[`HasOne remove should remove supervisor 2`] = `Array []`;
+
+exports[`HasOne update should update supervisor 1`] = `
+Object {
+  "props": Object {
+    "name": "Ignatz",
+  },
+  "supervisor": Object {
+    "add": [Function],
+    "create": [Function],
+    "get": [Function],
+    "hasOne": [Function],
+    "remove": [Function],
+    "update": [Function],
+  },
+  "tasks": Object {
+    "add": [Function],
+    "count": [Function],
+    "create": [Function],
+    "get": [Function],
+    "update": [Function],
+  },
+}
+`;

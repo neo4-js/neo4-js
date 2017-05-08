@@ -1,0 +1,57 @@
+{
+  "name": "neo4js",
+  "version": "0.1.0",
+  "description": "Neo4j graphdb object graph mapper for javascript",
+  "main": "src/index.js",
+  "author": "Jan Schlacher <j.schlacher@trisoft.at>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --runInBand",
+    "test:watch": "yarn test -- --watch",
+    "start-db": "./scripts/neo4j-startup.sh"
+  },
+  "dependencies": {
+    "core-decorators": "^0.18.0",
+    "dequeue": "^1.0.5",
+    "elegant-spinner": "^1.0.1",
+    "event-kit": "^2.0.0",
+    "fs-plus": "^3.0.0",
+    "fuzzaldrin": "^2.1.0",
+    "i": "^0.3.5",
+    "idx": "^1.5.0",
+    "js-beautify": "^1.6.12",
+    "lodash": "^4.17.4",
+    "log4js": "^1.1.1",
+    "lru-cache": "^4.0.1",
+    "mkdirp": "^0.5.1",
+    "neo4j-driver": "^1.2.0",
+    "regenerator-runtime": "^0.10.5",
+    "rimraf": "^2.5.4",
+    "rxjs": "^5.3.1",
+    "semver": "^5.3.0",
+    "shell-quote": "^1.6.0",
+    "temp": "^0.8.3",
+    "uuid": "^3.0.1"
+  },
+  "devDependencies": {
+    "babel-jest": "^20.0.0",
+    "babel-plugin-idx": "^1.5.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "flow-bin": "^0.45.0",
+    "jest": "^20.0.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "setupFiles": [
+      "<rootDir>jest-setup.js"
+    ]
+  }
+}

@@ -4,7 +4,7 @@
 image: node:latest
 
 variables:
-  NEO4J_AUTH: neo4j/jan95
+  NEO4J_AUTH: neo4j/neo4j
 
 # Pick zero or more services to be used on all builds.
 # Only needed when using a docker container to run your tests in.
