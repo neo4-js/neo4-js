@@ -1,5 +1,7 @@
 # Neo4-js
 
+[![Build Status](https://travis-ci.org/JanPeter/neo4js.svg?branch=master)](https://travis-ci.org/JanPeter/neo4js)
+
 Neo4-js is a object-graph mapper for JavaScript and neo4j with full flow-type support. Neo4-js hides repetitive queries such as the basic CRUD operations to the developer. For best development experience use flow-type from Facebook to obtain good autocomplete results.
 
 In this document you'll find the basic usage of the library.
