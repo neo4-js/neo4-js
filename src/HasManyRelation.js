@@ -1,5 +1,6 @@
 // @flow
 import trineo, { ModelInstance } from "./index";
+import { prepareWhere } from "./utils";
 
 export async function get(
   instance: ModelInstance<*>,
@@ -10,14 +11,15 @@ export async function get(
     return Promise.reject(new Error("No relation label given"));
   }
 
-  const matchPropsStr = props ? this.src.prepareMatchProps(props) : "";
+  const { where, flatProps } = prepareWhere(props, "b");
 
   const result = await trineo.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[c:${label}]-(b:${this.dest.label} {${matchPropsStr}})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[c:${label}]-(b:${this.dest.label})
+    ${where}
     RETURN b
   `,
-    { _srcGuid: instance.props.guid, ...props }
+    { _srcGuid: instance.props.guid, ...flatProps }
   );
 
   return Promise.resolve(result.map(p => this.dest._createModelInstance(p.b)));
@@ -87,14 +89,15 @@ export async function count(
     return Promise.reject(new Error("No relation label given"));
   }
 
-  const matchPropsStr = props ? this.src.prepareMatchProps(props) : "";
+  const { where, flatProps } = prepareWhere(props, "b");
 
   const result = await trineo.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[c:${label}]->(b:${this.dest.label} {${matchPropsStr}})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[c:${label}]->(b:${this.dest.label})
+    ${where}
     RETURN COUNT(b) as b
   `,
-    { _srcGuid: instance.props.guid, ...props }
+    { _srcGuid: instance.props.guid, ...flatProps }
   );
 
   // $FlowFixMe
@@ -106,22 +109,23 @@ export async function update(
   instance: ModelInstance<*>,
   label: ?string,
   props: any,
-  where: any
+  whereProps: any
 ): Promise<any> {
   if (!label) {
     return Promise.reject(new Error("No relation label given"));
   }
 
-  const matchPropsStr = where ? this.src.prepareMatchProps(where) : "";
+  const { where, flatProps } = prepareWhere(whereProps, "b");
   const { str: setPropsStr, newProps } = this.src.prepareSetProps("b", props);
 
   const result = await trineo.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[c:${label}]->(b:${this.dest.label} {${matchPropsStr}})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[c:${label}]->(b:${this.dest.label})
+    ${where}
     SET ${setPropsStr}
     RETURN b
   `,
-    { _srcGuid: instance.props.guid, ...where, ...newProps }
+    { _srcGuid: instance.props.guid, ...flatProps, ...newProps }
   );
 
   return Promise.resolve(result.map(a => this.dest._createModelInstance(a.b)));

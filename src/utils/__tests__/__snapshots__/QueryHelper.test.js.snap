@@ -1,0 +1,190 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QueryHelper prepareWhere should return big where query 1`] = `
+Object {
+  "flatProps": Object {
+    "b": "Hans",
+    "d": "O",
+    "e": "Ol.?f",
+    "h": 5,
+    "i": 1,
+    "j": 15,
+    "k": 10,
+    "l": Array [
+      1,
+      2,
+      3,
+      4,
+      5,
+      11,
+      13,
+    ],
+  },
+  "where": "WHERE (a.name = {b} OR (a.name STARTS WITH {d} AND a.name =~ {e})) AND ((a.age < {h} OR a.age > {i} OR a.age < {j} OR a.age > {k}) AND a.age IN {l})",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return big where query with not 1`] = `
+Object {
+  "flatProps": Object {
+    "c": "Hans",
+    "e": "O",
+    "f": "Ol.?f",
+    "i": 5,
+    "j": 1,
+    "k": 15,
+    "l": 10,
+    "m": Array [
+      1,
+      2,
+      3,
+      4,
+      5,
+      11,
+      13,
+    ],
+  },
+  "where": "WHERE NOT (a.name = {c} OR (a.name STARTS WITH {e} AND a.name =~ {f})) AND ((a.age < {i} OR a.age > {j} OR a.age < {k} OR a.age > {l}) AND a.age IN {m})",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where contains 1`] = `
+Object {
+  "flatProps": Object {
+    "a": "la",
+  },
+  "where": "WHERE a.name CONTAINS {a}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where contains 2`] = `
+Object {
+  "flatProps": Object {
+    "a": "la",
+  },
+  "where": "WHERE a.name CONTAINS {a}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where ends with 1`] = `
+Object {
+  "flatProps": Object {
+    "a": "f",
+  },
+  "where": "WHERE a.name ENDS WITH {a}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where equals 1`] = `
+Object {
+  "flatProps": Object {
+    "a": "Olaf",
+  },
+  "where": "WHERE a.name = {a}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where greater than 1`] = `
+Object {
+  "flatProps": Object {
+    "a": 5,
+  },
+  "where": "WHERE a.age > {a}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where greater than equal 1`] = `
+Object {
+  "flatProps": Object {
+    "a": 5,
+  },
+  "where": "WHERE a.age >= {a}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where less than 1`] = `
+Object {
+  "flatProps": Object {
+    "a": 5,
+  },
+  "where": "WHERE a.age < {a}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where less than equal 1`] = `
+Object {
+  "flatProps": Object {
+    "a": 5,
+  },
+  "where": "WHERE a.age <= {a}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where name in string array 1`] = `
+Object {
+  "flatProps": Object {
+    "a": Array [
+      "Olaf",
+      "Hubert",
+    ],
+  },
+  "where": "WHERE a.name IN {a}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where not name equals 1`] = `
+Object {
+  "flatProps": Object {
+    "b": "Olaf",
+  },
+  "where": "WHERE NOT a.name = {b}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where regex 1`] = `
+Object {
+  "flatProps": Object {
+    "a": "Ol.?f",
+  },
+  "where": "WHERE a.name =~ {a}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where starts with 1`] = `
+Object {
+  "flatProps": Object {
+    "a": "O",
+  },
+  "where": "WHERE a.name STARTS WITH {a}",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where starts with and ends with 1`] = `
+Object {
+  "flatProps": Object {
+    "b": "O",
+    "c": "f",
+  },
+  "where": "WHERE (a.name STARTS WITH {b} AND a.name ENDS WITH {c})",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where starts with or ends with 1`] = `
+Object {
+  "flatProps": Object {
+    "b": "O",
+    "c": "f",
+  },
+  "where": "WHERE (a.name STARTS WITH {b} OR a.name ENDS WITH {c})",
+}
+`;
+
+exports[`QueryHelper prepareWhere should return where with between 1`] = `
+Object {
+  "flatProps": Object {
+    "a": 1,
+    "b": 2,
+  },
+  "where": "WHERE {a} <= a.age <= {b}",
+}
+`;

@@ -4,11 +4,11 @@ import trineo, { Model, ModelInstance, hasMany, model, hasOne } from "../index";
 import idx from "idx";
 
 type PersonProps = {
-  name?: string,
+  name?: StringProperty,
 };
 
 type TaskProps = {
-  title?: string,
+  title?: StringProperty,
   done?: boolean,
 };
 
@@ -142,7 +142,15 @@ describe("HasMany", () => {
         undefined,
         "assignedTo"
       );
+      expect(tasks).toMatchSnapshot();
+    });
 
+    it("should find all tasks starting with character 'B' and are done", async () => {
+      await paul.tasks.create(tasksProps);
+      const tasks: TaskInstance[] = await paul.tasks.get({
+        title: { $sw: "B" },
+        done: true,
+      });
       expect(tasks).toMatchSnapshot();
     });
   });

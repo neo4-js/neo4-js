@@ -22,6 +22,18 @@ Array [
 ]
 `;
 
+exports[`HasMany get should find all tasks starting with character 'B' and are done 1`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "done": true,
+      "guid": "9f6504b5-dabd-4f11-bf97-f237be32b9e6",
+      "title": "Buy beer",
+    },
+  },
+]
+`;
+
 exports[`HasMany get should find all tasks to instance 1`] = `
 Array [
   ModelInstance {

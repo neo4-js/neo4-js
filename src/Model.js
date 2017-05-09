@@ -4,6 +4,7 @@ import { forIn } from "lodash";
 import uuid from "uuid";
 import trineo, { ModelInstance, Relation } from "./index";
 import type { BaseProps, RelationType } from "./index";
+import { CharGenerator, prepareWhere } from "./utils";
 
 export class Model<P, I: ModelInstance<P>> {
   label: string;
@@ -31,16 +32,6 @@ export class Model<P, I: ModelInstance<P>> {
   }
   afterUpdate(instance: I): I {
     return instance;
-  }
-
-  prepareMatchProps(props: P & BaseProps): string {
-    const matches = [];
-
-    forIn(props, (v, k) => {
-      matches.push(`${k}:{${k}}`);
-    });
-
-    return matches.join(",");
   }
 
   prepareSetProps(variable: string, props: P): { str: string, newProps: any } {
@@ -119,14 +110,15 @@ export class Model<P, I: ModelInstance<P>> {
   }
 
   async delete(props: P & BaseProps, detach: boolean = false): Promise<number> {
-    const matchPropsStr = this.prepareMatchProps(props);
+    const { where, flatProps } = prepareWhere(props, "n");
 
     const result = await trineo.run(
       `
-        MATCH (n:${this.label} {${matchPropsStr}})
+        MATCH (n:${this.label})
+        ${where}
         ${detach ? " DETACH " : ""} DELETE n
       `,
-      props
+      flatProps
     );
 
     // $FlowFixMe
@@ -135,14 +127,15 @@ export class Model<P, I: ModelInstance<P>> {
 
   async find(props?: P & BaseProps): Promise<I[]> {
     const p = this.beforeFind(props);
-    const matchPropsStr = p ? this.prepareMatchProps(p) : "";
+    const { where, flatProps } = prepareWhere(p, "n");
 
     let result = await trineo.run(
       `
-        MATCH (n:${this.label} {${matchPropsStr}})
+        MATCH (n:${this.label})
+        ${where}
         RETURN n
       `,
-      p
+      flatProps
     );
 
     result = result.map(p => this.afterFind(this._createModelInstance(p.n)));
@@ -151,7 +144,7 @@ export class Model<P, I: ModelInstance<P>> {
 
   async update(props: P & BaseProps, newProps: P): Promise<I[]> {
     const params = this.beforeUpdate(props, newProps);
-    const matchPropsStr = this.prepareMatchProps(params.props);
+    const { where, flatProps } = prepareWhere(params.props, "n");
     const { str: setPropsStr, newProps: _newProps } = this.prepareSetProps(
       "n",
       params.newProps
@@ -159,11 +152,12 @@ export class Model<P, I: ModelInstance<P>> {
 
     let result = await trineo.run(
       `
-        MATCH (n:${this.label} {${matchPropsStr}})
+        MATCH (n:${this.label})
+        ${where}
         SET ${setPropsStr}
         RETURN n
       `,
-      { ...(params.props: any), ..._newProps }
+      { ...flatProps, ..._newProps }
     );
 
     result = result.map(p => this.afterUpdate(this._createModelInstance(p.n)));

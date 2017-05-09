@@ -68,6 +68,21 @@ Array [
 ]
 `;
 
+exports[`Model find should find all persons starting with 'O' 1`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "name": "Olaf",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Olga",
+    },
+  },
+]
+`;
+
 exports[`Model find should find no persons 1`] = `Array []`;
 
 exports[`Model update should update all persons with name olaf 1`] = `

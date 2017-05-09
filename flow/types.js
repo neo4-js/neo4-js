@@ -18,6 +18,29 @@ type HasOneActions<Properties, ModelInstance, Labels/*: string = ''*/> = {
   hasOne: (label?: Labels) => Promise<boolean>,
 }
 
+type StringProperty =
+  { $sw: string }
+| { $ew: string }
+| { $contains: string }
+| { $reg: string }
+| { $eq: string }
+| { $in: string[] }
+| { $not: StringProperty }
+| string;
+
+type NumberProperty =
+  { $gt: number }
+| { $gte: number }
+| { $lt: number }
+| { $lte: number }
+| { $eq: number }
+| { $or: NumberProperty[] }
+| { $and: NumberProperty[] }
+| { $between: [number, number] }
+| { $in: number[] }
+| { $not: NumberProperty }
+| number;
+
 type Neo4jResultStats = {
   nodesCreated: number,
   nodesDeleted: number,

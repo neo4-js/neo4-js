@@ -4,7 +4,8 @@ import trineo, { Model, ModelInstance } from "../index";
 import idx from "idx";
 
 type Props = {
-  name: string,
+  name?: StringProperty,
+  age?: NumberProperty,
 };
 
 class PersonInstance extends ModelInstance<Props> {}
@@ -114,6 +115,21 @@ describe("Model", () => {
       await Person.create({ name: "Olaf" });
       let persons = await Person.find({ name: "Hanns" });
       expect(persons).toMatchSnapshot();
+    });
+
+    it("should find all persons starting with 'O'", async () => {
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Ignatz" });
+      await Person.create({ name: "Hubert" });
+      await Person.create({ name: "Olga" });
+      let persons = await Person.find({ name: { $sw: "O" } });
+      expect(persons.length).toEqual(2);
+      expect(
+        persons.map(p => {
+          delete p.props.guid;
+          return p;
+        })
+      ).toMatchSnapshot();
     });
   });
 
