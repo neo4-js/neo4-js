@@ -12,7 +12,8 @@
     "build:flow": "flow-copy-source -v -i '**/__tests__/**' src lib",
     "test": "jest --runInBand",
     "test:watch": "yarn test -- --watch",
-    "start-db": "./scripts/neo4j-startup.sh"
+    "start-db": "./scripts/neo4j-startup.sh",
+    "prettier": "prettier --trailing-comma es5 --write 'src/**/*.js'"
   },
   "dependencies": {
     "core-decorators": "^0.18.0",
@@ -36,6 +37,7 @@
     "flow-bin": "^0.45.0",
     "flow-copy-source": "^1.1.0",
     "jest": "^20.0.0",
+    "prettier": "^1.3.1",
     "rimraf": "^2.6.1"
   },
   "jest": {

@@ -1,8 +1,8 @@
 // @flow
 
-import { v1 as neo4j } from 'neo4j-driver';
-import { autobind } from 'core-decorators';
-import idx from 'idx';
+import { v1 as neo4j } from "neo4j-driver";
+import { autobind } from "core-decorators";
+import idx from "idx";
 
 export type Neo4jsOptions = {
   boltUri?: string,
@@ -11,7 +11,7 @@ export type Neo4jsOptions = {
   restPort?: number,
   username?: string,
   password?: string,
-}
+};
 
 class neo4js {
   options: Neo4jsOptions;
@@ -23,7 +23,7 @@ class neo4js {
     // TODO: at least some verification...
     const uri = `bolt://${this.options.boltUri}:${this.options.boltPort}`;
     const { username, password } = this.options;
-    let auth = undefined
+    let auth = undefined;
     if (username) {
       auth = neo4j.auth.basic(username, password);
     }
@@ -38,19 +38,21 @@ class neo4js {
   }
 
   @autobind()
-  run(cmd: string, params?: any): Promise<any[] & { _stats: Neo4jResultStats, _raw: any }> {
+  run(
+    cmd: string,
+    params?: any
+  ): Promise<any[] & { _stats: Neo4jResultStats, _raw: any }> {
     let session = this.driver.session();
-    return session.run(cmd, params)
+    return session
+      .run(cmd, params)
       .then(raw => {
         session.close();
-        let result = raw.records
-          .map(r => r.toObject())
-          .map(r => {
-            let keys = Object.keys(r);
-            let o = {};
-            keys.forEach(k => o[k] = r[k].properties);
-            return o;
-          });
+        let result = raw.records.map(r => r.toObject()).map(r => {
+          let keys = Object.keys(r);
+          let o = {};
+          keys.forEach(k => (o[k] = r[k].properties));
+          return o;
+        });
         result._stats = idx(raw, r => r.summary.counters._stats);
         result._raw = raw;
         return result;
@@ -64,6 +66,6 @@ class neo4js {
 
 export default new neo4js();
 
-export * from './Model';
-export * from './ModelInstance';
-export * from './Relation';
+export * from "./Model";
+export * from "./ModelInstance";
+export * from "./Relation";

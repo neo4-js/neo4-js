@@ -5,3 +5,4 @@ coverage/
 .idea/
 jsconfig.json
 npm-debug.log
+.vscode/

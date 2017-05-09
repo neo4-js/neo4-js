@@ -1,7 +1,7 @@
 // @flow
 
-import trineo, { Model, ModelInstance } from '../index';
-import idx from 'idx';
+import trineo, { Model, ModelInstance } from "../index";
+import idx from "idx";
 
 type Props = {
   name: string,
@@ -9,35 +9,38 @@ type Props = {
 
 class PersonInstance extends ModelInstance<Props> {}
 class PersonModel extends Model<Props, PersonInstance> {}
-const Person = new PersonModel('Person');
+const Person = new PersonModel("Person");
 
-describe('Model', () => {
+describe("Model", () => {
   beforeAll(() => {
     trineo.init({
-      boltUri: 'localhost',
-      boltPort: 10001
+      boltUri: "localhost",
+      boltPort: 10001,
     });
   });
 
   afterEach(async () => {
-    await trineo.run('MATCH (n) DETACH DELETE n');
+    await trineo.run("MATCH (n) DETACH DELETE n");
   });
 
   afterAll(() => {
     trineo.close();
   });
 
-  describe('create', () => {
-    it('should create a instance of specific model', async () => {
-      const paul: PersonInstance = await Person.create({ name: 'Paul', age: 21 });
+  describe("create", () => {
+    it("should create a instance of specific model", async () => {
+      const paul: PersonInstance = await Person.create({
+        name: "Paul",
+        age: 21,
+      });
       delete paul.props.guid;
       expect(paul).toMatchSnapshot();
     });
   });
 
-  describe('findByGuid', () => {
-    it('should get a instance with specific guid', async () => {
-      let p1 = await Person.create({ name: 'Paul' });
+  describe("findByGuid", () => {
+    it("should get a instance with specific guid", async () => {
+      let p1 = await Person.create({ name: "Paul" });
       const guid = p1.props.guid;
       if (guid) {
         const p2 = await Person.findByGuid(guid);
@@ -47,83 +50,101 @@ describe('Model', () => {
       }
     });
 
-    it('should not get any instance by wrong guid', async () => {
-      const p = await Person.findByGuid('asdf');
+    it("should not get any instance by wrong guid", async () => {
+      const p = await Person.findByGuid("asdf");
       expect(p).toBeNull();
     });
   });
 
-  describe('delete', () => {
-    it('should return number of deleted persons', async () => {
-      await Person.create({ name: 'Olaf' });
-      const n = await Person.delete({ name: 'Olaf' });
+  describe("delete", () => {
+    it("should return number of deleted persons", async () => {
+      await Person.create({ name: "Olaf" });
+      const n = await Person.delete({ name: "Olaf" });
       expect(n).toMatchSnapshot();
     });
 
-    it('should return number of deleted olafs', async () => {
-      await Person.create({ name: 'Olaf' });
-      await Person.create({ name: 'Olaf' });
-      await Person.create({ name: 'Hubert' });
-      await Person.create({ name: 'Olaf' });
-      const n = await Person.delete({ name: 'Olaf' });
+    it("should return number of deleted olafs", async () => {
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Hubert" });
+      await Person.create({ name: "Olaf" });
+      const n = await Person.delete({ name: "Olaf" });
       expect(n).toMatchSnapshot();
 
       let persons = await Person.find();
-      persons = persons.map(p => { delete p.props.guid; return p; });
+      persons = persons.map(p => {
+        delete p.props.guid;
+        return p;
+      });
       expect(persons).toMatchSnapshot();
     });
   });
 
-  describe('find', () => {
-    it('should find all persons by name', async () => {
-      await Person.create({ name: 'Olaf' });
-      await Person.create({ name: 'Olaf' });
-      await Person.create({ name: 'Hubert' });
-      await Person.create({ name: 'Olaf' });
-      let persons = await Person.find({ name: 'Olaf' });
-      persons = persons.map(p => { delete p.props.guid; return p; });
+  describe("find", () => {
+    it("should find all persons by name", async () => {
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Hubert" });
+      await Person.create({ name: "Olaf" });
+      let persons = await Person.find({ name: "Olaf" });
+      persons = persons.map(p => {
+        delete p.props.guid;
+        return p;
+      });
       expect(persons).toMatchSnapshot();
     });
 
-    it('should find all persons', async () => {
-      await Person.create({ name: 'Olaf' });
-      await Person.create({ name: 'Olaf' });
-      await Person.create({ name: 'Hubert' });
-      await Person.create({ name: 'Olaf' });
+    it("should find all persons", async () => {
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Hubert" });
+      await Person.create({ name: "Olaf" });
       let persons = await Person.find();
-      persons = persons.map(p => { delete p.props.guid; return p; });
+      persons = persons.map(p => {
+        delete p.props.guid;
+        return p;
+      });
       expect(persons).toMatchSnapshot();
     });
 
-    it('should find no persons', async () => {
-      await Person.create({ name: 'Olaf' });
-      await Person.create({ name: 'Olaf' });
-      await Person.create({ name: 'Hubert' });
-      await Person.create({ name: 'Olaf' });
-      let persons = await Person.find({ name: 'Hanns' });
+    it("should find no persons", async () => {
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Hubert" });
+      await Person.create({ name: "Olaf" });
+      let persons = await Person.find({ name: "Hanns" });
       expect(persons).toMatchSnapshot();
     });
   });
 
-  describe('update', () => {
-    it('should update person with name olaf', async () => {
-      let p = await Person.create({ name: 'Olaf' });
-      p = await Person.update(p.props, { name: 'Hanns' });
-      p = p.map(p => { delete p.props.guid; return p; });
+  describe("update", () => {
+    it("should update person with name olaf", async () => {
+      let p = await Person.create({ name: "Olaf" });
+      p = await Person.update(p.props, { name: "Hanns" });
+      p = p.map(p => {
+        delete p.props.guid;
+        return p;
+      });
       expect(p).toMatchSnapshot();
     });
 
-    it('should update all persons with name olaf', async () => {
-      await Person.create({ name: 'Olaf' });
-      await Person.create({ name: 'Olaf' });
-      await Person.create({ name: 'Hubert' });
-      await Person.create({ name: 'Ignatz' });
-      await Person.create({ name: 'Olaf' });
-      let p = await Person.update({ name: 'Olaf' }, { name: 'Hanns' });
-      p = p.map(p => { delete p.props.guid; return p; });
+    it("should update all persons with name olaf", async () => {
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Hubert" });
+      await Person.create({ name: "Ignatz" });
+      await Person.create({ name: "Olaf" });
+      let p = await Person.update({ name: "Olaf" }, { name: "Hanns" });
+      p = p.map(p => {
+        delete p.props.guid;
+        return p;
+      });
       expect(p).toMatchSnapshot();
       let persons = await Person.find();
-      persons = persons.map(p => { delete p.props.guid; return p; });
+      persons = persons.map(p => {
+        delete p.props.guid;
+        return p;
+      });
       expect(persons).toMatchSnapshot();
     });
   });
