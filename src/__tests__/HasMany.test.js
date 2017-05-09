@@ -151,7 +151,12 @@ describe("HasMany", () => {
         title: { $sw: "B" },
         done: true,
       });
-      expect(tasks).toMatchSnapshot();
+      expect(
+        tasks.map(t => {
+          delete t.props.guid;
+          return t;
+        })
+      ).toMatchSnapshot();
     });
   });
 
@@ -211,8 +216,9 @@ describe("HasMany", () => {
       expect(t).toMatchSnapshot();
 
       const relatedTasks = await paul.tasks.get(undefined, "assignedTo");
-      // $FlowFixMe
+
       const mapSort = t =>
+        // $FlowFixMe
         t.map(a => a.props).sort((a, b) => a.title.localeCompare(b.title));
       expect(mapSort(relatedTasks)).toEqual(mapSort(tasks));
     });
