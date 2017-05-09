@@ -101,3 +101,21 @@ export function prepareWhere(
 
   return { where: "WHERE " + where.join(" AND "), flatProps };
 }
+
+export function prepareSet(
+  variable: string,
+  props: any
+): { str: string, newProps: any } {
+  const sets = [];
+  const newProps: any = {};
+
+  forIn(props, (v, k) => {
+    if (k === "guid") return null;
+    sets.push(`${variable}.${k}={_u${k}}`);
+    newProps[`_u${k}`] = v;
+  });
+
+  if (!sets.length) throw new Error(`Nothing to update`);
+
+  return { str: sets.join(" "), newProps };
+}

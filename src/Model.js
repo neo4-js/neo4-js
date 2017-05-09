@@ -4,7 +4,7 @@ import { forIn } from "lodash";
 import uuid from "uuid";
 import trineo, { ModelInstance, Relation } from "./index";
 import type { BaseProps, RelationType } from "./index";
-import { CharGenerator, prepareWhere } from "./utils";
+import { CharGenerator, prepareWhere, prepareSet } from "./utils";
 
 export class Model<P, I: ModelInstance<P>> {
   label: string;
@@ -32,21 +32,6 @@ export class Model<P, I: ModelInstance<P>> {
   }
   afterUpdate(instance: I): I {
     return instance;
-  }
-
-  prepareSetProps(variable: string, props: P): { str: string, newProps: any } {
-    const sets = [];
-    const newProps: any = {};
-
-    forIn(props, (v, k) => {
-      if (k === "guid") return null;
-      sets.push(`${variable}.${k}={_u${k}}`);
-      newProps[`_u${k}`] = v;
-    });
-
-    if (!sets.length) throw new Error(`Nothing to update`);
-
-    return { str: sets.join(" "), newProps };
   }
 
   _createModelInstance(props: P & BaseProps): I {
@@ -145,7 +130,7 @@ export class Model<P, I: ModelInstance<P>> {
   async update(props: P & BaseProps, newProps: P): Promise<I[]> {
     const params = this.beforeUpdate(props, newProps);
     const { where, flatProps } = prepareWhere(params.props, "n");
-    const { str: setPropsStr, newProps: _newProps } = this.prepareSetProps(
+    const { str: setPropsStr, newProps: _newProps } = prepareSet(
       "n",
       params.newProps
     );

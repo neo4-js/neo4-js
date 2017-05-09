@@ -27,7 +27,6 @@ Array [
   ModelInstance {
     "props": Object {
       "done": true,
-      "guid": "9f6504b5-dabd-4f11-bf97-f237be32b9e6",
       "title": "Buy beer",
     },
   },

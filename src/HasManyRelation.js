@@ -1,6 +1,6 @@
 // @flow
 import trineo, { ModelInstance } from "./index";
-import { prepareWhere } from "./utils";
+import { prepareWhere, prepareSet } from "./utils";
 
 export async function get(
   instance: ModelInstance<*>,
@@ -116,7 +116,7 @@ export async function update(
   }
 
   const { where, flatProps } = prepareWhere(whereProps, "b");
-  const { str: setPropsStr, newProps } = this.src.prepareSetProps("b", props);
+  const { str: setPropsStr, newProps } = prepareSet("b", props);
 
   const result = await trineo.run(
     `
