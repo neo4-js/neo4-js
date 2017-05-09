@@ -1,37 +1,7 @@
-## Welcome to GitHub Pages
+# Neo4js
 
-You can use the [editor on GitHub](https://github.com/JanPeter/neo4js/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
+Neo4-js is a object-graph mapper for JavaScript and neo4j with full flow-type support. Neo4-js hides repetitive queries such as the basic CRUD operations to the developer. For best development experience use flow-type from Facebook to obtain good autocomplete results.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+The documentation is currently not done...So please just have a look at the `__tests__` in the `src` directory.
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/JanPeter/neo4js/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+For a basic usage example you can have a look at [neo4js-todo minimal](https://github.com/JanPeter/neo4js-todo/tree/minimal) and [neo4js-todo basic](https://github.com/JanPeter/neo4js-todo/tree/autocomplete).
