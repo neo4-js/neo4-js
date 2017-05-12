@@ -29,7 +29,7 @@ class neo4js {
     }
 
     if (this.driver) this.close();
-    this.driver = neo4j.driver(uri);
+    this.driver = neo4j.driver(uri, auth);
   }
 
   @autobind()
