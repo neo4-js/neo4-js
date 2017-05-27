@@ -18,11 +18,6 @@ export type Neo4jsOptions = {
 class neo4js {
   options: Neo4jsOptions;
   driver: any;
-  models: { [label: string]: any };
-
-  constructor() {
-    this.models = {};
-  }
 
   init(options: Neo4jsOptions) {
     this.options = { ...options };

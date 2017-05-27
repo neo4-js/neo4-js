@@ -5,7 +5,12 @@ import uuid from "uuid";
 import { autobind } from "core-decorators";
 import trineo, { ModelInstance, Relation } from "./index";
 import type { BaseProps, RelationType } from "./index";
-import { CharGenerator, prepareWhere, prepareSet } from "./utils";
+import {
+  CharGenerator,
+  prepareWhere,
+  prepareSet,
+  relationConnectHelper,
+} from "./utils";
 
 export class Model<P, I: ModelInstance<P>> {
   label: string;
@@ -46,7 +51,16 @@ export class Model<P, I: ModelInstance<P>> {
   constructor(label: string) {
     this.label = label;
     this.relations = [];
-    trineo.models[label] = this;
+    relationConnectHelper.models[label] = this;
+
+    relationConnectHelper.relationsToAdd
+      .filter(t => t.destLabel == label)
+      .forEach(t => {
+        t.src[t.type](this, t.propertyName, t.defaultLabel);
+      });
+    relationConnectHelper.relationsToAdd = relationConnectHelper.relationsToAdd.filter(
+      t => t.destLabel != label
+    );
   }
 
   async create(props: P): Promise<I> {

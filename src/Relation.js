@@ -4,45 +4,53 @@ import trineo, { Model, ModelInstance } from "./index";
 import * as HasMany from "./HasManyRelation";
 import * as HasOne from "./HasOneRelation";
 import idx from "idx";
+import { relationConnectHelper } from "./utils";
 
 export type RelationType = "hasMany" | "hasOne";
+
+function addRelation(
+  target: any,
+  destLabel: string,
+  name: string,
+  type: RelationType,
+  defaultLabel?: string
+) {
+  if (!target._relations) {
+    target._relations = [];
+  }
+  target._relations.push({ destLabel, name, type, defaultLabel });
+}
 
 export const hasOne = (destLabel: string, defaultLabel?: string) => (
   target: any,
   name: string
 ) => {
-  if (!target._hasOne) {
-    target._hasOne = [];
-  }
-  target._hasOne.push({ destLabel, name, defaultLabel });
+  addRelation(target, destLabel, name, "hasOne", defaultLabel);
 };
 
 export const hasMany = (destLabel: string, defaultLabel?: string) => (
   target: any,
   name: string
 ) => {
-  if (!target._hasMany) {
-    target._hasMany = [];
-  }
-  target._hasMany.push({ destLabel, name, defaultLabel });
+  addRelation(target, destLabel, name, "hasMany", defaultLabel);
 };
 
 export const model = (label: string) => (target: any, name: string) => {
-  const m = trineo.models[label];
+  const m = relationConnectHelper.models[label];
   if (m) {
-    if (target.prototype._hasMany) {
-      for (const t of target.prototype._hasMany) {
-        const destModel = trineo.models[t.destLabel];
+    if (target.prototype._relations) {
+      for (const t of target.prototype._relations) {
+        const destModel = relationConnectHelper.models[t.destLabel];
         if (destModel) {
-          m.hasMany(destModel, t.name, t.defaultLabel);
-        }
-      }
-    }
-    if (target.prototype._hasOne) {
-      for (const t of target.prototype._hasOne) {
-        const destModel = trineo.models[t.destLabel];
-        if (destModel) {
-          m.hasOne(destModel, t.name, t.defaultLabel);
+          m[t.type](destModel, t.name, t.defaultLabel);
+        } else {
+          relationConnectHelper.relationsToAdd.push({
+            src: m,
+            destLabel: t.destLabel,
+            propertyName: t.name,
+            defaultLabel: t.defaultLabel,
+            type: t.type,
+          });
         }
       }
     }

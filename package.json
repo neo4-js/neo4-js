@@ -60,6 +60,7 @@
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     },
+    "testRegex": "/__tests__/.*test\\.jsx?$",
     "setupFiles": [
       "<rootDir>jest-setup.js"
     ]
