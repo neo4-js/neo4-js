@@ -7,38 +7,51 @@ import idx from "idx";
 
 export type RelationType = "hasMany" | "hasOne";
 
-export const hasOne = (model: Model<*, *>, defaultLabel?: string) => (
+export const hasOne = (destLabel: string, defaultLabel?: string) => (
   target: any,
   name: string
 ) => {
   if (!target._hasOne) {
     target._hasOne = [];
   }
-  target._hasOne.push({ name, model, defaultLabel });
+  target._hasOne.push({ destLabel, name, defaultLabel });
 };
 
-export const hasMany = (model: Model<*, *>, defaultLabel?: string) => (
+export const hasMany = (destLabel: string, defaultLabel?: string) => (
   target: any,
   name: string
 ) => {
   if (!target._hasMany) {
     target._hasMany = [];
   }
-  target._hasMany.push({ name, model, defaultLabel });
+  target._hasMany.push({ destLabel, name, defaultLabel });
 };
 
-export const model = (model: Model<*, *>) => (target: any, name: string) => {
-  if (target.prototype._hasMany) {
-    for (const t of target.prototype._hasMany) {
-      model.hasMany(t.model, t.name, t.defaultLabel);
+export const model = (label: string) => (target: any, name: string) => {
+  const m = trineo.models[label];
+  if (m) {
+    if (target.prototype._hasMany) {
+      for (const t of target.prototype._hasMany) {
+        const destModel = trineo.models[t.destLabel];
+        if (destModel) {
+          m.hasMany(destModel, t.name, t.defaultLabel);
+        }
+      }
     }
-  }
-  if (target.prototype._hasOne) {
-    for (const t of target.prototype._hasOne) {
-      model.hasOne(t.model, t.name, t.defaultLabel);
+    if (target.prototype._hasOne) {
+      for (const t of target.prototype._hasOne) {
+        const destModel = trineo.models[t.destLabel];
+        if (destModel) {
+          m.hasOne(destModel, t.name, t.defaultLabel);
+        }
+      }
     }
+  } else {
+    /**
+     * The ModelInstance got called before the model was defined!
+     */
+    throw new Error("Can't define ModelInstance before Model itself");
   }
-  target._model = model;
 };
 
 export class Relation {

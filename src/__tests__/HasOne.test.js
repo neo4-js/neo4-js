@@ -18,19 +18,19 @@ const Person: PersonModel = new PersonModel("Person");
 class TaskModel extends Model<TaskProps, TaskInstance> {}
 const Task: TaskModel = new TaskModel("Task");
 
-@model(Person)
+@model("Person")
 class PersonInstance extends ModelInstance<PersonProps> {
-  @hasMany(Task)
+  @hasMany("Task")
   tasks: HasManyActions<TaskProps, TaskInstance, "manager" | "assignee">;
-  @hasOne(Person, "supervisor")
+  @hasOne("Person", "supervisor")
   supervisor: HasOneActions<PersonProps, PersonInstance, "supervisor">;
 }
 
-@model(Task)
+@model("Task")
 class TaskInstance extends ModelInstance<TaskProps> {
-  @hasOne(Person)
+  @hasOne("Person")
   manager: HasOneActions<PersonProps, PersonInstance, "manager">;
-  @hasOne(Person)
+  @hasOne("Person")
   assignee: HasOneActions<PersonProps, PersonInstance, "supervisor">;
 }
 

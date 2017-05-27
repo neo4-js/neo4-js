@@ -2,6 +2,7 @@
 
 import { forIn } from "lodash";
 import uuid from "uuid";
+import { autobind } from "core-decorators";
 import trineo, { ModelInstance, Relation } from "./index";
 import type { BaseProps, RelationType } from "./index";
 import { CharGenerator, prepareWhere, prepareSet } from "./utils";
@@ -45,6 +46,7 @@ export class Model<P, I: ModelInstance<P>> {
   constructor(label: string) {
     this.label = label;
     this.relations = [];
+    trineo.models[label] = this;
   }
 
   async create(props: P): Promise<I> {

@@ -3,6 +3,8 @@
 import { v1 as neo4j } from "neo4j-driver";
 import { autobind } from "core-decorators";
 import idx from "idx";
+import { Model } from "./Model";
+import { ModelInstance } from "./ModelInstance";
 
 export type Neo4jsOptions = {
   boltUri?: string,
@@ -16,6 +18,11 @@ export type Neo4jsOptions = {
 class neo4js {
   options: Neo4jsOptions;
   driver: any;
+  models: { [label: string]: Model<*, *> };
+
+  constructor() {
+    this.models = {};
+  }
 
   init(options: Neo4jsOptions) {
     this.options = { ...options };

@@ -18,14 +18,15 @@ const Person: PersonModel = new PersonModel("Person");
 class TaskModel extends Model<TaskProps, TaskInstance> {}
 const Task: TaskModel = new TaskModel("Task");
 
-@model(Person)
+@model("Person")
 class PersonInstance extends ModelInstance<PersonProps> {
-  @hasMany(Task, "created")
+  @hasMany("Task", "created")
   tasks: HasManyActions<TaskProps, TaskInstance, "created" | "assignedTo">;
-  @hasMany(Person, "friend")
+  @hasMany("Person", "friend")
   friends: HasManyActions<PersonProps, PersonInstance, "friend">;
 }
 
+@model("Task")
 class TaskInstance extends ModelInstance<TaskProps> {}
 
 describe("HasMany", () => {
@@ -67,7 +68,6 @@ describe("HasMany", () => {
       ];
 
       const tasks: TaskInstance[] = await paul.tasks.create(propsArray);
-      paul.tasks.get();
 
       expect(
         tasks.map(t => {
