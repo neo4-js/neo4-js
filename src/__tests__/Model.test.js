@@ -133,6 +133,45 @@ describe("Model", () => {
     });
   });
 
+  describe("findOne", () => {
+    it("should find first person with name", async () => {
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Hubert" });
+      await Person.create({ name: "Olaf" });
+      let person = await Person.findOne({ name: "Hubert" });
+      if (person) {
+        delete person.props.guid;
+        expect(person).toMatchSnapshot();
+      } else {
+        expect(1).toEqual(0);
+      }
+    });
+
+    it("should find no persons", async () => {
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Hubert" });
+      await Person.create({ name: "Olaf" });
+      let person = await Person.findOne({ name: "Hanns" });
+      expect(person).toMatchSnapshot();
+    });
+
+    it("should find all persons starting with 'O'", async () => {
+      await Person.create({ name: "Olaf" });
+      await Person.create({ name: "Ignatz" });
+      await Person.create({ name: "Hubert" });
+      await Person.create({ name: "Olga" });
+      let person = await Person.findOne({ name: { $sw: "Olg" } });
+      if (person) {
+        delete person.props.guid;
+        expect(person).toMatchSnapshot();
+      } else {
+        expect(1).toEqual(0);
+      }
+    });
+  });
+
   describe("update", () => {
     it("should update person with name olaf", async () => {
       let p = await Person.create({ name: "Olaf" });

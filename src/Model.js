@@ -146,6 +146,25 @@ export class Model<P, I: ModelInstance<P>> {
     return result;
   }
 
+  async findOne(props?: P & BaseProps): Promise<?I> {
+    const p = this.beforeFind(props);
+    const { where, flatProps } = prepareWhere(p, "n");
+
+    let result = await trineo.run(
+      `
+        MATCH (n:${this.label})
+        ${where}
+        RETURN n
+      `,
+      flatProps
+    );
+
+    if (result.length) {
+      return this.afterFind(this._createModelInstance(result[0].n));
+    }
+    return Promise.resolve(null);
+  }
+
   async update(props: P & BaseProps, newProps: P): Promise<I[]> {
     const params = this.beforeUpdate(props, newProps);
     const { where, flatProps } = prepareWhere(params.props, "n");

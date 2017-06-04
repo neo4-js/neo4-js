@@ -85,6 +85,24 @@ Array [
 
 exports[`Model find should find no persons 1`] = `Array []`;
 
+exports[`Model findOne should find all persons starting with 'O' 1`] = `
+ModelInstance {
+  "props": Object {
+    "name": "Olga",
+  },
+}
+`;
+
+exports[`Model findOne should find first person with name 1`] = `
+ModelInstance {
+  "props": Object {
+    "name": "Hubert",
+  },
+}
+`;
+
+exports[`Model findOne should find no persons 1`] = `null`;
+
 exports[`Model update should update all persons with name olaf 1`] = `
 Array [
   ModelInstance {
