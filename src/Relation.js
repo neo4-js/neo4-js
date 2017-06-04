@@ -23,15 +23,19 @@ function addRelation(
 
 export const hasOne = (destLabel: string, defaultLabel?: string) => (
   target: any,
-  name: string
+  name: string,
+  descriptor: any
 ) => {
+  descriptor.writable = true;
   addRelation(target, destLabel, name, "hasOne", defaultLabel);
 };
 
 export const hasMany = (destLabel: string, defaultLabel?: string) => (
   target: any,
-  name: string
+  name: string,
+  descriptor: any
 ) => {
+  descriptor.writable = true;
   addRelation(target, destLabel, name, "hasMany", defaultLabel);
 };
 
@@ -94,70 +98,57 @@ export class Relation {
   }
 
   addHasManyToInstance(instance: ModelInstance<*>): any {
-    const accessors = {
-      [this.propertyName]: {
-        get: (props: any, label?: string) =>
-          HasMany.get.bind(this, instance, label ? label : this.defaultLabel)(
-            props
-          ),
-        update: (newProps: any, props: any, label?: string) =>
-          HasMany.update.bind(
-            this,
-            instance,
-            label ? label : this.defaultLabel
-          )(newProps, props),
-        create: (props: any, label?: string) =>
-          HasMany.create.bind(
-            this,
-            instance,
-            label ? label : this.defaultLabel
-          )(props),
-        add: (instances: any, label?: string) =>
-          HasMany.add.bind(this, instance, label ? label : this.defaultLabel)(
-            instances
-          ),
-        count: (props: any, label?: string) =>
-          HasMany.count.bind(this, instance, label ? label : this.defaultLabel)(
-            props
-          ),
-      },
+    // $FlowFixMe
+    instance[this.propertyName] = {
+      get: (props: any, label?: string) =>
+        HasMany.get.bind(this, instance, label ? label : this.defaultLabel)(
+          props
+        ),
+      update: (newProps: any, props: any, label?: string) =>
+        HasMany.update.bind(this, instance, label ? label : this.defaultLabel)(
+          newProps,
+          props
+        ),
+      create: (props: any, label?: string) =>
+        HasMany.create.bind(this, instance, label ? label : this.defaultLabel)(
+          props
+        ),
+      add: (instances: any, label?: string) =>
+        HasMany.add.bind(this, instance, label ? label : this.defaultLabel)(
+          instances
+        ),
+      count: (props: any, label?: string) =>
+        HasMany.count.bind(this, instance, label ? label : this.defaultLabel)(
+          props
+        ),
     };
 
-    return { ...instance, ...accessors };
+    return instance;
   }
 
   addHasOneToInstance(instance: ModelInstance<*>): any {
-    const accessors = {
-      [this.propertyName]: {
-        get: (label?: string) =>
-          HasOne.get.bind(this, instance, label ? label : this.defaultLabel)(),
-        update: (props: any, label?: string) =>
-          HasOne.update.bind(this, instance, label ? label : this.defaultLabel)(
-            props
-          ),
-        create: (props: any, label?: string) =>
-          HasOne.create.bind(this, instance, label ? label : this.defaultLabel)(
-            props
-          ),
-        add: (destInstance: ModelInstance<*>, label?: string) =>
-          HasOne.add.bind(this, instance, label ? label : this.defaultLabel)(
-            destInstance
-          ),
-        remove: (label?: string) =>
-          HasOne.remove.bind(
-            this,
-            instance,
-            label ? label : this.defaultLabel
-          )(),
-        hasOne: (label?: string) =>
-          HasOne.hasOne.bind(
-            this,
-            instance,
-            label ? label : this.defaultLabel
-          )(),
-      },
+    // $FlowFixMe
+    instance[this.propertyName] = {
+      get: (label?: string) =>
+        HasOne.get.bind(this, instance, label ? label : this.defaultLabel)(),
+      update: (props: any, label?: string) =>
+        HasOne.update.bind(this, instance, label ? label : this.defaultLabel)(
+          props
+        ),
+      create: (props: any, label?: string) =>
+        HasOne.create.bind(this, instance, label ? label : this.defaultLabel)(
+          props
+        ),
+      add: (destInstance: ModelInstance<*>, label?: string) =>
+        HasOne.add.bind(this, instance, label ? label : this.defaultLabel)(
+          destInstance
+        ),
+      remove: (label?: string) =>
+        HasOne.remove.bind(this, instance, label ? label : this.defaultLabel)(),
+      hasOne: (label?: string) =>
+        HasOne.hasOne.bind(this, instance, label ? label : this.defaultLabel)(),
     };
 
-    return { ...instance, ...accessors };
+    return instance;
   }
 }

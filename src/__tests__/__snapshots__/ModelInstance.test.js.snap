@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ModelInstance ModelInstance functions should return friends with starting name 'O' 1`] = `
+Array [
+  PersonInstance {
+    "friends": Object {
+      "add": [Function],
+      "count": [Function],
+      "create": [Function],
+      "get": [Function],
+      "update": [Function],
+    },
+    "getFriendsWithName": [Function],
+    "props": Object {
+      "name": "Olga",
+    },
+    "tasks": Object {
+      "add": [Function],
+      "count": [Function],
+      "create": [Function],
+      "get": [Function],
+      "update": [Function],
+    },
+  },
+]
+`;
