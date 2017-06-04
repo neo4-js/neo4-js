@@ -37,6 +37,7 @@ export const hasMany = (destLabel: string, defaultLabel?: string) => (
 
 export const model = (label: string) => (target: any, name: string) => {
   const m = relationConnectHelper.models[label];
+  m.modelInstanceClass = target;
   if (m) {
     if (target.prototype._relations) {
       for (const t of target.prototype._relations) {

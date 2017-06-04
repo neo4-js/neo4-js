@@ -15,6 +15,7 @@ import {
 export class Model<P, I: ModelInstance<P>> {
   label: string;
   relations: Relation[];
+  modelInstanceClass: Class<ModelInstance<*>>;
 
   beforeCreate(props: P): P {
     return props;
@@ -41,7 +42,9 @@ export class Model<P, I: ModelInstance<P>> {
   }
 
   _createModelInstance(props: P & BaseProps): I {
-    let instance = new ModelInstance(props);
+    let instance = this.modelInstanceClass
+      ? new this.modelInstanceClass(props)
+      : new ModelInstance(props);
     this.relations.forEach(
       r => (instance = r.addFunctionsToInstance(instance))
     );
