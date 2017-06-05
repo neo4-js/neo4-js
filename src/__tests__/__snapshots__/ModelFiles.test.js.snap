@@ -3,6 +3,14 @@
 exports[`Models in different files create should create a instances of tasks and relate them to person instance 1`] = `
 Array [
   TaskInstance {
+    "assignee": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
     "creator": Object {
       "add": [Function],
       "create": [Function],
@@ -16,6 +24,14 @@ Array [
     },
   },
   TaskInstance {
+    "assignee": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
     "creator": Object {
       "add": [Function],
       "create": [Function],

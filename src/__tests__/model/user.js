@@ -1,8 +1,15 @@
 // @flow
 
-import neo4js, { Model, ModelInstance, model, hasMany } from "../../index";
-import { TaskInstance } from "./index";
-import type { TaskProps } from "./index";
+import neo4js, {
+  Model,
+  ModelInstance,
+  model,
+  relation,
+  src,
+  dest,
+} from "../../index";
+import { TaskInstance, TaskAssigneeRelation } from "./task";
+import type { TaskProps } from "./task";
 
 export type UserProps = {
   firstname?: StringProperty,
@@ -11,8 +18,15 @@ export type UserProps = {
 
 export const User: Model<UserProps, UserInstance> = new Model("User");
 
+export const TaskCreatorRelation = relation("creator").src
+  .hasMany("Task")
+  .dest.hasOne("User");
+
 @model("User")
 export class UserInstance extends ModelInstance<UserProps> {
-  @hasMany("Task", "created")
+  @src(() => TaskCreatorRelation)
+  createdTasks: HasManyActions<TaskProps, TaskInstance>;
+
+  @dest(() => TaskAssigneeRelation)
   tasks: HasManyActions<TaskProps, TaskInstance>;
 }

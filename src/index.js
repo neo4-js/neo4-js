@@ -71,3 +71,4 @@ export default new neo4js();
 export * from "./Model";
 export * from "./ModelInstance";
 export * from "./Relation";
+export * from "./Decorators";

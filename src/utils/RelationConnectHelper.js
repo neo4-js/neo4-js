@@ -12,9 +12,12 @@ class RelationConnectHelper {
     relationType: RelationType,
   }[];
 
+  lazy: () => any[];
+
   constructor() {
     this.models = {};
     this.relationsToAdd = [];
+    this.lazy = [];
   }
 }
 
