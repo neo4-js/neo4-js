@@ -115,7 +115,6 @@ export class Model<P, I: ModelInstance<P>> {
       flatProps
     );
 
-    // $FlowFixMe
     return result._stats.nodesDeleted;
   }
 

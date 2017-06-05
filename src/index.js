@@ -40,10 +40,7 @@ class neo4js {
   }
 
   @autobind()
-  run(
-    cmd: string,
-    params?: any
-  ): Promise<any[] & { _stats: Neo4jResultStats, _raw: any }> {
+  run(cmd: string, params?: any): Promise<any> {
     let session = this.driver.session();
     return session
       .run(cmd, params)

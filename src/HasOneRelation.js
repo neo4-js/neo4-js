@@ -78,7 +78,6 @@ export async function remove(
     { srcGuid: instance.props.guid }
   );
 
-  // $FlowFixMe
   return Promise.resolve(result._stats);
 }
 
@@ -99,7 +98,6 @@ export async function add(
     { srcGuid: instance.props.guid, destGuid: destInstance.props.guid }
   );
 
-  // $FlowFixMe
   if (result._stats.relationshipsCreated === 1) {
     return Promise.resolve(true);
   }

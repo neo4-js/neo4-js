@@ -50,28 +50,24 @@ describe("Hooks", () => {
 
   describe("create", () => {
     it("should call before create hook once", async () => {
-      // $FlowFixMe
       Person.beforeCreate = jest.fn().mockImplementationOnce(t => t);
       const paul = await Person.create({ name: "Paul", age: 21 });
       expect(Person.beforeCreate).toHaveBeenCalledTimes(1);
     });
 
     it("should call before create hook once and change props", async () => {
-      // $FlowFixMe
       Person.beforeCreate = (t: Props): Props => ({ ...t, age: t.age + 1 });
       const paul = await Person.create({ name: "Paul", age: 21 });
       expect(paul.props.age).toEqual(22);
     });
 
     it("should call before create hook once", async () => {
-      // $FlowFixMe
       Person.afterCreate = jest.fn().mockImplementationOnce(t => t);
       const paul = await Person.create({ name: "Paul", age: 21 });
       expect(Person.afterCreate).toHaveBeenCalledTimes(1);
     });
 
     it("should call after create hook once and change props of instance", async () => {
-      // $FlowFixMe
       Person.afterCreate = (t: PersonInstance) => {
         delete t.props.guid;
         return t;
@@ -83,14 +79,12 @@ describe("Hooks", () => {
 
   describe("find", () => {
     it("should call before find hook once", async () => {
-      // $FlowFixMe
       Person.beforeFind = jest.fn().mockImplementationOnce(t => t);
       await Person.find();
       expect(Person.beforeFind).toHaveBeenCalledTimes(1);
     });
 
     it("should call before find hook once and change props", async () => {
-      // $FlowFixMe
       Task.beforeFind = (p: TaskProps) => ({ ...p, done: true });
       await Task.create({ title: "Buy milk" });
       await Task.create({ title: "Read a book", done: true });
@@ -99,7 +93,6 @@ describe("Hooks", () => {
     });
 
     it("should call after find hook twice", async () => {
-      // $FlowFixMe
       Person.afterFind = jest.fn().mockImplementation(t => t);
       await Person.create({ name: "Hanns" });
       await Person.create({ name: "Olaf" });
@@ -117,7 +110,6 @@ describe("Hooks", () => {
 
   describe("update", () => {
     it("should call before update hook once", async () => {
-      // $FlowFixMe
       Person.beforeUpdate = jest
         .fn()
         .mockImplementationOnce((props, newProps) => ({ props, newProps }));
@@ -127,7 +119,6 @@ describe("Hooks", () => {
     });
 
     it("should call before find hook once and change props", async () => {
-      // $FlowFixMe
       Person.beforeUpdate = (props: Props, newProps: Props) => {
         newProps.age += 1;
         return { props, newProps };
@@ -138,7 +129,6 @@ describe("Hooks", () => {
     });
 
     it("should call after find hook twice", async () => {
-      // $FlowFixMe
       Person.afterUpdate = jest.fn().mockImplementation(t => t);
       await Person.create({ name: "Hanns" });
       await Person.create({ name: "Olaf" });
