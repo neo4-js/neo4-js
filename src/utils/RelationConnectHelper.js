@@ -1,21 +1,21 @@
 // @flow
 
+import { Model } from "../Model";
 import type { RelationType } from "../relation";
 
 class RelationConnectHelper {
-  models: { [label: string]: any };
   relationsToAdd: {
-    src: any,
-    destLabel: string,
+    srcModel: Model<*, *> | (() => Model<*, *>),
+    destModel: Model<*, *> | (() => Model<*, *>),
     propertyName: string,
     relationLabel: string,
     relationType: RelationType,
+    added?: boolean,
   }[];
 
-  lazy: () => any[];
+  lazy: any[];
 
   constructor() {
-    this.models = {};
     this.relationsToAdd = [];
     this.lazy = [];
   }

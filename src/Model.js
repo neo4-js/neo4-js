@@ -54,21 +54,6 @@ export class Model<P, I: ModelInstance<P>> {
   constructor(label: string) {
     this.label = label;
     this.relations = [];
-    relationConnectHelper.models[label] = this;
-
-    relationConnectHelper.relationsToAdd
-      .filter(t => t.destLabel == label)
-      .forEach(t => {
-        t.src.addRelation(
-          this,
-          t.propertyName,
-          t.relationLabel,
-          t.relationType
-        );
-      });
-    relationConnectHelper.relationsToAdd = relationConnectHelper.relationsToAdd.filter(
-      t => t.destLabel != label
-    );
   }
 
   async create(props: P): Promise<I> {

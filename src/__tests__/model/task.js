@@ -8,7 +8,7 @@ import neo4js, {
   relation,
   src,
 } from "../../index";
-import { UserInstance, TaskCreatorRelation } from "./user";
+import { User, UserInstance, TaskCreatorRelation } from "./user";
 import type { UserProps } from "./user";
 
 export type TaskProps = {
@@ -16,11 +16,11 @@ export type TaskProps = {
   done?: boolean,
 };
 
-export const Task: Model<TaskProps, TaskInstance> = new Model("Task");
-
 export const TaskAssigneeRelation = relation("assigned").src
-  .hasOne("User")
-  .dest.hasMany("Task");
+  .hasOne(() => User)
+  .dest.hasMany(() => Task);
+
+export const Task: Model<TaskProps, TaskInstance> = new Model("Task");
 
 @model(Task)
 export class TaskInstance extends ModelInstance<TaskProps> {

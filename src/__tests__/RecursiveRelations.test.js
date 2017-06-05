@@ -20,8 +20,8 @@ class ProjectModel extends Model<ProjectProps, ProjectInstance> {}
 const Project = new ProjectModel("Project");
 
 const ProjectChildRelation = relation("child").src
-  .hasMany("Project")
-  .dest.hasOne("Project");
+  .hasMany(Project)
+  .dest.hasOne(Project);
 
 @model(Project)
 class ProjectInstance extends ModelInstance<ProjectProps> {

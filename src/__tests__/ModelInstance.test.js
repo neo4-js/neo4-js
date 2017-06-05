@@ -20,9 +20,9 @@ const Task: TaskModel = new TaskModel("Task");
 
 @model(Person)
 class PersonInstance extends ModelInstance<PersonProps> {
-  @hasMany("Task", "created")
+  @hasMany(Task, "created")
   tasks: HasManyActions<TaskProps, TaskInstance>;
-  @hasMany("Person", "friend")
+  @hasMany(Person, "friend")
   friends: HasManyActions<PersonProps, PersonInstance>;
 
   getFriendsWithName = async (name: string) => {

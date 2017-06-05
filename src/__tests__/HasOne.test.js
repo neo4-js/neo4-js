@@ -26,16 +26,16 @@ class TaskModel extends Model<TaskProps, TaskInstance> {}
 const Task: TaskModel = new TaskModel("Task");
 
 const TaskCreatorRelation = relation("created").src
-  .hasMany("Task")
-  .dest.hasOne("Person");
+  .hasMany(Task)
+  .dest.hasOne(Person);
 
 const TaskAssigneeRelation = relation("assigned").src
-  .hasMany("Task")
-  .dest.hasOne("Person");
+  .hasMany(Task)
+  .dest.hasOne(Person);
 
 const SupervisorRelation = relation("supervisor").src
-  .hasOne("Person")
-  .dest.hasMany("Person");
+  .hasOne(Person)
+  .dest.hasMany(Person);
 
 @model(Person)
 class PersonInstance extends ModelInstance<PersonProps> {
