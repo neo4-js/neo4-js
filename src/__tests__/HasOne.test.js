@@ -37,7 +37,7 @@ const SupervisorRelation = relation("supervisor").src
   .hasOne("Person")
   .dest.hasMany("Person");
 
-@model("Person")
+@model(Person)
 class PersonInstance extends ModelInstance<PersonProps> {
   @src(TaskCreatorRelation)
   createdTasks: HasManyActions<TaskProps, TaskInstance>;
@@ -51,7 +51,7 @@ class PersonInstance extends ModelInstance<PersonProps> {
   supervisor: HasOneActions<PersonProps, PersonInstance>;
 }
 
-@model("Task")
+@model(Task)
 class TaskInstance extends ModelInstance<TaskProps> {
   @dest(TaskCreatorRelation)
   creator: HasOneActions<PersonProps, PersonInstance>;

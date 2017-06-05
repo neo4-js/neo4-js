@@ -33,7 +33,7 @@ const TaskAssigneeRelation = relation("assigned").src
   .hasMany("Task")
   .dest.hasOne("Person");
 
-@model("Person")
+@model(Person)
 class PersonInstance extends ModelInstance<PersonProps> {
   @src(TaskCreatorRelation)
   tasks: HasManyActions<TaskProps, TaskInstance>;
@@ -42,7 +42,7 @@ class PersonInstance extends ModelInstance<PersonProps> {
   assignedTasks: HasManyActions<TaskProps, TaskInstance>;
 }
 
-@model("Task")
+@model(Task)
 class TaskInstance extends ModelInstance<TaskProps> {
   @dest(TaskCreatorRelation)
   creator: HasOneActions<PersonProps, PersonInstance>;

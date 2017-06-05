@@ -175,18 +175,17 @@ export const hasMany = (destLabel: string, relationLabel: string) => (
   );
 };
 
-export const model = (label: string) => (target: any, name: string) => {
-  const m = relationConnectHelper.models[label];
-  m.modelInstanceClass = target;
-  if (m) {
+export const model = (model: Model<*, *>) => (target: any, name: string) => {
+  if (model) {
+    model.modelInstanceClass = target;
     if (target.prototype._relations) {
       for (const t of target.prototype._relations) {
         const destModel = relationConnectHelper.models[t.destLabel];
         if (destModel) {
-          m.addRelation(destModel, t.name, t.relationLabel, t.relationType);
+          model.addRelation(destModel, t.name, t.relationLabel, t.relationType);
         } else {
           relationConnectHelper.relationsToAdd.push({
-            src: m,
+            src: model,
             destLabel: t.destLabel,
             propertyName: t.name,
             relationLabel: t.relationLabel,

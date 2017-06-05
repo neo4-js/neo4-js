@@ -22,7 +22,7 @@ export const TaskAssigneeRelation = relation("assigned").src
   .hasOne("User")
   .dest.hasMany("Task");
 
-@model("Task")
+@model(Task)
 export class TaskInstance extends ModelInstance<TaskProps> {
   @dest(() => TaskCreatorRelation)
   creator: HasOneActions<UserProps, UserInstance>;

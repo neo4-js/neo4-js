@@ -23,7 +23,7 @@ const ProjectChildRelation = relation("child").src
   .hasMany("Project")
   .dest.hasOne("Project");
 
-@model("Project")
+@model(Project)
 class ProjectInstance extends ModelInstance<ProjectProps> {
   @src(ProjectChildRelation)
   children: HasManyActions<ProjectProps, ProjectInstance>;

@@ -18,7 +18,7 @@ const Person: PersonModel = new PersonModel("Person");
 class TaskModel extends Model<TaskProps, TaskInstance> {}
 const Task: TaskModel = new TaskModel("Task");
 
-@model("Person")
+@model(Person)
 class PersonInstance extends ModelInstance<PersonProps> {
   @hasMany("Task", "created")
   tasks: HasManyActions<TaskProps, TaskInstance>;
@@ -30,7 +30,7 @@ class PersonInstance extends ModelInstance<PersonProps> {
   };
 }
 
-@model("Task")
+@model(Task)
 class TaskInstance extends ModelInstance<TaskProps> {}
 
 describe("ModelInstance", () => {
