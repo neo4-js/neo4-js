@@ -1,40 +1,40 @@
 // @flow
 
-import trineo from "../index";
+import neo4js from "../index";
 
-describe("trineo", () => {
+describe("neo4js", () => {
   beforeAll(() => {
-    trineo.init({
+    neo4js.init({
       boltUri: "localhost",
       boltPort: 10001,
     });
   });
 
   afterEach(async () => {
-    await trineo.run("MATCH (n) DETACH DELETE n");
+    await neo4js.run("MATCH (n) DETACH DELETE n");
   });
 
   afterAll(() => {
-    trineo.close();
+    neo4js.close();
   });
 
   it("should create a person", async () => {
-    const result = await trineo.run(
+    const result = await neo4js.run(
       'CREATE (n:Person {name:"Hanns"}) RETURN n'
     );
     expect(result).toMatchSnapshot();
   });
 
   it("should create a bunch of persons and select them", async () => {
-    await trineo.run(
+    await neo4js.run(
       'CREATE (n:Person {name:"Hanns"}), (p:Person {name:"Huber"})'
     );
-    const result = await trineo.run("MATCH (n:Person) RETURN n");
+    const result = await neo4js.run("MATCH (n:Person) RETURN n");
     expect(result).toMatchSnapshot();
   });
 
   it("should create a person with params", async () => {
-    const result = await trineo.run("CREATE (n:Person {p}) RETURN n", {
+    const result = await neo4js.run("CREATE (n:Person {p}) RETURN n", {
       p: { name: "Hanns" },
     });
     expect(result).toMatchSnapshot();
@@ -42,7 +42,7 @@ describe("trineo", () => {
 
   it("should produce an error", async () => {
     try {
-      await trineo.run("CREATE");
+      await neo4js.run("CREATE");
       expect(1).toEqual(0);
     } catch (err) {
       expect(err).toMatchSnapshot();

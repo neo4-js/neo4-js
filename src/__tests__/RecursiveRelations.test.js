@@ -1,6 +1,6 @@
 // @flow
 
-import trineo, {
+import neo4js, {
   Model,
   ModelInstance,
   src,
@@ -34,7 +34,7 @@ class ProjectInstance extends ModelInstance<ProjectProps> {
 
 describe("Recursive relations", () => {
   beforeAll(() => {
-    trineo.init({
+    neo4js.init({
       boltUri: "localhost",
       boltPort: 10001,
     });
@@ -54,11 +54,11 @@ describe("Recursive relations", () => {
   }
 
   afterEach(async () => {
-    await trineo.run("MATCH (n) DETACH DELETE n");
+    await neo4js.run("MATCH (n) DETACH DELETE n");
   });
 
   afterAll(() => {
-    trineo.close();
+    neo4js.close();
   });
 
   it("should return only parent", async () => {

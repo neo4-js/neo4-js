@@ -1,6 +1,6 @@
 // @flow
 
-import trineo, {
+import neo4js, {
   Model,
   ModelInstance,
   src,
@@ -62,7 +62,7 @@ class TaskInstance extends ModelInstance<TaskProps> {
 
 describe("HasOne", () => {
   beforeAll(() => {
-    trineo.init({
+    neo4js.init({
       boltUri: "localhost",
       boltPort: 10001,
     });
@@ -77,11 +77,11 @@ describe("HasOne", () => {
   });
 
   afterEach(async () => {
-    await trineo.run("MATCH (n) DETACH DELETE n");
+    await neo4js.run("MATCH (n) DETACH DELETE n");
   });
 
   afterAll(() => {
-    trineo.close();
+    neo4js.close();
   });
 
   describe("create", () => {
@@ -105,7 +105,7 @@ describe("HasOne", () => {
         name: "Olaf",
       });
 
-      const result = await trineo.run(
+      const result = await neo4js.run(
         "MATCH (p:Person)-[:supervisor]->(b:Person) RETURN b"
       );
 
@@ -143,7 +143,7 @@ describe("HasOne", () => {
 
       let result = await paul.supervisor.remove();
       expect(result).toMatchSnapshot();
-      result = await trineo.run("MATCH (a:Person {guid:{guid}}) RETURN a", {
+      result = await neo4js.run("MATCH (a:Person {guid:{guid}}) RETURN a", {
         guid: hubert.props.guid,
       });
       expect(result).toMatchSnapshot();

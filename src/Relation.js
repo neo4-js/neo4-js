@@ -1,6 +1,6 @@
 // @flow
 
-import trineo, { Model, ModelInstance } from "./index";
+import neo4js, { Model, ModelInstance } from "./index";
 import * as HasMany from "./HasManyRelation";
 import * as HasOne from "./HasOneRelation";
 import idx from "idx";

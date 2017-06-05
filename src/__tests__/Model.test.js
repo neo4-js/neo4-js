@@ -1,6 +1,6 @@
 // @flow
 
-import trineo, { Model, ModelInstance } from "../index";
+import neo4js, { Model, ModelInstance } from "../index";
 import idx from "idx";
 
 type Props = {
@@ -14,18 +14,18 @@ const Person = new PersonModel("Person");
 
 describe("Model", () => {
   beforeAll(() => {
-    trineo.init({
+    neo4js.init({
       boltUri: "localhost",
       boltPort: 10001,
     });
   });
 
   afterEach(async () => {
-    await trineo.run("MATCH (n) DETACH DELETE n");
+    await neo4js.run("MATCH (n) DETACH DELETE n");
   });
 
   afterAll(() => {
-    trineo.close();
+    neo4js.close();
   });
 
   describe("create", () => {

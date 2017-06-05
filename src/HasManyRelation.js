@@ -1,5 +1,5 @@
 // @flow
-import trineo, { ModelInstance } from "./index";
+import neo4js, { ModelInstance } from "./index";
 import { prepareWhere, prepareSet } from "./utils";
 import type { RelationType } from "./relation";
 
@@ -19,7 +19,7 @@ export async function get(
   const { where, flatProps } = prepareWhere(props, "b");
 
   const relationString = getRelationString(label, relationType);
-  const result = await trineo.run(
+  const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
     ${where}
@@ -43,7 +43,7 @@ export async function create(
   for (const props of propsArray) {
     const destInstance = await this.dest.create(props);
     destInstances.push(destInstance);
-    await trineo.run(
+    await neo4js.run(
       `
       MATCH
         (a:${this.src.label} {guid:{srcGuid}}),
@@ -66,7 +66,7 @@ export async function add(
   const relationString = getRelationString(label, relationType);
   let relationshipsCreated = 0;
   for (const destInstance of instances) {
-    const result = await trineo.run(
+    const result = await neo4js.run(
       `
       MATCH
         (a:${this.src.label} {guid:{srcGuid}}),
@@ -91,7 +91,7 @@ export async function count(
   const { where, flatProps } = prepareWhere(props, "b");
 
   const relationString = getRelationString(label, relationType);
-  const result = await trineo.run(
+  const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
     ${where}
@@ -116,7 +116,7 @@ export async function update(
   const { str: setPropsStr, newProps } = prepareSet("b", props);
 
   const relationString = getRelationString(label, relationType);
-  const result = await trineo.run(
+  const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
     ${where}

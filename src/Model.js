@@ -3,7 +3,7 @@
 import { forIn } from "lodash";
 import uuid from "uuid";
 import { autobind } from "core-decorators";
-import trineo, { ModelInstance, Relation } from "./index";
+import neo4js, { ModelInstance, Relation } from "./index";
 import type { BaseProps, RelationType } from "./index";
 import {
   CharGenerator,
@@ -76,7 +76,7 @@ export class Model<P, I: ModelInstance<P>> {
     p = ({ ...(p: any) }: P & BaseProps);
     p.guid = uuid();
 
-    const result = await trineo.run(
+    const result = await neo4js.run(
       `
         CREATE (n:${this.label} {p})
         RETURN n
@@ -95,7 +95,7 @@ export class Model<P, I: ModelInstance<P>> {
   }
 
   async findByGuid(guid: string): Promise<I | null> {
-    const result = await trineo.run(
+    const result = await neo4js.run(
       `
         MATCH (n:${this.label} {guid:{guid}})
         RETURN n
@@ -121,7 +121,7 @@ export class Model<P, I: ModelInstance<P>> {
   async delete(props: P & BaseProps, detach: boolean = false): Promise<number> {
     const { where, flatProps } = prepareWhere(props, "n");
 
-    const result = await trineo.run(
+    const result = await neo4js.run(
       `
         MATCH (n:${this.label})
         ${where}
@@ -138,7 +138,7 @@ export class Model<P, I: ModelInstance<P>> {
     const p = this.beforeFind(props);
     const { where, flatProps } = prepareWhere(p, "n");
 
-    let result = await trineo.run(
+    let result = await neo4js.run(
       `
         MATCH (n:${this.label})
         ${where}
@@ -155,7 +155,7 @@ export class Model<P, I: ModelInstance<P>> {
     const p = this.beforeFind(props);
     const { where, flatProps } = prepareWhere(p, "n");
 
-    let result = await trineo.run(
+    let result = await neo4js.run(
       `
         MATCH (n:${this.label})
         ${where}
@@ -178,7 +178,7 @@ export class Model<P, I: ModelInstance<P>> {
       params.newProps
     );
 
-    let result = await trineo.run(
+    let result = await neo4js.run(
       `
         MATCH (n:${this.label})
         ${where}

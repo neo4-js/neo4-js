@@ -1,5 +1,5 @@
 // @flow
-import trineo, { ModelInstance } from "./index";
+import neo4js, { ModelInstance } from "./index";
 import type { RelationType } from "./relation";
 
 function getRelationString(label: string, relationType: RelationType) {
@@ -15,7 +15,7 @@ export async function get(
   relationType: RelationType
 ): Promise<any> {
   const relationString = getRelationString(label, relationType);
-  const result = await trineo.run(
+  const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
     RETURN b
@@ -43,7 +43,7 @@ export async function create(
   const destInstance = await this.dest.create(props);
 
   const relationString = getRelationString(label, relationType);
-  const result = await trineo.run(
+  const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
     DETACH DELETE b
@@ -51,7 +51,7 @@ export async function create(
     { srcGuid: instance.props.guid }
   );
 
-  await trineo.run(
+  await neo4js.run(
     `
     MATCH
       (a:${this.src.label} {guid:{srcGuid}}),
@@ -70,7 +70,7 @@ export async function remove(
   relationType: RelationType
 ): Promise<any> {
   const relationString = getRelationString(label, relationType);
-  const result = await trineo.run(
+  const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
     DETACH DELETE b
@@ -89,7 +89,7 @@ export async function add(
   destInstance: ModelInstance<*>
 ): Promise<boolean> {
   const relationString = getRelationString(label, relationType);
-  const result = await trineo.run(
+  const result = await neo4js.run(
     `
     MATCH
       (a:${this.src.label} {guid:{srcGuid}}),
@@ -113,7 +113,7 @@ export async function hasOne(
   relationType: RelationType
 ): Promise<boolean> {
   const relationString = getRelationString(label, relationType);
-  const result = await trineo.run(
+  const result = await neo4js.run(
     `
     MATCH
       (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
@@ -140,7 +140,7 @@ export async function update(
   newProps: any
 ): Promise<any> {
   const relationString = getRelationString(label, relationType);
-  let props = await trineo.run(
+  let props = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
     RETURN b

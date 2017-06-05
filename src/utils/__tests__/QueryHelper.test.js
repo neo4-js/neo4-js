@@ -1,12 +1,6 @@
 // @flow
 
-import trineo from "../../index";
 import { prepareWhere } from "../QueryHelper";
-
-trineo.init({
-  boltUri: "localhost",
-  boltPort: 10001,
-});
 
 describe("QueryHelper", () => {
   describe("prepareWhere", () => {
