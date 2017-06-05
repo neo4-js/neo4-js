@@ -1,13 +1,6 @@
 // @flow
 
-import trineo, {
-  Model,
-  ModelInstance,
-  hasMany,
-  model,
-  hasOne,
-  connectModelInstance,
-} from "../index";
+import trineo, { Model, ModelInstance, hasMany, model, hasOne } from "../index";
 import idx from "idx";
 
 type PersonProps = {
@@ -28,12 +21,12 @@ const Task: TaskModel = new TaskModel("Task");
 @model("Person")
 class PersonInstance extends ModelInstance<PersonProps> {
   @hasMany("Task", "created")
-  tasks: HasManyActions<TaskProps, TaskInstance, "created" | "assignedTo">;
+  tasks: HasManyActions<TaskProps, TaskInstance>;
   @hasMany("Person", "friend")
-  friends: HasManyActions<PersonProps, PersonInstance, "friend">;
+  friends: HasManyActions<PersonProps, PersonInstance>;
 
-  getFriendsWithName = (name: string) => {
-    return this.friends.get({ name: { $sw: name } });
+  getFriendsWithName = async (name: string) => {
+    return await this.friends.get({ name: { $sw: name } });
   };
 }
 
@@ -50,7 +43,7 @@ describe("ModelInstance", () => {
 
   beforeEach(async () => {
     const paul = await Person.create({ name: "Olaf" });
-    paul.friends.create([{ name: "Olga" }, { name: "Hannes" }]);
+    await paul.friends.create([{ name: "Olga" }, { name: "Hannes" }]);
     await Task.create({ title: "Learn magic", done: true });
     await Task.create({ title: "Write more test cases", done: false });
     await Task.create({ title: "Write more test cases", done: false });

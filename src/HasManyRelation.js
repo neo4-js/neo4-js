@@ -1,21 +1,27 @@
 // @flow
 import trineo, { ModelInstance } from "./index";
 import { prepareWhere, prepareSet } from "./utils";
+import type { RelationType } from "./relation";
+
+function getRelationString(label: string, relationType: RelationType) {
+  if (relationType.any) {
+    return `-[:${label}]-`;
+  }
+  return `${relationType.reverse ? "<" : ""}-[:${label}]-${relationType.reverse ? "" : ">"}`;
+}
 
 export async function get(
   instance: ModelInstance<*>,
-  label: ?string,
+  label: string,
+  relationType: RelationType,
   props: any
 ): Promise<any> {
-  if (!label) {
-    return Promise.reject(new Error("No relation label given"));
-  }
-
   const { where, flatProps } = prepareWhere(props, "b");
 
+  const relationString = getRelationString(label, relationType);
   const result = await trineo.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[c:${label}]-(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
     ${where}
     RETURN b
   `,
@@ -27,15 +33,13 @@ export async function get(
 
 export async function create(
   instance: ModelInstance<*>,
-  label: ?string,
+  label: string,
+  relationType: RelationType,
   propsArray: any[]
 ): Promise<any> {
-  if (!label) {
-    return Promise.reject(new Error("No relation label given"));
-  }
-
   const destInstances = [];
 
+  const relationString = getRelationString(label, relationType);
   for (const props of propsArray) {
     const destInstance = await this.dest.create(props);
     destInstances.push(destInstance);
@@ -44,7 +48,7 @@ export async function create(
       MATCH
         (a:${this.src.label} {guid:{srcGuid}}),
         (b:${this.dest.label} {guid:{destGuid}})
-      MERGE (a)-[c:${label}]->(b)
+      MERGE (a)${relationString}(b)
     `,
       { srcGuid: instance.props.guid, destGuid: destInstance.props.guid }
     );
@@ -55,13 +59,11 @@ export async function create(
 
 export async function add(
   instance: ModelInstance<*>,
-  label: ?string,
+  label: string,
+  relationType: RelationType,
   instances: ModelInstance<*>[]
 ): Promise<number> {
-  if (!label) {
-    return Promise.reject(new Error("No relation label given"));
-  }
-
+  const relationString = getRelationString(label, relationType);
   let relationshipsCreated = 0;
   for (const destInstance of instances) {
     const result = await trineo.run(
@@ -69,7 +71,7 @@ export async function add(
       MATCH
         (a:${this.src.label} {guid:{srcGuid}}),
         (b:${this.dest.label} {guid:{destGuid}})
-      MERGE (a)-[c:${label}]->(b)
+      MERGE (a)${relationString}(b)
     `,
       { srcGuid: instance.props.guid, destGuid: destInstance.props.guid }
     );
@@ -82,18 +84,16 @@ export async function add(
 
 export async function count(
   instance: ModelInstance<*>,
-  label: ?string,
+  label: string,
+  relationType: RelationType,
   props: any
 ): Promise<number> {
-  if (!label) {
-    return Promise.reject(new Error("No relation label given"));
-  }
-
   const { where, flatProps } = prepareWhere(props, "b");
 
+  const relationString = getRelationString(label, relationType);
   const result = await trineo.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[c:${label}]->(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
     ${where}
     RETURN COUNT(b) as b
   `,
@@ -107,20 +107,18 @@ export async function count(
 
 export async function update(
   instance: ModelInstance<*>,
-  label: ?string,
+  label: string,
+  relationType: RelationType,
   props: any,
   whereProps: any
 ): Promise<any> {
-  if (!label) {
-    return Promise.reject(new Error("No relation label given"));
-  }
-
   const { where, flatProps } = prepareWhere(whereProps, "b");
   const { str: setPropsStr, newProps } = prepareSet("b", props);
 
+  const relationString = getRelationString(label, relationType);
   const result = await trineo.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[c:${label}]->(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
     ${where}
     SET ${setPropsStr}
     RETURN b

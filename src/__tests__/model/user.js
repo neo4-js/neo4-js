@@ -14,5 +14,5 @@ export const User: Model<UserProps, UserInstance> = new Model("User");
 @model("User")
 export class UserInstance extends ModelInstance<UserProps> {
   @hasMany("Task", "created")
-  tasks: HasManyActions<TaskProps, TaskInstance, "created">;
+  tasks: HasManyActions<TaskProps, TaskInstance>;
 }

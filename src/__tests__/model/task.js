@@ -14,5 +14,5 @@ export const Task: Model<TaskProps, TaskInstance> = new Model("Task");
 @model("Task")
 export class TaskInstance extends ModelInstance<TaskProps> {
   @hasOne("User", "created")
-  creator: HasOneActions<UserProps, UserInstance, "created">;
+  creator: HasOneActions<UserProps, UserInstance>;
 }

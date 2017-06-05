@@ -1,6 +1,13 @@
 // @flow
 
-import trineo, { Model, ModelInstance, hasMany, model, hasOne } from "../index";
+import trineo, {
+  Model,
+  ModelInstance,
+  src,
+  model,
+  dest,
+  relation,
+} from "../index";
 import idx from "idx";
 
 type PersonProps = {
@@ -18,20 +25,39 @@ const Person: PersonModel = new PersonModel("Person");
 class TaskModel extends Model<TaskProps, TaskInstance> {}
 const Task: TaskModel = new TaskModel("Task");
 
+const TaskCreatorRelation = relation("created").src
+  .hasMany("Task")
+  .dest.hasOne("Person");
+
+const TaskAssigneeRelation = relation("assigned").src
+  .hasMany("Task")
+  .dest.hasOne("Person");
+
+const SupervisorRelation = relation("supervisor").src
+  .hasOne("Person")
+  .dest.hasMany("Person");
+
 @model("Person")
 class PersonInstance extends ModelInstance<PersonProps> {
-  @hasMany("Task")
-  tasks: HasManyActions<TaskProps, TaskInstance, "manager" | "assignee">;
-  @hasOne("Person", "supervisor")
-  supervisor: HasOneActions<PersonProps, PersonInstance, "supervisor">;
+  @src(TaskCreatorRelation)
+  createdTasks: HasManyActions<TaskProps, TaskInstance>;
+
+  @src(TaskAssigneeRelation)
+  assignedTasks: HasManyActions<TaskProps, TaskInstance>;
+
+  @dest(SupervisorRelation)
+  epmloyees: HasManyActions<PersonProps, PersonInstance>;
+  @src(SupervisorRelation)
+  supervisor: HasOneActions<PersonProps, PersonInstance>;
 }
 
 @model("Task")
 class TaskInstance extends ModelInstance<TaskProps> {
-  @hasOne("Person")
-  manager: HasOneActions<PersonProps, PersonInstance, "manager">;
-  @hasOne("Person")
-  assignee: HasOneActions<PersonProps, PersonInstance, "supervisor">;
+  @dest(TaskCreatorRelation)
+  creator: HasOneActions<PersonProps, PersonInstance>;
+
+  @dest(TaskAssigneeRelation)
+  assignee: HasOneActions<PersonProps, PersonInstance>;
 }
 
 describe("HasOne", () => {
@@ -85,19 +111,6 @@ describe("HasOne", () => {
 
       expect(result.length).toEqual(1);
       expect(result[0].b).toEqual(olaf.props);
-    });
-
-    it("should throw an error when creating a relation without a relation label", async () => {
-      const task: TaskInstance = await Task.create({ title: "Buy milk" });
-
-      try {
-        const paul: PersonInstance = await task.assignee.create({
-          name: "Paul",
-        });
-        expect(1).toEqual(0);
-      } catch (err) {
-        expect(err).toMatchSnapshot();
-      }
     });
   });
 

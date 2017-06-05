@@ -9,11 +9,27 @@ exports[`HasMany count should count all tasks with property done equals true to 
 exports[`HasMany create should create a instances of tasks and relate them to person instance 1`] = `
 Array [
   TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
     "props": Object {
       "title": "Buy milk",
     },
   },
   TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
     "props": Object {
       "done": false,
       "title": "Buy beer",
@@ -25,6 +41,14 @@ Array [
 exports[`HasMany get should find all tasks starting with character 'B' and are done 1`] = `
 Array [
   TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
     "props": Object {
       "done": true,
       "title": "Buy beer",
@@ -36,12 +60,28 @@ Array [
 exports[`HasMany get should find all tasks to instance 1`] = `
 Array [
   TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
     "props": Object {
       "done": true,
       "title": "Buy beer",
     },
   },
   TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
     "props": Object {
       "title": "Buy milk",
     },
@@ -52,12 +92,28 @@ Array [
 exports[`HasMany get should find all tasks to instance 2`] = `
 Array [
   TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
     "props": Object {
       "done": true,
       "title": "Buy beer",
     },
   },
   TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
     "props": Object {
       "title": "Buy milk",
     },
@@ -68,6 +124,14 @@ Array [
 exports[`HasMany get should find all tasks to instance where task property done equals true 1`] = `
 Array [
   TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
     "props": Object {
       "done": true,
       "title": "Buy beer",
@@ -81,6 +145,14 @@ exports[`HasMany get should find nothing 1`] = `Array []`;
 exports[`HasMany update should set tasks to done 1`] = `
 Array [
   TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
     "props": Object {
       "done": true,
       "title": "Buy milk",

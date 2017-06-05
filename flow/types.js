@@ -1,21 +1,21 @@
 // @flow
 
-type HasManyActions<Properties, ModelInstance, Labels/*: string*/> = {
-  get: (props?: Properties, label?: Labels) => Promise<ModelInstance[]>,
-  update: (props: Properties, where?: Properties, label?: Labels) => Promise<ModelInstance[]>,
-  create: (props: Properties[], label?: Labels) => Promise<ModelInstance[]>,
-  add: (instances: ModelInstance[], label?: Labels) => Promise<number>,
-  remove: (props?: Properties, label?: Labels) => Promise<number>,
-  count: (props?: Properties, label?: Labels) => Promise<number>,
+type HasManyActions<Properties, ModelInstance> = {
+  get: (props?: Properties) => Promise<ModelInstance[]>,
+  update: (props: Properties, where?: Properties) => Promise<ModelInstance[]>,
+  create: (props: Properties[]) => Promise<ModelInstance[]>,
+  add: (instances: ModelInstance[]) => Promise<number>,
+  remove: (props?: Properties) => Promise<number>,
+  count: (props?: Properties) => Promise<number>,
 };
 
-type HasOneActions<Properties, ModelInstance, Labels/*: string = ''*/> = {
-  get: (label?: Labels) => Promise<ModelInstance | null>,
-  update: (props: Properties, label?: Labels) => Promise<ModelInstance | null>,
-  create: (props: Properties, label?: Labels) => Promise<ModelInstance>,
-  add: (instance: ModelInstance, label?: Labels) => Promise<boolean>,
-  remove: (label?: Labels) => Promise<Neo4jResultStats>,
-  hasOne: (label?: Labels) => Promise<boolean>,
+type HasOneActions<Properties, ModelInstance> = {
+  get: () => Promise<ModelInstance | null>,
+  update: (props: Properties) => Promise<ModelInstance | null>,
+  create: (props: Properties) => Promise<ModelInstance>,
+  add: (instance: ModelInstance) => Promise<boolean>,
+  remove: () => Promise<Neo4jResultStats>,
+  hasOne: () => Promise<boolean>,
 }
 
 type StringProperty =

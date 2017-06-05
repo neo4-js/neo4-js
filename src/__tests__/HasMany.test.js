@@ -1,6 +1,13 @@
 // @flow
 
-import trineo, { Model, ModelInstance, hasMany, model, hasOne } from "../index";
+import trineo, {
+  Model,
+  ModelInstance,
+  src,
+  model,
+  dest,
+  relation,
+} from "../index";
 import idx from "idx";
 
 type PersonProps = {
@@ -18,16 +25,28 @@ const Person: PersonModel = new PersonModel("Person");
 class TaskModel extends Model<TaskProps, TaskInstance> {}
 const Task: TaskModel = new TaskModel("Task");
 
+const TaskCreatorRelation = relation("created").src
+  .hasMany("Task")
+  .dest.hasOne("Person");
+
+const TaskAssigneeRelation = relation("assigned").src
+  .hasMany("Task")
+  .dest.hasOne("Person");
+
 @model("Person")
 class PersonInstance extends ModelInstance<PersonProps> {
-  @hasMany("Task", "created")
-  tasks: HasManyActions<TaskProps, TaskInstance, "created" | "assignedTo">;
-  @hasMany("Person", "friend")
-  friends: HasManyActions<PersonProps, PersonInstance, "friend">;
+  @src(TaskCreatorRelation)
+  tasks: HasManyActions<TaskProps, TaskInstance>;
+
+  @src(TaskAssigneeRelation)
+  assignedTasks: HasManyActions<TaskProps, TaskInstance>;
 }
 
 @model("Task")
-class TaskInstance extends ModelInstance<TaskProps> {}
+class TaskInstance extends ModelInstance<TaskProps> {
+  @dest(TaskCreatorRelation)
+  creator: HasOneActions<PersonProps, PersonInstance>;
+}
 
 describe("HasMany", () => {
   beforeAll(() => {
@@ -122,11 +141,8 @@ describe("HasMany", () => {
     });
 
     it("should find all tasks to instance", async () => {
-      await paul.tasks.create(tasksProps, "assignedTo");
-      const tasks: TaskInstance[] = await paul.tasks.get(
-        undefined,
-        "assignedTo"
-      );
+      await paul.tasks.create(tasksProps);
+      const tasks: TaskInstance[] = await paul.tasks.get();
 
       expect(
         tasks.map(t => {
@@ -138,10 +154,7 @@ describe("HasMany", () => {
 
     it("should find nothing", async () => {
       await paul.tasks.create(tasksProps);
-      const tasks: TaskInstance[] = await paul.tasks.get(
-        undefined,
-        "assignedTo"
-      );
+      const tasks: TaskInstance[] = await paul.assignedTasks.get();
       expect(tasks).toMatchSnapshot();
     });
 
@@ -186,11 +199,8 @@ describe("HasMany", () => {
     });
 
     it("should count all tasks with property done equals true to instance", async () => {
-      await paul.tasks.create(tasksProps, "assignedTo");
-      const tasks: number = await paul.tasks.count(
-        { done: true },
-        "assignedTo"
-      );
+      await paul.tasks.create(tasksProps);
+      const tasks: number = await paul.tasks.count({ done: true });
       expect(tasks).toMatchSnapshot();
     });
   });
@@ -212,10 +222,10 @@ describe("HasMany", () => {
       for (const props of tasksProps) {
         tasks.push(await Task.create(props));
       }
-      const t: number = await paul.tasks.add(tasks, "assignedTo");
+      const t: number = await paul.assignedTasks.add(tasks);
       expect(t).toMatchSnapshot();
 
-      const relatedTasks = await paul.tasks.get(undefined, "assignedTo");
+      const relatedTasks = await paul.assignedTasks.get();
 
       const mapSort = t =>
         // $FlowFixMe
@@ -238,14 +248,10 @@ describe("HasMany", () => {
 
     it("should set tasks to done", async () => {
       const paul: PersonInstance = await Person.create({ name: "Paul" });
-      const tasks: TaskInstance[] = await paul.tasks.create(
-        tasksProps,
-        "assignedTo"
-      );
+      const tasks: TaskInstance[] = await paul.tasks.create(tasksProps);
       const result: TaskInstance[] = await paul.tasks.update(
         { done: true },
-        { done: false },
-        "assignedTo"
+        { done: false }
       );
 
       expect(

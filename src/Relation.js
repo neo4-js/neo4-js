@@ -6,37 +6,99 @@ import * as HasOne from "./HasOneRelation";
 import idx from "idx";
 import { relationConnectHelper } from "./utils";
 
-export type RelationType = "hasMany" | "hasOne";
+export type RelationType = {|
+  type: "hasMany" | "hasOne",
+  reverse?: boolean,
+  any?: boolean,
+|};
+
+export const relation = (relationLabel: string) => {
+  const addData = (model, direction, type) => {
+    chain.data[direction] = { model, type };
+    return chain;
+  };
+
+  const chain = {
+    data: {},
+    relationLabel,
+    src: {
+      hasMany: (model: string) =>
+        addData(model, "src", { type: "hasMany", reverse: false }),
+      hasOne: (model: string) =>
+        addData(model, "src", { type: "hasOne", reverse: false }),
+    },
+    dest: {
+      hasMany: (model: string) =>
+        addData(model, "dest", { type: "hasMany", reverse: true }),
+      hasOne: (model: string) =>
+        addData(model, "dest", { type: "hasOne", reverse: true }),
+    },
+  };
+
+  return chain;
+};
+
+export const src = (relation: any) => (
+  target: any,
+  name: string,
+  descriptor: any
+) => {
+  descriptor.writable = true;
+  const { model, type } = relation.data.src;
+  addRelation(target, model, name, type, relation.relationLabel);
+};
+
+export const dest = (relation: any) => (
+  target: any,
+  name: string,
+  descriptor: any
+) => {
+  descriptor.writable = true;
+  const { model, type } = relation.data.dest;
+  addRelation(target, model, name, type, relation.relationLabel);
+};
 
 function addRelation(
   target: any,
   destLabel: string,
   name: string,
-  type: RelationType,
-  defaultLabel?: string
+  relationType: RelationType,
+  relationLabel: string
 ) {
   if (!target._relations) {
     target._relations = [];
   }
-  target._relations.push({ destLabel, name, type, defaultLabel });
+  target._relations.push({ destLabel, name, relationType, relationLabel });
 }
 
-export const hasOne = (destLabel: string, defaultLabel?: string) => (
+export const hasOne = (destLabel: string, relationLabel: string) => (
   target: any,
   name: string,
   descriptor: any
 ) => {
   descriptor.writable = true;
-  addRelation(target, destLabel, name, "hasOne", defaultLabel);
+  addRelation(
+    target,
+    destLabel,
+    name,
+    { type: "hasOne", any: true },
+    relationLabel
+  );
 };
 
-export const hasMany = (destLabel: string, defaultLabel?: string) => (
+export const hasMany = (destLabel: string, relationLabel: string) => (
   target: any,
   name: string,
   descriptor: any
 ) => {
   descriptor.writable = true;
-  addRelation(target, destLabel, name, "hasMany", defaultLabel);
+  addRelation(
+    target,
+    destLabel,
+    name,
+    { type: "hasMany", any: true },
+    relationLabel
+  );
 };
 
 export const model = (label: string) => (target: any, name: string) => {
@@ -47,14 +109,14 @@ export const model = (label: string) => (target: any, name: string) => {
       for (const t of target.prototype._relations) {
         const destModel = relationConnectHelper.models[t.destLabel];
         if (destModel) {
-          m[t.type](destModel, t.name, t.defaultLabel);
+          m.addRelation(destModel, t.name, t.relationLabel, t.relationType);
         } else {
           relationConnectHelper.relationsToAdd.push({
             src: m,
             destLabel: t.destLabel,
             propertyName: t.name,
-            defaultLabel: t.defaultLabel,
-            type: t.type,
+            relationLabel: t.relationLabel,
+            relationType: t.relationType,
           });
         }
       }
@@ -68,30 +130,30 @@ export const model = (label: string) => (target: any, name: string) => {
 };
 
 export class Relation {
-  type: RelationType;
+  relationType: RelationType;
   src: Model<*, *>;
   dest: Model<*, *>;
   propertyName: string;
-  defaultLabel: ?string;
+  label: string;
 
   constructor(
-    type: RelationType,
+    relationType: RelationType,
     src: Model<*, *>,
     dest: Model<*, *>,
     propertyName: string,
-    defaultLabel?: string
+    label: string
   ) {
-    this.type = type;
+    this.relationType = relationType;
     this.src = src;
     this.dest = dest;
     this.propertyName = propertyName;
-    this.defaultLabel = defaultLabel;
+    this.label = label;
   }
 
   addFunctionsToInstance<T: ModelInstance<*>>(instance: T): T {
-    if (this.type === "hasMany") {
+    if (this.relationType.type === "hasMany") {
       return this.addHasManyToInstance(instance);
-    } else if (this.type === "hasOne") {
+    } else if (this.relationType.type === "hasOne") {
       return this.addHasOneToInstance(instance);
     }
     return instance;
@@ -100,25 +162,23 @@ export class Relation {
   addHasManyToInstance(instance: ModelInstance<*>): any {
     // $FlowFixMe
     instance[this.propertyName] = {
-      get: (props: any, label?: string) =>
-        HasMany.get.bind(this, instance, label ? label : this.defaultLabel)(
-          props
-        ),
-      update: (newProps: any, props: any, label?: string) =>
-        HasMany.update.bind(this, instance, label ? label : this.defaultLabel)(
+      get: (props: any) =>
+        HasMany.get.bind(this, instance, this.label, this.relationType)(props),
+      update: (newProps: any, props: any) =>
+        HasMany.update.bind(this, instance, this.label, this.relationType)(
           newProps,
           props
         ),
-      create: (props: any, label?: string) =>
-        HasMany.create.bind(this, instance, label ? label : this.defaultLabel)(
+      create: (props: any) =>
+        HasMany.create.bind(this, instance, this.label, this.relationType)(
           props
         ),
-      add: (instances: any, label?: string) =>
-        HasMany.add.bind(this, instance, label ? label : this.defaultLabel)(
+      add: (instances: any) =>
+        HasMany.add.bind(this, instance, this.label, this.relationType)(
           instances
         ),
-      count: (props: any, label?: string) =>
-        HasMany.count.bind(this, instance, label ? label : this.defaultLabel)(
+      count: (props: any) =>
+        HasMany.count.bind(this, instance, this.label, this.relationType)(
           props
         ),
     };
@@ -129,24 +189,24 @@ export class Relation {
   addHasOneToInstance(instance: ModelInstance<*>): any {
     // $FlowFixMe
     instance[this.propertyName] = {
-      get: (label?: string) =>
-        HasOne.get.bind(this, instance, label ? label : this.defaultLabel)(),
+      get: () =>
+        HasOne.get.bind(this, instance, this.label, this.relationType)(),
       update: (props: any, label?: string) =>
-        HasOne.update.bind(this, instance, label ? label : this.defaultLabel)(
+        HasOne.update.bind(this, instance, this.label, this.relationType)(
           props
         ),
       create: (props: any, label?: string) =>
-        HasOne.create.bind(this, instance, label ? label : this.defaultLabel)(
+        HasOne.create.bind(this, instance, this.label, this.relationType)(
           props
         ),
       add: (destInstance: ModelInstance<*>, label?: string) =>
-        HasOne.add.bind(this, instance, label ? label : this.defaultLabel)(
+        HasOne.add.bind(this, instance, this.label, this.relationType)(
           destInstance
         ),
       remove: (label?: string) =>
-        HasOne.remove.bind(this, instance, label ? label : this.defaultLabel)(),
+        HasOne.remove.bind(this, instance, this.label, this.relationType)(),
       hasOne: (label?: string) =>
-        HasOne.hasOne.bind(this, instance, label ? label : this.defaultLabel)(),
+        HasOne.hasOne.bind(this, instance, this.label, this.relationType)(),
     };
 
     return instance;

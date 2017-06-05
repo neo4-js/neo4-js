@@ -1,17 +1,23 @@
 // @flow
 import trineo, { ModelInstance } from "./index";
+import type { RelationType } from "./relation";
+
+function getRelationString(label: string, relationType: RelationType) {
+  if (relationType.any) {
+    return `-[:${label}]-`;
+  }
+  return `${relationType.reverse ? "<" : ""}-[:${label}]-${relationType.reverse ? "" : ">"}`;
+}
 
 export async function get(
   instance: ModelInstance<*>,
-  label: ?string
+  label: string,
+  relationType: RelationType
 ): Promise<any> {
-  if (!label) {
-    return Promise.reject(new Error("No relation label given"));
-  }
-
+  const relationString = getRelationString(label, relationType);
   const result = await trineo.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})-[:${label}]-(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
     RETURN b
   `,
     { _srcGuid: instance.props.guid }
@@ -21,24 +27,25 @@ export async function get(
     return Promise.resolve(null);
   }
 
+  if (result.length > 1) {
+    return Promise.reject("hasOne has more than one relations");
+  }
+
   return Promise.resolve(this.dest._createModelInstance(result[0].b));
 }
 
 export async function create(
   instance: ModelInstance<*>,
-  label: ?string,
+  label: string,
+  relationType: RelationType,
   props: any
 ): Promise<any> {
-  if (!label) {
-    return Promise.reject(new Error("No relation label given"));
-  }
-
   const destInstance = await this.dest.create(props);
 
-  // TODO: Not quite sure to keep this as the default behaviour...
-  await trineo.run(
+  const relationString = getRelationString(label, relationType);
+  const result = await trineo.run(
     `
-    MATCH (a:${this.src.label} {guid:{srcGuid}})-[:${label}]->(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
     DETACH DELETE b
   `,
     { srcGuid: instance.props.guid }
@@ -49,7 +56,7 @@ export async function create(
     MATCH
       (a:${this.src.label} {guid:{srcGuid}}),
       (b:${this.dest.label} {guid:{destGuid}})
-    MERGE (a)-[:${label}]->(b)
+    MERGE (a)${relationString}(b)
   `,
     { srcGuid: instance.props.guid, destGuid: destInstance.props.guid }
   );
@@ -59,15 +66,13 @@ export async function create(
 
 export async function remove(
   instance: ModelInstance<*>,
-  label: ?string
+  label: string,
+  relationType: RelationType
 ): Promise<any> {
-  if (!label) {
-    return Promise.reject(new Error("No relation label given"));
-  }
-
+  const relationString = getRelationString(label, relationType);
   const result = await trineo.run(
     `
-    MATCH (a:${this.src.label} {guid:{srcGuid}})-[:${label}]->(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
     DETACH DELETE b
   `,
     { srcGuid: instance.props.guid }
@@ -79,19 +84,17 @@ export async function remove(
 
 export async function add(
   instance: ModelInstance<*>,
-  label: ?string,
+  label: string,
+  relationType: RelationType,
   destInstance: ModelInstance<*>
 ): Promise<boolean> {
-  if (!label) {
-    return Promise.reject(new Error("No relation label given"));
-  }
-
+  const relationString = getRelationString(label, relationType);
   const result = await trineo.run(
     `
     MATCH
       (a:${this.src.label} {guid:{srcGuid}}),
       (b:${this.dest.label} {guid:{destGuid}})
-    MERGE (a)-[:${label}]->(b)
+    MERGE (a)${relationString}(b)
   `,
     { srcGuid: instance.props.guid, destGuid: destInstance.props.guid }
   );
@@ -106,16 +109,14 @@ export async function add(
 
 export async function hasOne(
   instance: ModelInstance<*>,
-  label: ?string
+  label: string,
+  relationType: RelationType
 ): Promise<boolean> {
-  if (!label) {
-    return Promise.reject(new Error("No relation label given"));
-  }
-
+  const relationString = getRelationString(label, relationType);
   const result = await trineo.run(
     `
     MATCH
-      (a:${this.src.label} {guid:{srcGuid}})-[:${label}]->(b:${this.dest.label})
+      (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
     RETURN b
   `,
     { srcGuid: instance.props.guid }
@@ -134,16 +135,14 @@ export async function hasOne(
 
 export async function update(
   instance: ModelInstance<*>,
-  label: ?string,
+  label: string,
+  relationType: RelationType,
   newProps: any
 ): Promise<any> {
-  if (!label) {
-    return Promise.reject(new Error("No relation label given"));
-  }
-
+  const relationString = getRelationString(label, relationType);
   let props = await trineo.run(
     `
-    MATCH (a:${this.src.label} {guid:{srcGuid}})-[:${label}]->(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
     RETURN b
   `,
     { srcGuid: instance.props.guid }

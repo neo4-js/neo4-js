@@ -59,7 +59,12 @@ export class Model<P, I: ModelInstance<P>> {
     relationConnectHelper.relationsToAdd
       .filter(t => t.destLabel == label)
       .forEach(t => {
-        t.src[t.type](this, t.propertyName, t.defaultLabel);
+        t.src.addRelation(
+          this,
+          t.propertyName,
+          t.relationLabel,
+          t.relationType
+        );
       });
     relationConnectHelper.relationsToAdd = relationConnectHelper.relationsToAdd.filter(
       t => t.destLabel != label
@@ -187,15 +192,14 @@ export class Model<P, I: ModelInstance<P>> {
     return result;
   }
 
-  hasMany(model: Model<*, *>, propertyName: string, defaultLabel?: string) {
+  addRelation(
+    model: Model<*, *>,
+    propertyName: string,
+    relationLabel: string,
+    relationType: RelationType
+  ) {
     this.relations.push(
-      new Relation("hasMany", this, model, propertyName, defaultLabel)
-    );
-  }
-
-  hasOne(model: Model<*, *>, propertyName: string, defaultLabel?: string) {
-    this.relations.push(
-      new Relation("hasOne", this, model, propertyName, defaultLabel)
+      new Relation(relationType, this, model, propertyName, relationLabel)
     );
   }
 }
