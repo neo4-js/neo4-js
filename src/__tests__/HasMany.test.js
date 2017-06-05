@@ -53,18 +53,6 @@ describe("HasMany", () => {
     trineo.close();
   });
 
-  // TODO: Fix me! No idea how, but fix me!
-  /*describe("modelInstance connection", () => {
-    it("should return an instance of PersonIsntance", async () => {
-      const paul: PersonInstance = await Person.create({ name: "Paul" });
-
-      console.log(typeof paul);
-      console.log(PersonInstance.prototype);
-
-      expect(paul).toBeInstanceOf(PersonInstance);
-    });
-  });*/
-
   describe("create", () => {
     it("should create a instances of tasks and relate them to person instance", async () => {
       const paul: PersonInstance = await Person.create({ name: "Paul" });
