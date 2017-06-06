@@ -1,6 +1,6 @@
 // @flow
 
-type HasManyActions<Properties, ModelInstance> = {
+declare type HasManyActions<Properties, ModelInstance> = {
   get: (props?: Properties) => Promise<ModelInstance[]>,
   update: (props: Properties, where?: Properties) => Promise<ModelInstance[]>,
   create: (props: Properties[]) => Promise<ModelInstance[]>,
@@ -9,7 +9,7 @@ type HasManyActions<Properties, ModelInstance> = {
   count: (props?: Properties) => Promise<number>,
 };
 
-type HasOneActions<Properties, ModelInstance> = {
+declare type HasOneActions<Properties, ModelInstance> = {
   get: () => Promise<ModelInstance | null>,
   update: (props: Properties) => Promise<ModelInstance | null>,
   create: (props: Properties) => Promise<ModelInstance>,
@@ -18,17 +18,19 @@ type HasOneActions<Properties, ModelInstance> = {
   hasOne: () => Promise<boolean>,
 }
 
-type StringProperty =
+declare type StringProperty =
   { $sw: string }
 | { $ew: string }
 | { $contains: string }
 | { $reg: string }
 | { $eq: string }
+| { $or: StringProperty[] }
+| { $and: StringProperty[] }
 | { $in: string[] }
 | { $not: StringProperty }
 | string;
 
-type NumberProperty =
+declare type NumberProperty =
   { $gt: number }
 | { $gte: number }
 | { $lt: number }
@@ -41,7 +43,7 @@ type NumberProperty =
 | { $not: NumberProperty }
 | number;
 
-type Neo4jResultStats = {
+declare type Neo4jResultStats = {
   nodesCreated: number,
   nodesDeleted: number,
   relationshipsCreated: number,
