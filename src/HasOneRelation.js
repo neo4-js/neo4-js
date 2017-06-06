@@ -6,7 +6,9 @@ function getRelationString(label: string, relationType: RelationType) {
   if (relationType.any) {
     return `-[:${label}]-`;
   }
-  return `${relationType.reverse ? "<" : ""}-[:${label}]-${relationType.reverse ? "" : ">"}`;
+  return `${relationType.reverse ? "<" : ""}-[:${label}]-${relationType.reverse
+    ? ""
+    : ">"}`;
 }
 
 export async function get(
@@ -17,7 +19,8 @@ export async function get(
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
+      .label})
     RETURN b
   `,
     { _srcGuid: instance.props.guid }
@@ -45,7 +48,8 @@ export async function create(
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
-    MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest
+      .label})
     DETACH DELETE b
   `,
     { srcGuid: instance.props.guid }
@@ -72,7 +76,8 @@ export async function remove(
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
-    MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest
+      .label})
     DETACH DELETE b
   `,
     { srcGuid: instance.props.guid }
@@ -114,7 +119,8 @@ export async function hasOne(
   const result = await neo4js.run(
     `
     MATCH
-      (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
+      (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest
+      .label})
     RETURN b
   `,
     { srcGuid: instance.props.guid }
@@ -140,7 +146,8 @@ export async function update(
   const relationString = getRelationString(label, relationType);
   let props = await neo4js.run(
     `
-    MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest
+      .label})
     RETURN b
   `,
     { srcGuid: instance.props.guid }

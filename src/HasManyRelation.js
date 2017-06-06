@@ -7,7 +7,9 @@ function getRelationString(label: string, relationType: RelationType) {
   if (relationType.any) {
     return `-[:${label}]-`;
   }
-  return `${relationType.reverse ? "<" : ""}-[:${label}]-${relationType.reverse ? "" : ">"}`;
+  return `${relationType.reverse ? "<" : ""}-[:${label}]-${relationType.reverse
+    ? ""
+    : ">"}`;
 }
 
 export async function get(
@@ -21,7 +23,8 @@ export async function get(
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
+      .label})
     ${where}
     RETURN b
   `,
@@ -93,7 +96,8 @@ export async function count(
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
+      .label})
     ${where}
     RETURN COUNT(b) as b
   `,
@@ -118,7 +122,8 @@ export async function update(
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest.label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
+      .label})
     ${where}
     SET ${setPropsStr}
     RETURN b

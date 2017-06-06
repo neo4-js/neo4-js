@@ -25,11 +25,15 @@ const ProjectChildRelation = relation("child").src
 
 @model(Project)
 class ProjectInstance extends ModelInstance<ProjectProps> {
-  @src(ProjectChildRelation)
-  children: HasManyActions<ProjectProps, ProjectInstance>;
+  @src(ProjectChildRelation) children: HasManyActions<
+    ProjectProps,
+    ProjectInstance
+  >;
 
-  @dest(ProjectChildRelation)
-  parent: HasOneActions<ProjectProps, ProjectInstance>;
+  @dest(ProjectChildRelation) parent: HasOneActions<
+    ProjectProps,
+    ProjectInstance
+  >;
 }
 
 describe("Recursive relations", () => {
