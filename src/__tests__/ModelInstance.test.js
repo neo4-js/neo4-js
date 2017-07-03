@@ -1,6 +1,13 @@
 // @flow
 
-import neo4js, { Model, ModelInstance, hasMany, model, hasOne } from "../index";
+import neo4js, {
+  Model,
+  ModelInstance,
+  hasMany,
+  model,
+  hasOne,
+  defaultProps,
+} from "../index";
 import idx from "idx";
 
 type PersonProps = {
@@ -30,6 +37,10 @@ class PersonInstance extends ModelInstance<PersonProps> {
   };
 }
 
+@defaultProps({
+  title: "(empty)",
+  done: () => false,
+})
 @model(Task)
 class TaskInstance extends ModelInstance<TaskProps> {}
 
@@ -76,6 +87,21 @@ describe("ModelInstance", () => {
         return f;
       });
       expect(friends).toMatchSnapshot();
+    });
+  });
+
+  describe("Default Properties", () => {
+    it("should initialize with default properties", async () => {
+      let task: ?TaskInstance = await Task.create({});
+      // $FlowFixMe
+      const guid = task.props.guid;
+
+      if (task && task.props.guid) delete task.props.guid;
+      expect(task).toMatchSnapshot();
+
+      task = await Task.findByGuid(guid);
+      if (task && task.props.guid) delete task.props.guid;
+      expect(task).toMatchSnapshot();
     });
   });
 });

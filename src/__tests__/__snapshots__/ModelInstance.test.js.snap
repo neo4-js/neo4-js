@@ -1,5 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ModelInstance Default Properties should initialize with default properties 1`] = `
+TaskInstance {
+  "props": Object {
+    "done": false,
+    "title": "(empty)",
+  },
+}
+`;
+
+exports[`ModelInstance Default Properties should initialize with default properties 2`] = `
+TaskInstance {
+  "props": Object {
+    "done": false,
+    "title": "(empty)",
+  },
+}
+`;
+
 exports[`ModelInstance ModelInstance functions should return friends with starting name 'O' 1`] = `
 Array [
   PersonInstance {

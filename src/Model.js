@@ -1,7 +1,8 @@
 // @flow
 
-import { forIn } from "lodash";
+import { forIn, mapValues } from "lodash";
 import uuid from "uuid";
+import idx from "idx";
 import { autobind } from "core-decorators";
 import neo4js, { ModelInstance, Relation } from "./index";
 import type { BaseProps, RelationType } from "./index";
@@ -57,7 +58,12 @@ export class Model<P, I: ModelInstance<P>> {
   }
 
   async create(props: P): Promise<I> {
-    let p = this.beforeCreate(props);
+    let defaultProps = mapValues(
+      // $FlowFixMe
+      idx(this.modelInstanceClass, _ => _.prototype._defaultProps) || {},
+      prop => (typeof prop === "function" ? prop() : prop)
+    );
+    let p = this.beforeCreate(({ ...defaultProps, ...(props: any) }: P));
     p = ({ ...(p: any) }: P & BaseProps);
     p.guid = uuid();
 

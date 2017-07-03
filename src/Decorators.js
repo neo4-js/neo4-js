@@ -242,3 +242,9 @@ export const model = (model: Model<*, *>) => (target: any, name: string) => {
     );
   }
 };
+
+export const defaultProps = (props: any) => (target: any, name: string) => {
+  if (props) {
+    target.prototype._defaultProps = props;
+  }
+};
