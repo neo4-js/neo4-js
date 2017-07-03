@@ -39,37 +39,25 @@ const SupervisorRelation = relation("supervisor").src
 
 @model(Person)
 class PersonInstance extends ModelInstance<PersonProps> {
-  @src(TaskCreatorRelation) createdTasks: HasManyActions<
-    TaskProps,
-    TaskInstance
-  >;
+  @src(TaskCreatorRelation)
+  createdTasks: HasManyActions<TaskProps, TaskInstance>;
 
-  @src(TaskAssigneeRelation) assignedTasks: HasManyActions<
-    TaskProps,
-    TaskInstance
-  >;
+  @src(TaskAssigneeRelation)
+  assignedTasks: HasManyActions<TaskProps, TaskInstance>;
 
-  @dest(SupervisorRelation) epmloyees: HasManyActions<
-    PersonProps,
-    PersonInstance
-  >;
-  @src(SupervisorRelation) supervisor: HasOneActions<
-    PersonProps,
-    PersonInstance
-  >;
+  @dest(SupervisorRelation)
+  epmloyees: HasManyActions<PersonProps, PersonInstance>;
+  @src(SupervisorRelation)
+  supervisor: HasOneActions<PersonProps, PersonInstance>;
 }
 
 @model(Task)
 class TaskInstance extends ModelInstance<TaskProps> {
-  @dest(TaskCreatorRelation) creator: HasOneActions<
-    PersonProps,
-    PersonInstance
-  >;
+  @dest(TaskCreatorRelation)
+  creator: HasOneActions<PersonProps, PersonInstance>;
 
-  @dest(TaskAssigneeRelation) assignee: HasOneActions<
-    PersonProps,
-    PersonInstance
-  >;
+  @dest(TaskAssigneeRelation)
+  assignee: HasOneActions<PersonProps, PersonInstance>;
 }
 
 describe("HasOne", () => {
