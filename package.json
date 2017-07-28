@@ -35,7 +35,7 @@
     "core-decorators": "^0.19.0",
     "idx": "^1.5.0",
     "lodash": "^4.17.4",
-    "neo4j-driver": "^1.3.0",
+    "neo4j-driver": "^1.4.0",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
@@ -50,10 +50,10 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-3": "^6.24.1",
-    "flow-bin": "^0.49.1",
+    "flow-bin": "^0.51.1",
     "flow-copy-source": "^1.2.0",
     "jest": "^20.0.4",
-    "prettier": "^1.5.2",
+    "prettier": "^1.5.3",
     "rimraf": "^2.6.1"
   },
   "jest": {

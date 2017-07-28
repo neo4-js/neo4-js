@@ -134,7 +134,7 @@ describe("HasOne", () => {
   });
 
   describe("remove", () => {
-    it("should remove supervisor", async () => {
+    it("should remove supervisor relation without deleting supervisor", async () => {
       const paul: PersonInstance = await Person.create({ name: "Paul" });
 
       const hubert: PersonInstance = await paul.supervisor.create({
@@ -143,8 +143,10 @@ describe("HasOne", () => {
 
       let result = await paul.supervisor.remove();
       expect(result).toMatchSnapshot();
-      result = await neo4js.run("MATCH (a:Person {guid:{guid}}) RETURN a", {
-        guid: hubert.props.guid,
+      result = await neo4js.run("MATCH (m) RETURN m");
+      result = result.map(node => {
+        delete node.m.guid;
+        return node;
       });
       expect(result).toMatchSnapshot();
     });

@@ -2,13 +2,17 @@
 import neo4js, { ModelInstance } from "./index";
 import type { RelationType } from "./relation";
 
-function getRelationString(label: string, relationType: RelationType) {
+function getRelationString(
+  label: string,
+  relationType: RelationType,
+  variable: string = ""
+) {
   if (relationType.any) {
-    return `-[:${label}]-`;
+    return `-[${variable}:${label}]-`;
   }
-  return `${relationType.reverse ? "<" : ""}-[:${label}]-${relationType.reverse
-    ? ""
-    : ">"}`;
+  return `${relationType.reverse
+    ? "<"
+    : ""}-[${variable}:${label}]-${relationType.reverse ? "" : ">"}`;
 }
 
 export async function get(
@@ -73,13 +77,13 @@ export async function remove(
   label: string,
   relationType: RelationType
 ): Promise<any> {
-  const relationString = getRelationString(label, relationType);
+  const relationString = getRelationString(label, relationType, "c");
   const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${this.dest
       .label})
-    DETACH DELETE b
-  `,
+    DELETE c
+    `,
     { srcGuid: instance.props.guid }
   );
 
