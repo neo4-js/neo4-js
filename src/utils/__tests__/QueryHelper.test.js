@@ -1,6 +1,6 @@
 // @flow
 
-import { prepareWhere } from "../QueryHelper";
+import { prepareWhere, prepareSet } from "../QueryHelper";
 
 describe("QueryHelper", () => {
   describe("prepareWhere", () => {
@@ -137,6 +137,18 @@ describe("QueryHelper", () => {
         "a"
       );
       expect(where).toMatchSnapshot();
+    });
+  });
+
+  describe("prepareSet", () => {
+    it("should return set with single value", () => {
+      const set = prepareSet("o", { name: "Olaf" });
+      expect(set).toMatchSnapshot();
+    });
+
+    it("should return set with multiple values", () => {
+      const set = prepareSet("o", { name: "Olaf", age: 43 });
+      expect(set).toMatchSnapshot();
     });
   });
 });

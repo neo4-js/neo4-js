@@ -202,5 +202,15 @@ describe("Model", () => {
       });
       expect(persons).toMatchSnapshot();
     });
+
+    it("should update person with name olaf", async () => {
+      let p = await Person.create({ name: "Olaf", age: 20 });
+      p = await Person.update(p.props, { name: "Hanns", age: 22 });
+      p = p.map(p => {
+        delete p.props.guid;
+        return p;
+      });
+      expect(p).toMatchSnapshot();
+    });
   });
 });

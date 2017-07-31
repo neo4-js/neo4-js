@@ -117,5 +117,5 @@ export function prepareSet(
 
   if (!sets.length) throw new Error(`Nothing to update`);
 
-  return { str: sets.join(" "), newProps };
+  return { str: sets.join(", "), newProps };
 }

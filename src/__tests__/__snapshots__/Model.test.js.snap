@@ -162,3 +162,14 @@ Array [
   },
 ]
 `;
+
+exports[`Model update should update person with name olaf 2`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "age": 22,
+      "name": "Hanns",
+    },
+  },
+]
+`;
