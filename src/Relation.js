@@ -44,24 +44,31 @@ export class Relation {
   addHasManyToInstance(instance: ModelInstance<*>): any {
     // $FlowFixMe
     instance[this.propertyName] = {
-      get: (props: any) =>
-        HasMany.get.bind(this, instance, this.label, this.relationType)(props),
-      update: (newProps: any, props: any) =>
+      get: (props: any, relationProps: any = {}) =>
+        HasMany.get.bind(this, instance, this.label, this.relationType)(
+          props,
+          relationProps
+        ),
+      update: (newProps: any, props: any, relationProps: any = {}) =>
         HasMany.update.bind(this, instance, this.label, this.relationType)(
           newProps,
-          props
+          props,
+          relationProps
         ),
-      create: (props: any) =>
+      create: (props: any, relationProps: any = {}) =>
         HasMany.create.bind(this, instance, this.label, this.relationType)(
-          props
+          props,
+          relationProps
         ),
-      add: (instances: any) =>
+      add: (instances: any, relationProps: any = {}) =>
         HasMany.add.bind(this, instance, this.label, this.relationType)(
-          instances
+          instances,
+          relationProps
         ),
-      count: (props: any) =>
+      count: (props: any, relationProps: any = {}) =>
         HasMany.count.bind(this, instance, this.label, this.relationType)(
-          props
+          props,
+          relationProps
         ),
     };
 

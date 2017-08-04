@@ -94,6 +94,61 @@ describe("HasMany", () => {
         })
       ).toMatchSnapshot();
     });
+
+    it("should create instances of tasks and relate them to a person instance with relation properties", async () => {
+      const paul: PersonInstance = await Person.create({ name: "Paul" });
+
+      const propsArray: TaskProps[] = [
+        {
+          title: "Buy milk",
+        },
+        {
+          title: "Buy beer",
+          done: false,
+        },
+      ];
+
+      const tasks: TaskInstance[] = await paul.tasks.create(propsArray, {
+        relationCreated: "today",
+      });
+
+      const db = await neo4js.run("MATCH (a)-[b]->(c) RETURN a, b, c");
+      const data = db.map(item => {
+        delete item.a.guid;
+        delete item.c.guid;
+        return { from: item.a, to: item.c, props: item.b };
+      });
+
+      expect(data).toMatchSnapshot();
+    });
+
+    it("should create instances of tasks and relate them to a person instance with multiple relation properties", async () => {
+      const paul: PersonInstance = await Person.create({ name: "Paul" });
+
+      const propsArray: TaskProps[] = [
+        {
+          title: "Buy milk",
+        },
+        {
+          title: "Buy beer",
+          done: false,
+        },
+      ];
+
+      const tasks: TaskInstance[] = await paul.tasks.create(propsArray, {
+        relationCreated: "today",
+        type: "todo",
+      });
+
+      const db = await neo4js.run("MATCH (a)-[b]->(c) RETURN a, b, c");
+      const data = db.map(item => {
+        delete item.a.guid;
+        delete item.c.guid;
+        return { from: item.a, to: item.c, props: item.b };
+      });
+
+      expect(data).toMatchSnapshot();
+    });
   });
 
   describe("get", () => {
@@ -112,7 +167,10 @@ describe("HasMany", () => {
     beforeEach(async () => {
       paul = await Person.create({ name: "Paul" });
       const hubert: PersonInstance = await Person.create({ name: "Hubert" });
-      hubert.tasks.create([{ title: "Learn to drive a car" }]);
+      hubert.tasks.create([{ title: "Learn to drive a car" }], {
+        since: "today",
+        type: "todo",
+      });
     });
 
     it("should find all tasks to instance", async () => {
@@ -163,6 +221,27 @@ describe("HasMany", () => {
         title: { $sw: "B" },
         done: true,
       });
+      expect(
+        tasks.map(t => {
+          delete t.props.guid;
+          return t;
+        })
+      ).toMatchSnapshot();
+    });
+
+    it("should find all tasks starting with character 'B' and are done with relationProp type todo", async () => {
+      await paul.tasks.create(tasksProps);
+      await paul.tasks.create([{ title: "Buy milk", done: true }], {
+        type: "todo",
+      });
+      const tasks: TaskInstance[] = await paul.tasks.get(
+        {
+          title: { $sw: "B" },
+          done: true,
+        },
+        { type: "todo" }
+      );
+
       expect(
         tasks.map(t => {
           delete t.props.guid;

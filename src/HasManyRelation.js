@@ -1,26 +1,41 @@
 // @flow
 import neo4js, { ModelInstance } from "./index";
 import { prepareWhere, prepareSet } from "./utils";
+import { keys } from "lodash";
 import type { RelationType } from "./relation";
 
-function getRelationString(label: string, relationType: RelationType) {
-  if (relationType.any) {
-    return `-[:${label}]-`;
+const relationPropsKey = "relationProps";
+
+function getRelationString(
+  label: string,
+  relationType: RelationType,
+  relationProps?: any
+) {
+  let relationPropsStr = "";
+  if (relationProps) {
+    relationPropsStr = keys(relationProps)
+      .map(key => `${key}: {${relationPropsKey}}.${key}`)
+      .join(", ");
   }
-  return `${relationType.reverse ? "<" : ""}-[:${label}]-${relationType.reverse
-    ? ""
-    : ">"}`;
+
+  if (relationType.any) {
+    return `-[:${label} {${relationPropsStr}}]-`;
+  }
+  return `${relationType.reverse
+    ? "<"
+    : ""}-[:${label} {${relationPropsStr}}]-${relationType.reverse ? "" : ">"}`;
 }
 
 export async function get(
   instance: ModelInstance<*>,
   label: string,
   relationType: RelationType,
-  props: any
+  props: any,
+  relationProps?: any
 ): Promise<any> {
   const { where, flatProps } = prepareWhere(props, "b");
 
-  const relationString = getRelationString(label, relationType);
+  const relationString = getRelationString(label, relationType, relationProps);
   const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
@@ -28,7 +43,7 @@ export async function get(
     ${where}
     RETURN b
   `,
-    { _srcGuid: instance.props.guid, ...flatProps }
+    { _srcGuid: instance.props.guid, ...flatProps, relationProps }
   );
 
   return Promise.resolve(result.map(p => this.dest._createModelInstance(p.b)));
@@ -38,11 +53,12 @@ export async function create(
   instance: ModelInstance<*>,
   label: string,
   relationType: RelationType,
-  propsArray: any[]
+  propsArray: any[],
+  relationProps?: any
 ): Promise<any> {
   const destInstances = [];
 
-  const relationString = getRelationString(label, relationType);
+  const relationString = getRelationString(label, relationType, relationProps);
   for (const props of propsArray) {
     const destInstance = await this.dest.create(props);
     destInstances.push(destInstance);
@@ -53,7 +69,11 @@ export async function create(
         (b:${this.dest.label} {guid:{destGuid}})
       MERGE (a)${relationString}(b)
     `,
-      { srcGuid: instance.props.guid, destGuid: destInstance.props.guid }
+      {
+        srcGuid: instance.props.guid,
+        destGuid: destInstance.props.guid,
+        relationProps,
+      }
     );
   }
 
@@ -64,9 +84,10 @@ export async function add(
   instance: ModelInstance<*>,
   label: string,
   relationType: RelationType,
-  instances: ModelInstance<*>[]
+  instances: ModelInstance<*>[],
+  relationProps?: any
 ): Promise<number> {
-  const relationString = getRelationString(label, relationType);
+  const relationString = getRelationString(label, relationType, relationProps);
   let relationshipsCreated = 0;
   for (const destInstance of instances) {
     const result = await neo4js.run(
@@ -76,7 +97,11 @@ export async function add(
         (b:${this.dest.label} {guid:{destGuid}})
       MERGE (a)${relationString}(b)
     `,
-      { srcGuid: instance.props.guid, destGuid: destInstance.props.guid }
+      {
+        srcGuid: instance.props.guid,
+        destGuid: destInstance.props.guid,
+        relationProps,
+      }
     );
 
     relationshipsCreated += result._stats.relationshipsCreated;
@@ -89,11 +114,12 @@ export async function count(
   instance: ModelInstance<*>,
   label: string,
   relationType: RelationType,
-  props: any
+  props: any,
+  relationProps?: any
 ): Promise<number> {
   const { where, flatProps } = prepareWhere(props, "b");
 
-  const relationString = getRelationString(label, relationType);
+  const relationString = getRelationString(label, relationType, relationProps);
   const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
@@ -101,7 +127,7 @@ export async function count(
     ${where}
     RETURN COUNT(b) as b
   `,
-    { _srcGuid: instance.props.guid, ...flatProps }
+    { _srcGuid: instance.props.guid, ...flatProps, relationProps }
   );
 
   // $FlowFixMe
@@ -114,12 +140,13 @@ export async function update(
   label: string,
   relationType: RelationType,
   props: any,
-  whereProps: any
+  whereProps: any,
+  relationProps?: any
 ): Promise<any> {
   const { where, flatProps } = prepareWhere(whereProps, "b");
   const { str: setPropsStr, newProps } = prepareSet("b", props);
 
-  const relationString = getRelationString(label, relationType);
+  const relationString = getRelationString(label, relationType, relationProps);
   const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
@@ -128,7 +155,7 @@ export async function update(
     SET ${setPropsStr}
     RETURN b
   `,
-    { _srcGuid: instance.props.guid, ...flatProps, ...newProps }
+    { _srcGuid: instance.props.guid, ...flatProps, ...newProps, relationProps }
   );
 
   return Promise.resolve(result.map(a => this.dest._createModelInstance(a.b)));

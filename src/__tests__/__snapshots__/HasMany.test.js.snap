@@ -6,38 +6,6 @@ exports[`HasMany count should count all tasks to instance 1`] = `2`;
 
 exports[`HasMany count should count all tasks with property done equals true to instance 1`] = `1`;
 
-exports[`HasMany create should create a instances of tasks and relate them to person instance 1`] = `
-Array [
-  TaskInstance {
-    "creator": Object {
-      "add": [Function],
-      "create": [Function],
-      "get": [Function],
-      "hasOne": [Function],
-      "remove": [Function],
-      "update": [Function],
-    },
-    "props": Object {
-      "title": "Buy milk",
-    },
-  },
-  TaskInstance {
-    "creator": Object {
-      "add": [Function],
-      "create": [Function],
-      "get": [Function],
-      "hasOne": [Function],
-      "remove": [Function],
-      "update": [Function],
-    },
-    "props": Object {
-      "done": false,
-      "title": "Buy beer",
-    },
-  },
-]
-`;
-
 exports[`HasMany create should create instances of tasks and relate them to a person instance 1`] = `
 Array [
   TaskInstance {
@@ -70,6 +38,64 @@ Array [
 ]
 `;
 
+exports[`HasMany create should create instances of tasks and relate them to a person instance with multiple relation properties 1`] = `
+Array [
+  Object {
+    "from": Object {
+      "name": "Paul",
+    },
+    "props": Object {
+      "relationCreated": "today",
+      "type": "todo",
+    },
+    "to": Object {
+      "done": false,
+      "title": "Buy beer",
+    },
+  },
+  Object {
+    "from": Object {
+      "name": "Paul",
+    },
+    "props": Object {
+      "relationCreated": "today",
+      "type": "todo",
+    },
+    "to": Object {
+      "title": "Buy milk",
+    },
+  },
+]
+`;
+
+exports[`HasMany create should create instances of tasks and relate them to a person instance with relation properties 1`] = `
+Array [
+  Object {
+    "from": Object {
+      "name": "Paul",
+    },
+    "props": Object {
+      "relationCreated": "today",
+    },
+    "to": Object {
+      "done": false,
+      "title": "Buy beer",
+    },
+  },
+  Object {
+    "from": Object {
+      "name": "Paul",
+    },
+    "props": Object {
+      "relationCreated": "today",
+    },
+    "to": Object {
+      "title": "Buy milk",
+    },
+  },
+]
+`;
+
 exports[`HasMany get should find all tasks starting with character 'B' and are done 1`] = `
 Array [
   TaskInstance {
@@ -84,6 +110,25 @@ Array [
     "props": Object {
       "done": true,
       "title": "Buy beer",
+    },
+  },
+]
+`;
+
+exports[`HasMany get should find all tasks starting with character 'B' and are done with relationProp type todo 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "done": true,
+      "title": "Buy milk",
     },
   },
 ]

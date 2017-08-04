@@ -54,7 +54,10 @@ describe("ModelInstance", () => {
 
   beforeEach(async () => {
     const paul = await Person.create({ name: "Olaf" });
-    await paul.friends.create([{ name: "Olga" }, { name: "Hannes" }]);
+    await paul.friends.create([{ name: "Olga" }, { name: "Hannes" }], {
+      since: "yesterday",
+      location: "Graz",
+    });
     await Task.create({ title: "Learn magic", done: true });
     await Task.create({ title: "Write more test cases", done: false });
     await Task.create({ title: "Write more test cases", done: false });
