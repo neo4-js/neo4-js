@@ -63,9 +63,10 @@ export class Model<P, I: ModelInstance<P>> {
       idx(this.modelInstanceClass, _ => _.prototype._defaultProps) || {},
       prop => (typeof prop === "function" ? prop() : prop)
     );
-    let p = this.beforeCreate(({ ...defaultProps, ...(props: any) }: P));
+    let p = this.beforeCreate(
+      ({ guid: uuid(), ...defaultProps, ...(props: any) }: P)
+    );
     p = ({ ...(p: any) }: P & BaseProps);
-    p.guid = uuid();
 
     const result = await neo4js.run(
       `
