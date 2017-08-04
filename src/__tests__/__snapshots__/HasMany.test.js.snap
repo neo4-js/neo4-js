@@ -38,6 +38,38 @@ Array [
 ]
 `;
 
+exports[`HasMany create should create instances of tasks and relate them to a person instance 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+  },
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "done": false,
+      "title": "Buy beer",
+    },
+  },
+]
+`;
+
 exports[`HasMany get should find all tasks starting with character 'B' and are done 1`] = `
 Array [
   TaskInstance {

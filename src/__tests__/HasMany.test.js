@@ -72,7 +72,7 @@ describe("HasMany", () => {
   });
 
   describe("create", () => {
-    it("should create a instances of tasks and relate them to person instance", async () => {
+    it("should create instances of tasks and relate them to a person instance", async () => {
       const paul: PersonInstance = await Person.create({ name: "Paul" });
 
       const propsArray: TaskProps[] = [
