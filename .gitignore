@@ -6,3 +6,4 @@ coverage/
 jsconfig.json
 npm-debug.log
 .vscode/
+.DS_Store
