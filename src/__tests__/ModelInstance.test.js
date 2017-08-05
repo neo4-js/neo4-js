@@ -44,6 +44,14 @@ class PersonInstance extends ModelInstance<PersonProps> {
 @model(Task)
 class TaskInstance extends ModelInstance<TaskProps> {}
 
+const Todo = new Model("Todo");
+@defaultProps({
+  title: "(empty)",
+  done: () => false,
+})
+@model(Todo)
+class TodoInstance extends ModelInstance {}
+
 describe("ModelInstance", () => {
   beforeAll(() => {
     neo4js.init({
@@ -105,6 +113,12 @@ describe("ModelInstance", () => {
       task = await Task.findByGuid(guid);
       if (task && task.props.guid) delete task.props.guid;
       expect(task).toMatchSnapshot();
+    });
+
+    it("should initialize with minimal configuration default properties", async () => {
+      let todo = await Todo.create({});
+      delete todo.props.guid;
+      expect(todo).toMatchSnapshot();
     });
   });
 });

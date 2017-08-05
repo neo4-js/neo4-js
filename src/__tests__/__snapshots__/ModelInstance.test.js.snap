@@ -18,6 +18,15 @@ TaskInstance {
 }
 `;
 
+exports[`ModelInstance Default Properties should initialize with minimal configuration default properties 1`] = `
+TodoInstance {
+  "props": Object {
+    "done": false,
+    "title": "(empty)",
+  },
+}
+`;
+
 exports[`ModelInstance ModelInstance functions should return friends with starting name 'O' 1`] = `
 Array [
   PersonInstance {
