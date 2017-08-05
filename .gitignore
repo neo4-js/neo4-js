@@ -7,3 +7,4 @@ jsconfig.json
 npm-debug.log
 .vscode/
 .DS_Store
+_book
