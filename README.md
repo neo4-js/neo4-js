@@ -4,8 +4,64 @@
 
 Neo4-js is a object-graph mapper for JavaScript and neo4j with full flow-type support. Neo4-js hides repetitive queries such as the basic CRUD operations to the developer. For best development experience use flow-type from Facebook to obtain good autocomplete results.
 
-In this document you'll find the basic usage of the library.
+## Documentation
 
-The documentation is currently not done...So please just have a look at the `__tests__` in the `src` directory.
+The documentation is not completed yet but you'll find the basics on [GitBooks](https://janpeter.gitbooks.io/neo4js/). Any help is very much appreciated!
 
-For a basic usage example you can have a look at [neo4js-todo minimal](https://github.com/JanPeter/neo4js-todo/tree/minimal) and [neo4js-todo basic](https://github.com/JanPeter/neo4js-todo/tree/autocomplete).
+## Installing
+
+To use neo4-js properly you need to add babel, some presets and a few plugins. You might also add flow for static type checking and autocomplete support.
+
+```
+yarn add -D babel-cli babel-core babel-plugin-transform-class-properties babel-plugin-transform-decorators-legacy babel-preset-es2015 babel-preset-stage-3
+```
+
+To add flow install the following
+
+```
+yarn add -D babel-preset-flow flow-bin
+```
+
+The `.babelrc` needs to include the following, depending on your usage of flow add or remove the flow preset acordingly.
+
+```
+{
+  "presets": ["stage-3", "es2015", "flow"],
+  "plugins": [
+    "transform-decorators-legacy",
+    "transform-class-properties"
+  ]
+}
+```
+
+You might also install Docker to quickly create a neo4j database without any further installations. For neo4-js I used the following bash script to start a neo4j instance in docker. To run it you might create a scripts directory and add the following to `neo4j-startup.sh`, make sure you can execute the script with `chmod 777 neo4j-startup.sh` (because why not 777 on my local machine :P).
+
+```
+# REST PORT: 10000
+# BOLT PORT: 10001
+echo "docker run -p 10000:7474 -p 10001:7687 --rm --env=NEO4J_AUTH=none neo4j"
+docker run -p 10000:7474 -p 10001:7687 --rm --env=NEO4J_AUTH=none neo4j
+```
+
+The only runtime dependency you need to start using neo4-js is neo4-js itself. Currently you need to add the `@next` tag as the 1.0 version is pretty much useless at this point. The API as it is now is tested and breaking changes are not expected to happen at this point. So you should be save with the `@next` tag.
+
+```
+yarn add neo4-js@next
+```
+
+## Built With
+
+* [Babel](https://babeljs.io) - JavaScript compiler to use next gen EcmaScript features
+* [Flow](https://flow.org) - Static type checker from Facebook
+
+## Contributing
+
+Feel free to send a pull request or create an issue for bugs or feature requests.
+
+## Authors
+
+* **Jan Schlacher** - *Initial work*
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
