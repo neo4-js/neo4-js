@@ -32,6 +32,10 @@ Array [
     "props": Object {
       "name": "Olga",
     },
+    "relationProps": Object {
+      "location": "Graz",
+      "since": "yesterday",
+    },
     "tasks": Object {
       "add": [Function],
       "count": [Function],

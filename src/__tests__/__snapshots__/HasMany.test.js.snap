@@ -111,6 +111,7 @@ Array [
       "done": true,
       "title": "Buy beer",
     },
+    "relationProps": Object {},
   },
 ]
 `;
@@ -129,6 +130,9 @@ Array [
     "props": Object {
       "done": true,
       "title": "Buy milk",
+    },
+    "relationProps": Object {
+      "type": "todo",
     },
   },
 ]
@@ -149,6 +153,7 @@ Array [
       "done": true,
       "title": "Buy beer",
     },
+    "relationProps": Object {},
   },
   TaskInstance {
     "creator": Object {
@@ -162,6 +167,7 @@ Array [
     "props": Object {
       "title": "Buy milk",
     },
+    "relationProps": Object {},
   },
 ]
 `;
@@ -181,6 +187,7 @@ Array [
       "done": true,
       "title": "Buy beer",
     },
+    "relationProps": Object {},
   },
   TaskInstance {
     "creator": Object {
@@ -194,6 +201,7 @@ Array [
     "props": Object {
       "title": "Buy milk",
     },
+    "relationProps": Object {},
   },
 ]
 `;
@@ -213,6 +221,7 @@ Array [
       "done": true,
       "title": "Buy beer",
     },
+    "relationProps": Object {},
   },
 ]
 `;

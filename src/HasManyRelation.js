@@ -19,11 +19,11 @@ function getRelationString(
   }
 
   if (relationType.any) {
-    return `-[:${label} {${relationPropsStr}}]-`;
+    return `-[r:${label} {${relationPropsStr}}]-`;
   }
   return `${relationType.reverse
     ? "<"
-    : ""}-[:${label} {${relationPropsStr}}]-${relationType.reverse ? "" : ">"}`;
+    : ""}-[r:${label} {${relationPropsStr}}]-${relationType.reverse ? "" : ">"}`;
 }
 
 export async function get(
@@ -41,12 +41,16 @@ export async function get(
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
       .label})
     ${where}
-    RETURN b
+    RETURN b, r
   `,
     { _srcGuid: instance.props.guid, ...flatProps, relationProps }
   );
 
-  return Promise.resolve(result.map(p => this.dest._createModelInstance(p.b)));
+  return Promise.resolve(result.map(p => {
+    const instance = this.dest._createModelInstance(p.b);
+    instance.relationProps = p.r;
+    return instance;
+  }));
 }
 
 export async function create(
