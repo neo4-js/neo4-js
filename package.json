@@ -38,11 +38,6 @@
   },
   "dependencies": {
     "core-decorators": "^0.19.0",
-    "gitbook-plugin-anchorjs": "^1.1.1",
-    "gitbook-plugin-edit-link": "^2.0.2",
-    "gitbook-plugin-github": "^2.0.0",
-    "gitbook-plugin-prism": "^2.2.1",
-    "gitbook-plugin-theme-api": "^1.1.2",
     "idx": "^1.5.0",
     "lodash": "^4.17.4",
     "neo4j-driver": "^1.4.0",
