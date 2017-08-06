@@ -5,6 +5,7 @@ src
 .*/node_modules/fbjs/.*
 .*/node_modules/config-chain/test/broken.json
 .*/node_modules/npmconf/test/.*
+.*/node_modules/npmi/.*
 
 [libs]
 flow
