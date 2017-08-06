@@ -1,0 +1,12 @@
+[ignore]
+
+[include]
+
+[libs]
+flow
+node_modules/neo4-js/flow
+
+[lints]
+
+[options]
+esproposal.decorators=ignore
