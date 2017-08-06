@@ -1,12 +1,16 @@
 // @flow
 
+declare type Properties = {
+  [key: string]: StringProperty | NumberProperty | boolean,
+};
+
 declare type HasManyActions<Properties, ModelInstance> = {
-  get: (props?: Properties, relationProps?: { [key: string]: string | number }) => Promise<ModelInstance[]>,
-  update: (props: Properties, where?: Properties, relationProps?: { [key: string]: string | number }) => Promise<ModelInstance[]>,
-  create: (props: Properties[], relationProps?: { [key: string]: string | number }) => Promise<ModelInstance[]>,
-  add: (instances: ModelInstance[], relationProps?: { [key: string]: string | number }) => Promise<number>,
-  remove: (props?: Properties, relationProps?: { [key: string]: string | number }) => Promise<number>,
-  count: (props?: Properties, relationProps?: { [key: string]: string | number }) => Promise<number>,
+  get: (props?: Properties, relationProps?: Properties) => Promise<ModelInstance[]>,
+  update: (props: Properties, where?: Properties, relationProps?: Properties) => Promise<ModelInstance[]>,
+  create: (props: Properties[], relationProps?: Properties) => Promise<ModelInstance[]>,
+  add: (instances: ModelInstance[], relationProps?: Properties) => Promise<number>,
+  remove: (props?: Properties, relationProps?: Properties) => Promise<number>,
+  count: (props?: Properties, relationProps?: Properties) => Promise<number>,
 };
 
 declare type HasOneActions<Properties, ModelInstance> = {

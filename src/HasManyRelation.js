@@ -35,9 +35,11 @@ export async function get(
   props: any,
   relationProps?: any
 ): Promise<any> {
-  const { where, flatProps } = prepareWhere(props, "b");
-
-  const relationString = getRelationString(label, relationType, relationProps);
+  const { where, flatProps } = prepareWhere({ b: props, r: relationProps }, [
+    "b",
+    "r",
+  ]);
+  const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
@@ -45,7 +47,7 @@ export async function get(
     ${where}
     RETURN b, r
   `,
-    { _srcGuid: instance.props.guid, ...flatProps, relationProps }
+    { _srcGuid: instance.props.guid, ...flatProps }
   );
 
   return Promise.resolve(
@@ -125,9 +127,12 @@ export async function count(
   props: any,
   relationProps?: any
 ): Promise<number> {
-  const { where, flatProps } = prepareWhere(props, "b");
+  const { where, flatProps } = prepareWhere({ b: props, r: relationProps }, [
+    "b",
+    "r",
+  ]);
 
-  const relationString = getRelationString(label, relationType, relationProps);
+  const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
@@ -135,7 +140,7 @@ export async function count(
     ${where}
     RETURN COUNT(b) as b
   `,
-    { _srcGuid: instance.props.guid, ...flatProps, relationProps }
+    { _srcGuid: instance.props.guid, ...flatProps }
   );
 
   // $FlowFixMe
@@ -149,12 +154,16 @@ export async function update(
   relationType: RelationType,
   props: any,
   whereProps: any,
-  relationProps?: any
+  relationProps?: any,
+  whereRelationProps?: any
 ): Promise<any> {
-  const { where, flatProps } = prepareWhere(whereProps, "b");
+  const { where, flatProps } = prepareWhere(
+    { b: whereProps, r: whereRelationProps },
+    ["b", "r"]
+  );
   const { str: setPropsStr, newProps } = prepareSet("b", props);
 
-  const relationString = getRelationString(label, relationType, relationProps);
+  const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
@@ -163,7 +172,7 @@ export async function update(
     SET ${setPropsStr}
     RETURN b
   `,
-    { _srcGuid: instance.props.guid, ...flatProps, ...newProps, relationProps }
+    { _srcGuid: instance.props.guid, ...flatProps, ...newProps }
   );
 
   return Promise.resolve(result.map(a => this.dest._createModelInstance(a.b)));

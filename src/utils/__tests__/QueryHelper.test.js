@@ -9,6 +9,11 @@ describe("QueryHelper", () => {
       expect(where).toMatchSnapshot();
     });
 
+    it("should return where greater than 0", () => {
+      const where = prepareWhere({ assigned: { $gt: 0 } }, "a");
+      expect(where).toMatchSnapshot();
+    });
+
     it("should return where starts with", () => {
       const where = prepareWhere({ name: { $sw: "O" } }, "a");
       expect(where).toMatchSnapshot();

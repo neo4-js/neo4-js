@@ -4,6 +4,8 @@ exports[`HasMany add should add only a relation of instances to instance 1`] = `
 
 exports[`HasMany count should count all tasks to instance 1`] = `2`;
 
+exports[`HasMany count should count all tasks which are assigned 1`] = `1`;
+
 exports[`HasMany count should count all tasks with property done equals true to instance 1`] = `1`;
 
 exports[`HasMany create should create instances of tasks and relate them to a person instance 1`] = `
@@ -91,6 +93,49 @@ Array [
     },
     "to": Object {
       "title": "Buy milk",
+    },
+  },
+]
+`;
+
+exports[`HasMany get should find all tasks assigned 10 seconds ago 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+    "relationProps": Object {
+      "assigned": 1502022002035,
+    },
+  },
+]
+`;
+
+exports[`HasMany get should find all tasks assigned 10 seconds ago, type of todo and starts with 'B' 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+    "relationProps": Object {
+      "assigned": 1502022002035,
+      "type": "todo",
     },
   },
 ]

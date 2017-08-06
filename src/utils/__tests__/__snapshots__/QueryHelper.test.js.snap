@@ -103,6 +103,15 @@ Object {
 }
 `;
 
+exports[`QueryHelper prepareWhere should return where greater than 0 1`] = `
+Object {
+  "flatProps": Object {
+    "a": 0,
+  },
+  "where": "WHERE a.assigned > {a}",
+}
+`;
+
 exports[`QueryHelper prepareWhere should return where greater than 1`] = `
 Object {
   "flatProps": Object {

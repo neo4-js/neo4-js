@@ -71,7 +71,8 @@ function _prepareWhere(
       // TODO error? flow should actually be able to handle this...
     } else {
       forIn(singlePredicates, (predicateString, predicateKey) => {
-        if (v[predicateKey]) {
+        const val = v[predicateKey];
+        if (val || typeof val === "number" || typeof val === "string") {
           found = true;
           where.push(`${variable}.${k} ${predicateString} {${propChar}}`);
           flatProps[propChar] = v[predicateKey];
@@ -89,11 +90,27 @@ function _prepareWhere(
 }
 
 export function prepareWhere(
-  props: any,
-  variable: string
+  properties: any,
+  variables: string | string[]
 ): { where: string, flatProps: any } {
   CharGenerator.start("a");
-  const { where, flatProps } = _prepareWhere(props, variable);
+  let vars: string[] = [];
+  let props: any = {};
+  if (typeof variables === "string") {
+    vars = [variables];
+    props[variables] = properties;
+  } else if (Array.isArray(variables)) {
+    vars = variables;
+    props = properties;
+  }
+
+  let where = [];
+  let flatProps = {};
+  vars.forEach(variable => {
+    const result = _prepareWhere(props[variable], variable);
+    where = where.concat(result.where);
+    Object.assign(flatProps, result.flatProps);
+  });
 
   if (where.length === 0) {
     return { where: "", flatProps: undefined };

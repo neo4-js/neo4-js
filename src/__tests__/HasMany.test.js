@@ -249,6 +249,48 @@ describe("HasMany", () => {
         })
       ).toMatchSnapshot();
     });
+
+    it("should find all tasks assigned 10 seconds ago", async () => {
+      await paul.tasks.create(tasksProps);
+      await paul.tasks.create([{ title: "Buy milk" }], {
+        assigned: 1502022002035,
+      });
+
+      const tasks: TaskInstance[] = await paul.tasks.get(
+        {},
+        { assigned: { $gt: 1502022002035 - 10000 } }
+      );
+
+      expect(
+        tasks.map(t => {
+          delete t.props.guid;
+          return t;
+        })
+      ).toMatchSnapshot();
+    });
+
+    it("should find all tasks assigned 10 seconds ago, type of todo and starts with 'B'", async () => {
+      await paul.tasks.create(tasksProps);
+      await paul.tasks.create(
+        [{ title: "Buy milk" }, { title: "Read a book" }],
+        {
+          assigned: 1502022002035,
+          type: "todo",
+        }
+      );
+
+      const tasks: TaskInstance[] = await paul.tasks.get(
+        { title: { $sw: "B" } },
+        { assigned: { $gt: 1502022002035 - 10000 }, type: { $eq: "todo" } }
+      );
+
+      expect(
+        tasks.map(t => {
+          delete t.props.guid;
+          return t;
+        })
+      ).toMatchSnapshot();
+    });
   });
 
   describe("count", () => {
@@ -279,6 +321,18 @@ describe("HasMany", () => {
     it("should count all tasks with property done equals true to instance", async () => {
       await paul.tasks.create(tasksProps);
       const tasks: number = await paul.tasks.count({ done: true });
+      expect(tasks).toMatchSnapshot();
+    });
+
+    it("should count all tasks which are assigned", async () => {
+      await paul.tasks.create(tasksProps);
+      await paul.tasks.create([{ title: "Buy milk" }], {
+        assigned: 1502022002035,
+      });
+      const tasks: number = await paul.tasks.count(
+        {},
+        { assigned: { $gt: 0 } }
+      );
       expect(tasks).toMatchSnapshot();
     });
   });
