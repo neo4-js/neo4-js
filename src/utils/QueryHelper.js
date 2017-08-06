@@ -120,8 +120,8 @@ export function prepareWhere(
 }
 
 export function prepareSet(
-  variables: string | string[],
-  properties: any
+  properties: any,
+  variables: string | string[]
 ): { str: string, newProps: any } {
   const sets = [];
   const newProps: any = {};

@@ -165,8 +165,8 @@ export class Model<P, I: ModelInstance<P>> {
     const params = this.beforeUpdate(props, newProps);
     const { where, flatProps } = prepareWhere(params.props, "n");
     const { str: setPropsStr, newProps: _newProps } = prepareSet(
-      "n",
-      params.newProps
+      params.newProps,
+      "n"
     );
 
     let result = await neo4js.run(

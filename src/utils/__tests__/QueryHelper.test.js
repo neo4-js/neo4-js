@@ -147,28 +147,34 @@ describe("QueryHelper", () => {
 
   describe("prepareSet", () => {
     it("should return set with single value", () => {
-      const set = prepareSet("o", { name: "Olaf" });
+      const set = prepareSet({ name: "Olaf" }, "o");
       expect(set).toMatchSnapshot();
     });
 
     it("should return set with multiple variables and single value", () => {
-      const set = prepareSet(["o", "u"], {
-        o: { name: "Olaf" },
-        u: { name: "Ignatz" },
-      });
+      const set = prepareSet(
+        {
+          o: { name: "Olaf" },
+          u: { name: "Ignatz" },
+        },
+        ["o", "u"]
+      );
       expect(set).toMatchSnapshot();
     });
 
     it("should return set with multiple values", () => {
-      const set = prepareSet("o", { name: "Olaf", age: 43 });
+      const set = prepareSet({ name: "Olaf", age: 43 }, "o");
       expect(set).toMatchSnapshot();
     });
 
     it("should return set with multiple variables and multiple value", () => {
-      const set = prepareSet(["o", "u"], {
-        o: { name: "Olaf", age: 20 },
-        u: { name: "Ignatz", age: 20 },
-      });
+      const set = prepareSet(
+        {
+          o: { name: "Olaf", age: 20 },
+          u: { name: "Ignatz", age: 20 },
+        },
+        ["o", "u"]
+      );
       expect(set).toMatchSnapshot();
     });
   });
