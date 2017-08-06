@@ -423,12 +423,10 @@ describe("HasMany", () => {
         assigned: 1502022002035,
       });
 
-      const result: TaskInstance[] = await paul.tasks.update(
-        {},
-        {},
-        { type: "todo" },
-        { assigned: { $gt: 0 } }
-      );
+      const result: TaskInstance[] = await paul.tasks.update({
+        relationProps: { type: "todo" },
+        whereRelationProps: { assigned: { $gt: 0 }}
+      });
 
       expect(
         result.map(r => {

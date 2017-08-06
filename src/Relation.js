@@ -50,17 +50,19 @@ export class Relation {
           relationProps
         ),
       update: (
-        newProps: any,
-        props: any,
+        options: any,
+        whereProps: any,
         relationProps: any = {},
         whereRelationProps: any = {}
-      ) =>
-        HasMany.update.bind(this, instance, this.label, this.relationType)(
-          newProps,
-          props,
-          relationProps,
-          whereRelationProps
-        ),
+      ) => {
+        const optionsInUse = options.props || options.whereProps || options.relationProps || options.whereRelationProps;
+        return HasMany.update.bind(this, instance, this.label, this.relationType)(
+          optionsInUse ? options.props : options,
+          options.whereProps || whereProps,
+          options.relationProps || relationProps,
+          options.whereRelationProps || whereRelationProps
+        );
+      },
       create: (props: any, relationProps: any = {}) =>
         HasMany.create.bind(this, instance, this.label, this.relationType)(
           props,
