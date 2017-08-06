@@ -10,6 +10,28 @@ Object {
 }
 `;
 
+exports[`QueryHelper prepareSet should return set with multiple variables and multiple value 1`] = `
+Object {
+  "newProps": Object {
+    "_u_o_age": 20,
+    "_u_o_name": "Olaf",
+    "_u_u_age": 20,
+    "_u_u_name": "Ignatz",
+  },
+  "str": "o.name={_u_o_name}, o.age={_u_o_age}, u.name={_u_u_name}, u.age={_u_u_age}",
+}
+`;
+
+exports[`QueryHelper prepareSet should return set with multiple variables and single value 1`] = `
+Object {
+  "newProps": Object {
+    "_u_o_name": "Olaf",
+    "_u_u_name": "Ignatz",
+  },
+  "str": "o.name={_u_o_name}, u.name={_u_u_name}",
+}
+`;
+
 exports[`QueryHelper prepareSet should return set with single value 1`] = `
 Object {
   "newProps": Object {

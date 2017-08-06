@@ -393,5 +393,49 @@ describe("HasMany", () => {
         })
       ).toMatchSnapshot();
     });
+
+    it("should set tasks to done if task is assigned", async () => {
+      const paul: PersonInstance = await Person.create({ name: "Paul" });
+      await paul.tasks.create(tasksProps);
+      await paul.tasks.create([{ title: "Read a book" }], {
+        assigned: 1502022002035,
+      });
+
+      const result: TaskInstance[] = await paul.tasks.update(
+        { done: true },
+        {},
+        {},
+        { assigned: { $gt: 0 } }
+      );
+
+      expect(
+        result.map(r => {
+          delete r.props.guid;
+          return r;
+        })
+      ).toMatchSnapshot();
+    });
+
+    it("should set tasks to type todo if task is assigned", async () => {
+      const paul: PersonInstance = await Person.create({ name: "Paul" });
+      await paul.tasks.create(tasksProps);
+      await paul.tasks.create([{ title: "Read a book" }], {
+        assigned: 1502022002035,
+      });
+
+      const result: TaskInstance[] = await paul.tasks.update(
+        {},
+        {},
+        { type: "todo" },
+        { assigned: { $gt: 0 } }
+      );
+
+      expect(
+        result.map(r => {
+          delete r.props.guid;
+          return r;
+        })
+      ).toMatchSnapshot();
+    });
   });
 });

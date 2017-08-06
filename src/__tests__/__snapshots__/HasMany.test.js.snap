@@ -291,3 +291,40 @@ Array [
   },
 ]
 `;
+
+exports[`HasMany update should set tasks to done if task is assigned 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "done": true,
+      "title": "Read a book",
+    },
+  },
+]
+`;
+
+exports[`HasMany update should set tasks to type todo if task is assigned 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Read a book",
+    },
+  },
+]
+`;

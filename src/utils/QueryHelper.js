@@ -120,16 +120,27 @@ export function prepareWhere(
 }
 
 export function prepareSet(
-  variable: string,
-  props: any
+  variables: string | string[],
+  properties: any
 ): { str: string, newProps: any } {
   const sets = [];
   const newProps: any = {};
+  let vars: string[] = [];
+  let props: any = {};
+  if (typeof variables === "string") {
+    vars = [variables];
+    props[variables] = properties;
+  } else if (Array.isArray(variables)) {
+    vars = variables;
+    props = properties;
+  }
 
-  forIn(props, (v, k) => {
-    if (k === "guid") return null;
-    sets.push(`${variable}.${k}={_u${k}}`);
-    newProps[`_u${k}`] = v;
+  vars.forEach(variable => {
+    forIn(props[variable], (v, k) => {
+      if (k === "guid") return null;
+      sets.push(`${variable}.${k}={_u_${variable}_${k}}`);
+      newProps[`_u_${variable}_${k}`] = v;
+    });
   });
 
   if (!sets.length) throw new Error(`Nothing to update`);

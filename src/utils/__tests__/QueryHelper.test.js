@@ -151,8 +151,24 @@ describe("QueryHelper", () => {
       expect(set).toMatchSnapshot();
     });
 
+    it("should return set with multiple variables and single value", () => {
+      const set = prepareSet(["o", "u"], {
+        o: { name: "Olaf" },
+        u: { name: "Ignatz" },
+      });
+      expect(set).toMatchSnapshot();
+    });
+
     it("should return set with multiple values", () => {
       const set = prepareSet("o", { name: "Olaf", age: 43 });
+      expect(set).toMatchSnapshot();
+    });
+
+    it("should return set with multiple variables and multiple value", () => {
+      const set = prepareSet(["o", "u"], {
+        o: { name: "Olaf", age: 20 },
+        u: { name: "Ignatz", age: 20 },
+      });
       expect(set).toMatchSnapshot();
     });
   });

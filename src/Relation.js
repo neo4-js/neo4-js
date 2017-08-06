@@ -49,11 +49,17 @@ export class Relation {
           props,
           relationProps
         ),
-      update: (newProps: any, props: any, relationProps: any = {}) =>
+      update: (
+        newProps: any,
+        props: any,
+        relationProps: any = {},
+        whereRelationProps: any = {}
+      ) =>
         HasMany.update.bind(this, instance, this.label, this.relationType)(
           newProps,
           props,
-          relationProps
+          relationProps,
+          whereRelationProps
         ),
       create: (props: any, relationProps: any = {}) =>
         HasMany.create.bind(this, instance, this.label, this.relationType)(

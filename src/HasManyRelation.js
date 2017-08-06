@@ -161,8 +161,10 @@ export async function update(
     { b: whereProps, r: whereRelationProps },
     ["b", "r"]
   );
-  const { str: setPropsStr, newProps } = prepareSet("b", props);
-
+  const { str: setPropsStr, newProps } = prepareSet(["b", "r"], {
+    b: props,
+    r: relationProps,
+  });
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
