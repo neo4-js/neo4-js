@@ -1,7 +1,7 @@
 // @flow
 
 import neo4js from "neo4-js";
-import { User, Todo } from "./model.js";
+import { User, Todo } from "./model";
 
 neo4js.init({
   boltUri: "localhost",
