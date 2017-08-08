@@ -55,12 +55,21 @@ export class Relation {
         relationProps: any = {},
         whereRelationProps: any = {}
       ) => {
-        const optionsInUse = options.props || options.whereProps || options.relationProps || options.whereRelationProps;
-        return HasMany.update.bind(this, instance, this.label, this.relationType)(
+        const optionsInUse =
+          options.props ||
+          options.whereProps ||
+          options.relationProps ||
+          options.whereRelationProps;
+        return HasMany.update.bind(
+          this,
+          instance,
+          this.label,
+          this.relationType
+        )(
           optionsInUse ? options.props : options,
           options.whereProps || whereProps,
           options.relationProps || relationProps,
-          options.whereRelationProps || whereRelationProps
+          options.whereRelationProps || whereRelationProps
         );
       },
       create: (props: any, relationProps: any = {}) =>
