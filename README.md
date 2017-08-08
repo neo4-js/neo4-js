@@ -43,10 +43,10 @@ echo "docker run -p 10000:7474 -p 10001:7687 --rm --env=NEO4J_AUTH=none neo4j"
 docker run -p 10000:7474 -p 10001:7687 --rm --env=NEO4J_AUTH=none neo4j
 ```
 
-The only runtime dependency you need to start using neo4-js is neo4-js itself. Currently you need to add the `@next` tag as the 1.0 version is pretty much useless at this point. The API as it is now is tested and breaking changes are not expected to happen at this point. So you should be save with the `@next` tag.
+The only runtime dependency you need to start using neo4-js is neo4-js itself.
 
 ```
-yarn add neo4-js@next
+yarn add neo4-js
 ```
 
 ## Built With
