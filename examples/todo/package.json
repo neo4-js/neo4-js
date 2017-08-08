@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "babel-node index.js"
+    "start": "babel-node index.js",
+    "start-db": "./scripts/neo4j-startup.sh"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
