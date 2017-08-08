@@ -6,7 +6,7 @@ Neo4-js is a object-graph mapper for JavaScript and neo4j with full flow-type su
 
 ## Documentation
 
-The documentation is not completed yet but you'll find the basics on [GitBooks](https://janpeter.gitbooks.io/neo4js/). Any help is very much appreciated!
+The documentation is not completed yet but you'll find the basics on [neo4.js.org](https://neo4.js.org). Any help is very much appreciated!
 
 ## Installing
 
