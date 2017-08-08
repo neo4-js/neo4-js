@@ -273,6 +273,133 @@ Array [
 
 exports[`HasMany get should find nothing 1`] = `Array []`;
 
+exports[`HasMany remove should remove all relations between paul and all his tasks 1`] = `
+Object {
+  "constraintsAdded": 0,
+  "constraintsRemoved": 0,
+  "indexesAdded": 0,
+  "indexesRemoved": 0,
+  "labelsAdded": 0,
+  "labelsRemoved": 0,
+  "nodesCreated": 0,
+  "nodesDeleted": 0,
+  "propertiesSet": 0,
+  "relationshipsCreated": 0,
+  "relationshipsDeleted": 2,
+}
+`;
+
+exports[`HasMany remove should remove all relations between paul and all his tasks 2`] = `Array []`;
+
+exports[`HasMany remove should remove relations between paul and all tasks ending with 'beer' 1`] = `
+Object {
+  "constraintsAdded": 0,
+  "constraintsRemoved": 0,
+  "indexesAdded": 0,
+  "indexesRemoved": 0,
+  "labelsAdded": 0,
+  "labelsRemoved": 0,
+  "nodesCreated": 0,
+  "nodesDeleted": 0,
+  "propertiesSet": 0,
+  "relationshipsCreated": 0,
+  "relationshipsDeleted": 1,
+}
+`;
+
+exports[`HasMany remove should remove relations between paul and all tasks ending with 'beer' 2`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+    "relationProps": Object {},
+  },
+]
+`;
+
+exports[`HasMany remove should remove relations between paul and all tasks ending with 'beer' or starting with 'Read' 1`] = `
+Object {
+  "constraintsAdded": 0,
+  "constraintsRemoved": 0,
+  "indexesAdded": 0,
+  "indexesRemoved": 0,
+  "labelsAdded": 0,
+  "labelsRemoved": 0,
+  "nodesCreated": 0,
+  "nodesDeleted": 0,
+  "propertiesSet": 0,
+  "relationshipsCreated": 0,
+  "relationshipsDeleted": 2,
+}
+`;
+
+exports[`HasMany remove should remove relations between paul and all tasks ending with 'beer' or starting with 'Read' 2`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+    "relationProps": Object {
+      "since": "today",
+    },
+  },
+]
+`;
+
+exports[`HasMany remove should remove relations between paul and all tasks since today 1`] = `
+Object {
+  "constraintsAdded": 0,
+  "constraintsRemoved": 0,
+  "indexesAdded": 0,
+  "indexesRemoved": 0,
+  "labelsAdded": 0,
+  "labelsRemoved": 0,
+  "nodesCreated": 0,
+  "nodesDeleted": 0,
+  "propertiesSet": 0,
+  "relationshipsCreated": 0,
+  "relationshipsDeleted": 2,
+}
+`;
+
+exports[`HasMany remove should remove relations between paul and all tasks since today 2`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Read an awesome book",
+    },
+    "relationProps": Object {
+      "since": "yesterday",
+    },
+  },
+]
+`;
+
 exports[`HasMany update should set tasks to done 1`] = `
 Array [
   TaskInstance {

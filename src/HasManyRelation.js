@@ -59,6 +59,31 @@ export async function get(
   );
 }
 
+export async function remove(
+  instance: ModelInstance<*>,
+  label: string,
+  relationType: RelationType,
+  props: any,
+  relationProps?: any
+): Promise<any> {
+  const { where, flatProps } = prepareWhere({ b: props, r: relationProps }, [
+    "b",
+    "r",
+  ]);
+  const relationString = getRelationString(label, relationType);
+  const result = await neo4js.run(
+    `
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
+      .label})
+    ${where}
+    DELETE r
+    `,
+    { _srcGuid: instance.props.guid, ...flatProps }
+  );
+
+  return Promise.resolve(result._stats);
+}
+
 export async function create(
   instance: ModelInstance<*>,
   label: string,

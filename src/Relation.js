@@ -72,6 +72,11 @@ export class Relation {
           options.whereRelationProps || whereRelationProps
         );
       },
+      remove: (props: any, relationProps: any = {}) =>
+        HasMany.remove.bind(this, instance, this.label, this.relationType)(
+          props,
+          relationProps
+        ),
       create: (props: any, relationProps: any = {}) =>
         HasMany.create.bind(this, instance, this.label, this.relationType)(
           props,

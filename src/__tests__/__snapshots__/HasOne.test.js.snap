@@ -9,6 +9,7 @@ PersonInstance {
     "count": [Function],
     "create": [Function],
     "get": [Function],
+    "remove": [Function],
     "update": [Function],
   },
   "createdTasks": Object {
@@ -16,6 +17,7 @@ PersonInstance {
     "count": [Function],
     "create": [Function],
     "get": [Function],
+    "remove": [Function],
     "update": [Function],
   },
   "epmloyees": Object {
@@ -23,6 +25,7 @@ PersonInstance {
     "count": [Function],
     "create": [Function],
     "get": [Function],
+    "remove": [Function],
     "update": [Function],
   },
   "props": Object {
@@ -107,6 +110,7 @@ PersonInstance {
     "count": [Function],
     "create": [Function],
     "get": [Function],
+    "remove": [Function],
     "update": [Function],
   },
   "createdTasks": Object {
@@ -114,6 +118,7 @@ PersonInstance {
     "count": [Function],
     "create": [Function],
     "get": [Function],
+    "remove": [Function],
     "update": [Function],
   },
   "epmloyees": Object {
@@ -121,6 +126,7 @@ PersonInstance {
     "count": [Function],
     "create": [Function],
     "get": [Function],
+    "remove": [Function],
     "update": [Function],
   },
   "props": Object {

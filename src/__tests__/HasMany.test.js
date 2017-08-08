@@ -436,4 +436,95 @@ describe("HasMany", () => {
       ).toMatchSnapshot();
     });
   });
+
+  describe("remove", () => {
+    let paul: PersonInstance;
+
+    const tasksProps: TaskProps[] = [
+      {
+        title: "Buy milk",
+      },
+      {
+        title: "Buy beer",
+        done: true,
+      },
+    ];
+
+    beforeEach(async () => {
+      paul = await Person.create({ name: "Paul" });
+      const hubert: PersonInstance = await Person.create({ name: "Hubert" });
+      await hubert.tasks.create([{ title: "Learn to drive a car" }], {
+        since: "today",
+        type: "todo",
+      });
+    });
+
+    it("should remove all relations between paul and all his tasks", async () => {
+      await paul.tasks.create(tasksProps);
+      const result = await paul.tasks.remove({});
+
+      expect(result).toMatchSnapshot();
+      const tasks: TaskInstance[] = await paul.tasks.get();
+
+      expect(
+        tasks.map(t => {
+          delete t.props.guid;
+          return t;
+        })
+      ).toMatchSnapshot();
+    });
+
+    it("should remove relations between paul and all tasks ending with 'beer'", async () => {
+      await paul.tasks.create(tasksProps);
+      const result = await paul.tasks.remove({ title: { $ew: "beer" } });
+
+      expect(result).toMatchSnapshot();
+      const tasks: TaskInstance[] = await paul.tasks.get();
+
+      expect(
+        tasks.map(t => {
+          delete t.props.guid;
+          return t;
+        })
+      ).toMatchSnapshot();
+    });
+
+    it("should remove relations between paul and all tasks ending with 'beer' or starting with 'Read'", async () => {
+      await paul.tasks.create(tasksProps, { since: "today" });
+      await paul.tasks.create([{ title: "Read an awesome book" }], {
+        since: "yesterday",
+      });
+      const result = await paul.tasks.remove({
+        title: { $or: [{ $sw: "Read" }, { $ew: "beer" }] },
+      });
+
+      expect(result).toMatchSnapshot();
+      const tasks: TaskInstance[] = await paul.tasks.get();
+
+      expect(
+        tasks.map(t => {
+          delete t.props.guid;
+          return t;
+        })
+      ).toMatchSnapshot();
+    });
+
+    it("should remove relations between paul and all tasks since today", async () => {
+      await paul.tasks.create(tasksProps, { since: "today" });
+      await paul.tasks.create([{ title: "Read an awesome book" }], {
+        since: "yesterday",
+      });
+      const result = await paul.tasks.remove({}, { since: "today" });
+
+      expect(result).toMatchSnapshot();
+      const tasks: TaskInstance[] = await paul.tasks.get();
+
+      expect(
+        tasks.map(t => {
+          delete t.props.guid;
+          return t;
+        })
+      ).toMatchSnapshot();
+    });
+  });
 });
