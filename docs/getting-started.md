@@ -2,11 +2,11 @@
 
 At this point you should already have done the installation guide for your platform. Otherwise I can't promise that your autocomplete results are satisfying. For the purpose of simplicity we are going to create a simple database model for a todo application \(I know, at this point anybody is sick of todo tutorials in the JavaScript world, but bear with me ;\).
 
-To get started you can clone or download the zip of my getting started git repository with the following commands:
+To get started you can clone or download the zip of the neo4js git repository with the following commands:
 
 ```bash
 git clone https://github.com/JanPeter/neo4js
-cd neo4js/examples/todo
+cd neo4js/examples/starter
 yarn install
 ```
 
