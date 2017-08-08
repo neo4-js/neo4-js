@@ -16,6 +16,6 @@
     "babel-preset-stage-3": "^6.24.1"
   },
   "dependencies": {
-    "neo4-js": "next"
+    "neo4-js": "^2.0.0"
   }
 }
