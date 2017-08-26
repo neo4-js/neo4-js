@@ -20,7 +20,9 @@ Now that you initialized a new project, make sure you have a neo4j database inst
 
 ```javascript
 // File: index.js
-import neo4js, {
+require("babel-polyfill");
+var neo4js = require("neo4-js").default;
+var {
   Model,
   ModelInstance,
   src,
@@ -28,7 +30,7 @@ import neo4js, {
   dest,
   relation,
   defaultProps,
-} from "../index";
+} = require("neo4-js");
 
 class PersonModel extends Model {}
 const Person = new PersonModel("Person");
@@ -44,14 +46,12 @@ const TaskAssigneeRelation = relation("assigned").src
   .hasMany(Task)
   .dest.hasOne(Person);
 
-class PersonInstance extends ModelInstance {}
+class PersonInstance extends ModelInstance { }
 src(TaskAssigneeRelation, PersonInstance, "assignedTasks");
 src(TaskCreatorRelation, PersonInstance, "tasks");
 model(Person, PersonInstance);
 
-class TaskInstance extends ModelInstance {
-  creator;
-}
+class TaskInstance extends ModelInstance { }
 dest(TaskCreatorRelation, TaskInstance.creator);
 defaultProps({ title: "(empty)" }, TaskInstance);
 model(Task, TaskInstance);
@@ -61,7 +61,7 @@ neo4js.init({
   boltPort: 10001,
 });
 
-User.create({ name: "Olaf" })
+Person.create({ name: "Olaf" })
   .then(olaf => {
     console.log(olaf);
     return olaf.tasks.create([
@@ -72,6 +72,7 @@ User.create({ name: "Olaf" })
   })
   .then(tasks => {
     console.log(tasks);
+    neo4js.close();
   });
 ```
 
