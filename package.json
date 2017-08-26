@@ -1,6 +1,6 @@
 {
   "name": "neo4-js",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Neo4j graphdb object graph mapper for javascript",
   "main": "lib/index.js",
   "author": "Jan Schlacher <j.schlacher@trisoft.at>",
@@ -26,6 +26,7 @@
     "build:clean": "rimraf lib",
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:flow": "flow-copy-source -v -i '**/__tests__/**' src lib",
+    "prepublish": "yarn build",
     "test": "jest --runInBand",
     "test:watch": "yarn test -- --watch",
     "start-db": "./scripts/neo4j-startup.sh",
