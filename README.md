@@ -49,6 +49,10 @@ The only runtime dependency you need to start using neo4-js is neo4-js itself.
 yarn add neo4-js
 ```
 
+### Installing it for vanilla node.js without Babel
+
+Although I recommend you are using Babel for your project, it is possible to use it without. Take [this guide](https://neo4.js.org/docs/vanilla-node-guide.html) to get started with neo4-js without the usage of Babel.
+
 ## Built With
 
 * [Babel](https://babeljs.io) - JavaScript compiler to use next gen EcmaScript features
