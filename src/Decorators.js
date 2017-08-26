@@ -79,22 +79,32 @@ function addDirectedRelation(
   }
 }
 
-export const src = (relation: RelationMetaData | (() => RelationMetaData)) => (
-  target: any,
-  name: string,
-  descriptor: any
+export const src = (
+  relation: RelationMetaData | (() => RelationMetaData),
+  instance?: ModelInstance<*, *>,
+  propertyName?: string
 ) => {
-  descriptor.writable = true;
-  addDirectedRelation("src", target, name, relation);
+  if (instance && propertyName) {
+    return addDirectedRelation("src", instance, propertyName, relation);
+  }
+  return (target: any, name: string, descriptor: any) => {
+    descriptor.writable = true;
+    addDirectedRelation("src", target, name, relation);
+  };
 };
 
-export const dest = (relation: RelationMetaData | (() => RelationMetaData)) => (
-  target: any,
-  name: string,
-  descriptor: any
+export const dest = (
+  relation: RelationMetaData | (() => RelationMetaData),
+  instance?: ModelInstance<*, *>,
+  propertyName?: string
 ) => {
-  descriptor.writable = true;
-  addDirectedRelation("dest", target, name, relation);
+  if (instance && propertyName) {
+    return addDirectedRelation("dest", instance, propertyName, relation);
+  }
+  return (target: any, name: string, descriptor: any) => {
+    descriptor.writable = true;
+    addDirectedRelation("dest", target, name, relation);
+  };
 };
 
 function tryLazyRelations() {
@@ -207,44 +217,65 @@ function tryLazyModels() {
   );
 }
 
-export const model = (model: Model<*, *>) => (target: any, name: string) => {
-  if (model) {
-    model.modelInstanceClass = target;
-    if (target.prototype._relations) {
-      for (const t of target.prototype._relations) {
-        let destModel = t.destModel;
-        if (!(destModel instanceof Model)) {
-          destModel = destModel();
-        }
+export const model = (model: Model<*, *>, instance?: ModelInstance<*>) => {
+  const fn = (model, target) => {
+    if (model) {
+      model.modelInstanceClass = target;
+      if (target.prototype._relations) {
+        for (const t of target.prototype._relations) {
+          let destModel = t.destModel;
+          if (!(destModel instanceof Model)) {
+            destModel = destModel();
+          }
 
-        if (destModel) {
-          model.addRelation(destModel, t.name, t.relationLabel, t.relationType);
-        } else {
-          relationConnectHelper.relationsToAdd.push({
-            srcModel: model,
-            destModel: t.destModel,
-            propertyName: t.name,
-            relationLabel: t.relationLabel,
-            relationType: t.relationType,
-          });
+          if (destModel) {
+            model.addRelation(
+              destModel,
+              t.name,
+              t.relationLabel,
+              t.relationType
+            );
+          } else {
+            relationConnectHelper.relationsToAdd.push({
+              srcModel: model,
+              destModel: t.destModel,
+              propertyName: t.name,
+              relationLabel: t.relationLabel,
+              relationType: t.relationType,
+            });
+          }
         }
       }
-    }
 
-    tryLazyModels();
-  } else {
-    /**
+      tryLazyModels();
+    } else {
+      /**
      * The ModelInstance got called before the model was defined!
      * TODO: Add link to guide
      */
-    throw new Error(
-      "Can't define ModelInstance before Model itself, please reorder your code"
-    );
+      throw new Error(
+        "Can't define ModelInstance before Model itself, please reorder your code"
+      );
+    }
+  };
+  if (instance) {
+    instance.prototype._relations = instance._relations;
+    delete instance._relations;
+    fn(model, instance);
+    return;
   }
+  return (target: any, name: string) => {
+    fn(model, target);
+  };
 };
 
-export const defaultProps = (props: any) => (target: any, name: string) => {
-  if (props) {
-    target.prototype._defaultProps = props;
+export const defaultProps = (props: any, instance?: ModelInstance<*>) => {
+  if (instance) {
+    instance.prototype._defaultProps = props;
   }
+  return (target: any, name: string) => {
+    if (props) {
+      target.prototype._defaultProps = props;
+    }
+  };
 };
