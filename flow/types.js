@@ -6,12 +6,7 @@ declare type PropertiesType = {
 
 declare type HasManyActions<Properties, ModelInstance> = {
   get: (props?: Properties, relationProps?: PropertiesType) => Promise<ModelInstance[]>,
-  update: (props: Properties, where?: Properties, relationProps?: PropertiesType, whereRelationProps?: PropertiesType) => Promise<ModelInstance[]> | (options: {
-    props?: Properties,
-    where?: Properties,
-    relationProps?: PropertiesType,
-    whereRelationProps?: PropertiesType,
-  }) => Promise<ModelInstance[]>,
+  update: (props?: Properties, where?: Properties, relationProps?: PropertiesType, whereRelationProps?: PropertiesType) => Promise<ModelInstance[]>,
   create: (props: Properties[], relationProps?: PropertiesType) => Promise<ModelInstance[]>,
   add: (instances: ModelInstance[], relationProps?: PropertiesType) => Promise<number>,
   remove: (props?: Properties, relationProps?: PropertiesType) => Promise<number>,
