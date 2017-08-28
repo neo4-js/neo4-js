@@ -217,7 +217,10 @@ function tryLazyModels() {
   );
 }
 
-export const model = (model: Model<*, *>, instance?: Class<ModelInstance<*>>) => {
+export const model = (
+  model: Model<*, *>,
+  instance?: Class<ModelInstance<*>>
+) => {
   const fn = (model: Model<*, *>, target: any) => {
     if (model) {
       model.modelInstanceClass = target;
