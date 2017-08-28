@@ -81,7 +81,7 @@ function addDirectedRelation(
 
 export const src = (
   relation: RelationMetaData | (() => RelationMetaData),
-  instance?: ModelInstance<*, *>,
+  instance?: ModelInstance<*>,
   propertyName?: string
 ) => {
   if (instance && propertyName) {
@@ -95,7 +95,7 @@ export const src = (
 
 export const dest = (
   relation: RelationMetaData | (() => RelationMetaData),
-  instance?: ModelInstance<*, *>,
+  instance?: ModelInstance<*>,
   propertyName?: string
 ) => {
   if (instance && propertyName) {
@@ -217,8 +217,8 @@ function tryLazyModels() {
   );
 }
 
-export const model = (model: Model<*, *>, instance?: ModelInstance<*>) => {
-  const fn = (model, target) => {
+export const model = (model: Model<*, *>, instance?: Class<ModelInstance<*>>) => {
+  const fn = (model: Model<*, *>, target: any) => {
     if (model) {
       model.modelInstanceClass = target;
       if (target.prototype._relations) {
@@ -259,7 +259,9 @@ export const model = (model: Model<*, *>, instance?: ModelInstance<*>) => {
     }
   };
   if (instance) {
+    // $FlowFixMe
     instance.prototype._relations = instance._relations;
+    // $FlowFixMe
     delete instance._relations;
     fn(model, instance);
     return;
@@ -271,6 +273,7 @@ export const model = (model: Model<*, *>, instance?: ModelInstance<*>) => {
 
 export const defaultProps = (props: any, instance?: ModelInstance<*>) => {
   if (instance) {
+    // $FlowFixMe
     instance.prototype._defaultProps = props;
   }
   return (target: any, name: string) => {
