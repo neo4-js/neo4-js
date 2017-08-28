@@ -1283,9 +1283,9 @@ nan@^2.3.0:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.6.2.tgz#e4ff34e6c95fdfb5aecc08de6596f43605a7db45"
 
-neo4-js@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/neo4-js/-/neo4-js-2.1.1.tgz#a9243b25f25430af80c4c4d2c597b92ef6f48eb9"
+neo4-js@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/neo4-js/-/neo4-js-2.1.2.tgz#43a62f49ac773a7fcdd55d12a8e3bf1e03d57743"
   dependencies:
     core-decorators "^0.19.0"
     idx "^1.5.0"
