@@ -1,8 +1,17 @@
 {
-  "presets": ["stage-3", "es2015", "flow"],
+  "passPerPreset": true,
+  "presets": [
+    {
+      "plugins": "transform-runtime"
+    }, {
+      "passPerPreset": false,
+      "presets": ["stage-3", "es2015", "flow"]
+    }
+  ],
   "plugins": [
     "idx",
     "transform-decorators-legacy",
-    "transform-class-properties"
+    "transform-class-properties",
+    "transform-es2015-modules-commonjs"
   ]
 }
