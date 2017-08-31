@@ -9,3 +9,4 @@ npm-debug.log
 .DS_Store
 _book
 *.swp
+legacy/
