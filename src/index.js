@@ -1,7 +1,6 @@
 // @flow
 
 import { v1 as neo4j } from "neo4j-driver";
-import { autobind } from "core-decorators";
 import idx from "idx";
 import { Model } from "./Model";
 import { ModelInstance } from "./ModelInstance";
@@ -36,13 +35,11 @@ class neo4js {
     this.driver = neo4j.driver(uri, auth);
   }
 
-  @autobind()
-  close() {
+  close = () => {
     this.driver.close();
-  }
+  };
 
-  @autobind()
-  run(cmd: string, params?: any): Promise<any> {
+  run = (cmd: string, params?: any): Promise<any> => {
     let session = this.driver.session();
     return session
       .run(cmd, params)
@@ -62,7 +59,7 @@ class neo4js {
         session.close();
         throw err;
       });
-  }
+  };
 }
 
 export default new neo4js();

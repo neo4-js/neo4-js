@@ -38,12 +38,6 @@
     "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:janpeter/neo4js gh-pages --force"
   },
   "dependencies": {
-    "core-decorators": "^0.20.0",
-    "gitbook-plugin-anchorjs": "^1.1.1",
-    "gitbook-plugin-edit-link": "^2.0.2",
-    "gitbook-plugin-github": "^2.0.0",
-    "gitbook-plugin-prism": "^2.3.0",
-    "gitbook-plugin-theme-api": "^1.1.2",
     "idx": "^1.5.0",
     "lodash": "^4.17.4",
     "neo4j-driver": "^1.4.0",

@@ -3,7 +3,6 @@
 import { forIn, mapValues } from "lodash";
 import uuid from "uuid";
 import idx from "idx";
-import { autobind } from "core-decorators";
 import neo4js, { ModelInstance, Relation } from "./index";
 import type { BaseProps, RelationType } from "./index";
 import { CharGenerator, prepareWhere, prepareSet } from "./utils";
