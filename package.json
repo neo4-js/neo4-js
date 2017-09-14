@@ -6,7 +6,7 @@
   "author": "Jan Schlacher <j.schlacher@trisoft.at>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JanPeter/neo4js"
+    "url": "https://github.com/neo4-js/neo4-js"
   },
   "keywords": [
     "neo4j",
