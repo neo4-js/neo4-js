@@ -3,8 +3,7 @@
 import { Model } from "../Model";
 import { ModelInstance } from "../ModelInstance";
 import type { lazyModel, relationProperty } from "../Decorators";
-import { Relation } from "../relation";
-import type { RelationType } from "../relation";
+import { Relation } from "../Relation";
 import { lazy } from "./index";
 
 class RelationConnectHelper {
