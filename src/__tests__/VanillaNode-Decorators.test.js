@@ -35,7 +35,7 @@ PersonInstance.model(Person);
 class TaskInstance extends ModelInstance {
   creator;
 }
-extendModelInstance(TaskInstance);
+TaskInstance = extendModelInstance(TaskInstance);
 TaskInstance.hasOne("creator", () => Person, () => TaskCreatorRelation);
 TaskInstance.defaultProps({
   title: "(empty)",
