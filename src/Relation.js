@@ -29,19 +29,28 @@ export class Relation {
     }
   }
 
+  /**
+   * Initialise all lazy stuff
+   */
   init() {
     const property = lazy(this.lazy);
+    if (!property) return;
+
     const relation = lazy(property.relation);
+    if (!relation) return;
+
     const from = lazy(relation.from);
     const to = lazy(relation.to);
+    if (!from || !to) return;
 
     this.relationType = {
       many: property.many,
       out: property.out !== null ? property.out : from === this.src,
       any: property.any,
     };
-    this.dest = from === this.src ? relation.to : relation.from;
-    this.dest = lazy(this.dest);
+    this.dest = lazy(from === this.src ? relation.to : relation.from);
+    if (!this.dest) return;
+
     this.propertyName = property.propertyName;
     this.label = relation.via;
     delete this.lazy;
