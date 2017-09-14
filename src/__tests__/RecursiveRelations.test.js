@@ -8,6 +8,12 @@ import neo4js, {
   dest,
   relation,
 } from "../index";
+import type {
+  StringProperty,
+  NumberProperty,
+  HasManyActions,
+  HasOneActions,
+} from "../index";
 import idx from "idx";
 
 type ProjectProps = {
@@ -19,8 +25,8 @@ type ProjectProps = {
 class ProjectModel extends Model<ProjectProps, ProjectInstance> {}
 const Project = new ProjectModel("Project");
 
-const ProjectChildRelation = relation("child").src
-  .hasMany(Project)
+const ProjectChildRelation = relation("child")
+  .src.hasMany(Project)
   .dest.hasOne(Project);
 
 @model(Project)

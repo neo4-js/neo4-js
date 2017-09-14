@@ -8,6 +8,12 @@ import neo4js, {
   dest,
   relation,
 } from "../index";
+import type {
+  StringProperty,
+  NumberProperty,
+  HasManyActions,
+  HasOneActions,
+} from "../index";
 import idx from "idx";
 
 type PersonProps = {
@@ -25,16 +31,16 @@ const Person: PersonModel = new PersonModel("Person");
 class TaskModel extends Model<TaskProps, TaskInstance> {}
 const Task: TaskModel = new TaskModel("Task");
 
-const TaskCreatorRelation = relation("created").src
-  .hasMany(Task)
+const TaskCreatorRelation = relation("created")
+  .src.hasMany(Task)
   .dest.hasOne(Person);
 
-const TaskAssigneeRelation = relation("assigned").src
-  .hasMany(Task)
+const TaskAssigneeRelation = relation("assigned")
+  .src.hasMany(Task)
   .dest.hasOne(Person);
 
-const SupervisorRelation = relation("supervisor").src
-  .hasOne(Person)
+const SupervisorRelation = relation("supervisor")
+  .src.hasOne(Person)
   .dest.hasMany(Person);
 
 @model(Person)

@@ -15,6 +15,8 @@ export type Neo4jsOptions = {
   password?: string,
 };
 
+export * from "./types";
+
 class neo4js {
   options: Neo4jsOptions;
   driver: any;

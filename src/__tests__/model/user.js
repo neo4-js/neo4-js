@@ -8,6 +8,12 @@ import neo4js, {
   src,
   dest,
 } from "../../index";
+import type {
+  StringProperty,
+  NumberProperty,
+  HasManyActions,
+  HasOneActions,
+} from "../../index";
 import { Task, TaskInstance, TaskAssigneeRelation } from "./task";
 import type { TaskProps } from "./task";
 
@@ -16,8 +22,8 @@ export type UserProps = {
   lastname?: StringProperty,
 };
 
-export const TaskCreatorRelation = relation("creator").src
-  .hasMany(() => Task)
+export const TaskCreatorRelation = relation("creator")
+  .src.hasMany(() => Task)
   .dest.hasOne(() => User);
 
 export const User: Model<UserProps, UserInstance> = new Model("User");

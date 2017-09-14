@@ -9,7 +9,6 @@ src
 .*/examples/.*
 
 [libs]
-flow
 
 [options]
 esproposal.decorators=ignore

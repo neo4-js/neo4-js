@@ -1,6 +1,12 @@
 // @flow
 
 import neo4js, { Model, ModelInstance } from "../index";
+import type {
+  StringProperty,
+  NumberProperty,
+  HasManyActions,
+  HasOneActions,
+} from "../index";
 import idx from "idx";
 
 type Props = {

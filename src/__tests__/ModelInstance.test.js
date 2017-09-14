@@ -8,6 +8,12 @@ import neo4js, {
   hasOne,
   defaultProps,
 } from "../index";
+import type {
+  StringProperty,
+  NumberProperty,
+  HasManyActions,
+  HasOneActions,
+} from "../index";
 import idx from "idx";
 
 type PersonProps = {
@@ -18,6 +24,8 @@ type TaskProps = {
   title?: StringProperty,
   done?: boolean,
 };
+
+type TodoProps = TaskProps;
 
 class PersonModel extends Model<PersonProps, PersonInstance> {}
 const Person: PersonModel = new PersonModel("Person");
@@ -50,7 +58,7 @@ const Todo = new Model("Todo");
   done: () => false,
 })
 @model(Todo)
-class TodoInstance extends ModelInstance {}
+class TodoInstance extends ModelInstance<TodoProps> {}
 
 describe("ModelInstance", () => {
   beforeAll(() => {
