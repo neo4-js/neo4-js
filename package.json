@@ -1,6 +1,6 @@
 {
   "name": "neo4-js",
-  "version": "3.0.1-rc.1",
+  "version": "3.0.1-rc.2",
   "description": "Neo4j graphdb object graph mapper for javascript",
   "main": "lib/index.js",
   "author": "Jan Schlacher <j.schlacher@trisoft.at>",
@@ -38,6 +38,7 @@
     "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:janpeter/neo4js gh-pages --force"
   },
   "dependencies": {
+    "idx": "^1.5.0",
     "lodash": "^4.17.4",
     "neo4j-driver": "^1.4.0",
     "uuid": "^3.1.0"
@@ -58,7 +59,6 @@
     "flow-bin": "^0.54.1",
     "flow-copy-source": "^1.2.1",
     "gitbook-cli": "^2.3.2",
-    "idx": "^1.5.0",
     "jest": "^21.1.0",
     "prettier": "^1.6.1",
     "rimraf": "^2.6.2"
