@@ -6,12 +6,7 @@ import idx from "idx";
 import { autobind } from "core-decorators";
 import neo4js, { ModelInstance, Relation } from "./index";
 import type { BaseProps, RelationType } from "./index";
-import {
-  CharGenerator,
-  prepareWhere,
-  prepareSet,
-  relationConnectHelper,
-} from "./utils";
+import { CharGenerator, prepareWhere, prepareSet } from "./utils";
 
 export class Model<P, I: ModelInstance<P>> {
   label: string;
@@ -181,16 +176,5 @@ export class Model<P, I: ModelInstance<P>> {
 
     result = result.map(p => this.afterUpdate(this._createModelInstance(p.n)));
     return result;
-  }
-
-  addRelation(
-    model: Model<*, *>,
-    propertyName: string,
-    relationLabel: string,
-    relationType: RelationType
-  ) {
-    this.relations.push(
-      new Relation(relationType, this, model, propertyName, relationLabel)
-    );
   }
 }

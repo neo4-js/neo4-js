@@ -1,44 +1,58 @@
 // @flow
 
 import neo4js, { Model, ModelInstance } from "./index";
+import type { relationProperty, lazyModel } from "./Decorators";
+import { lazy } from "./utils";
 import * as HasMany from "./HasManyRelation";
 import * as HasOne from "./HasOneRelation";
 import idx from "idx";
 
 export type RelationType = {|
-  type: "hasMany" | "hasOne",
-  reverse?: boolean,
-  any?: boolean,
+  many: boolean,
+  out: ?boolean,
+  any: ?boolean,
 |};
 
 export class Relation {
   relationType: RelationType;
   src: Model<*, *>;
-  dest: Model<*, *>;
+  dest: lazyModel;
   propertyName: string;
   label: string;
+  lazy: relationProperty;
 
-  constructor(
-    relationType: RelationType,
-    src: Model<*, *>,
-    dest: Model<*, *>,
-    propertyName: string,
-    label: string
-  ) {
-    this.relationType = relationType;
+  constructor(src: Model<*, *>, property: relationProperty) {
     this.src = src;
-    this.dest = dest;
-    this.propertyName = propertyName;
-    this.label = label;
+    this.lazy = property;
+    if (lazy(property.relation)) {
+      this.init();
+    }
+  }
+
+  init() {
+    const property = lazy(this.lazy);
+    const relation = lazy(property.relation);
+    const from = lazy(relation.from);
+    const to = lazy(relation.to);
+
+    this.relationType = {
+      many: property.many,
+      out: property.out !== null ? property.out : from === this.src,
+      any: property.any,
+    };
+    this.dest = from === this.src ? relation.to : relation.from;
+    this.dest = lazy(this.dest);
+    this.propertyName = property.propertyName;
+    this.label = relation.via;
+    delete this.lazy;
   }
 
   addFunctionsToInstance<T: ModelInstance<*>>(instance: T): T {
-    if (this.relationType.type === "hasMany") {
+    if (this.lazy) this.init();
+    if (this.relationType.many) {
       return this.addHasManyToInstance(instance);
-    } else if (this.relationType.type === "hasOne") {
-      return this.addHasOneToInstance(instance);
     }
-    return instance;
+    return this.addHasOneToInstance(instance);
   }
 
   addHasManyToInstance(instance: ModelInstance<*>): any {

@@ -1,23 +1,39 @@
 // @flow
 
 import { Model } from "../Model";
+import { ModelInstance } from "../ModelInstance";
+import type { lazyModel, relationProperty } from "../Decorators";
+import { Relation } from "../relation";
 import type { RelationType } from "../relation";
+import { lazy } from "./index";
 
 class RelationConnectHelper {
-  relationsToAdd: {
-    srcModel: Model<*, *> | (() => Model<*, *>),
-    destModel: Model<*, *> | (() => Model<*, *>),
-    propertyName: string,
-    relationLabel: string,
-    relationType: RelationType,
-    added?: boolean,
+  models: {
+    model: lazyModel,
+    modelInstance: Class<ModelInstance<*>>,
+    relations: relationProperty[],
   }[];
 
-  lazy: any[];
-
   constructor() {
-    this.relationsToAdd = [];
-    this.lazy = [];
+    this.models = [];
+  }
+
+  tryInject() {
+    const buf = [];
+
+    this.models.forEach(m => {
+      const model = lazy(m.model);
+      if (model) {
+        model.modelInstanceClass = m.modelInstance;
+        if (m.relations) {
+          model.relations = m.relations.map(r => new Relation(model, r));
+        }
+      } else {
+        buf.push(m);
+      }
+    });
+
+    this.models = buf;
   }
 }
 

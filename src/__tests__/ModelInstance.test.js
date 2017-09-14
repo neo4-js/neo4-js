@@ -5,6 +5,7 @@ import neo4js, {
   ModelInstance,
   hasMany,
   model,
+  relation,
   hasOne,
   defaultProps,
 } from "../index";
@@ -27,6 +28,16 @@ type TaskProps = {
 
 type TodoProps = TaskProps;
 
+const PersonTaskRelation = relation
+  .from(() => Person)
+  .to(() => Task)
+  .via("created");
+
+const FriendRelation = relation
+  .from(() => Person)
+  .to(() => Person)
+  .via("friend");
+
 class PersonModel extends Model<PersonProps, PersonInstance> {}
 const Person: PersonModel = new PersonModel("Person");
 
@@ -35,9 +46,9 @@ const Task: TaskModel = new TaskModel("Task");
 
 @model(Person)
 class PersonInstance extends ModelInstance<PersonProps> {
-  @hasMany(Task, "created")
+  @hasMany(Task, PersonTaskRelation)
   tasks: HasManyActions<TaskProps, TaskInstance>;
-  @hasMany(Person, "friend")
+  @hasMany(Person, FriendRelation, "any")
   friends: HasManyActions<PersonProps, PersonInstance>;
 
   getFriendsWithName = async (name: string) => {

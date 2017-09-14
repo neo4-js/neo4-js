@@ -6,6 +6,7 @@ import neo4js, {
   dest,
   relation,
   defaultProps,
+  extendModelInstance,
 } from "../index";
 import idx from "idx";
 
@@ -15,25 +16,31 @@ const Person = new PersonModel("Person");
 class TaskModel extends Model {}
 const Task = new TaskModel("Task");
 
-const TaskCreatorRelation = relation("created").src
-  .hasMany(Task)
-  .dest.hasOne(Person);
+const TaskCreatorRelation = relation
+  .from(() => Person)
+  .to(Task)
+  .via("created");
 
-const TaskAssigneeRelation = relation("assigned").src
-  .hasMany(Task)
-  .dest.hasOne(Person);
+const TaskAssigneeRelation = relation
+  .from(Person)
+  .to(() => Task)
+  .via("assigned");
 
 class PersonInstance extends ModelInstance {}
-src(TaskAssigneeRelation, PersonInstance, "assignedTasks");
-src(TaskCreatorRelation, PersonInstance, "tasks");
-model(Person, PersonInstance);
+PersonInstance = extendModelInstance(PersonInstance);
+PersonInstance.hasMany("assignedTasks", () => Task, TaskCreatorRelation);
+PersonInstance.hasMany("tasks", () => Task, TaskAssigneeRelation);
+PersonInstance.model(Person);
 
 class TaskInstance extends ModelInstance {
   creator;
 }
-dest(TaskCreatorRelation, TaskInstance.creator);
-defaultProps({ title: "(empty)" }, TaskInstance);
-model(Task, TaskInstance);
+extendModelInstance(TaskInstance);
+TaskInstance.hasOne("creator", () => Person, () => TaskCreatorRelation);
+TaskInstance.defaultProps({
+  title: "(empty)",
+});
+TaskInstance.model(() => Task);
 
 describe("VanillaNodeDecorators", () => {
   beforeAll(() => {

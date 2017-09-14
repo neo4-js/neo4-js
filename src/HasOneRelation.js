@@ -7,12 +7,11 @@ function getRelationString(
   relationType: RelationType,
   variable: string = ""
 ) {
-  if (relationType.any) {
-    return `-[${variable}:${label}]-`;
-  }
-  return `${relationType.reverse
+  return `${!relationType.out && !relationType.any
     ? "<"
-    : ""}-[${variable}:${label}]-${relationType.reverse ? "" : ">"}`;
+    : ""}-[${variable}:${label}]-${!relationType.out && !relationType.any
+    ? ""
+    : ">"}`;
 }
 
 export async function get(

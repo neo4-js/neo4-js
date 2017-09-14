@@ -3,10 +3,10 @@
 import neo4js, {
   Model,
   ModelInstance,
-  src,
   model,
-  dest,
   relation,
+  hasMany,
+  hasOne,
 } from "../index";
 import type {
   StringProperty,
@@ -31,38 +31,41 @@ const Person: PersonModel = new PersonModel("Person");
 class TaskModel extends Model<TaskProps, TaskInstance> {}
 const Task: TaskModel = new TaskModel("Task");
 
-const TaskCreatorRelation = relation("created")
-  .src.hasMany(Task)
-  .dest.hasOne(Person);
+const TaskCreatorRelation = relation
+  .from(Person)
+  .to(Task)
+  .via("created");
 
-const TaskAssigneeRelation = relation("assigned")
-  .src.hasMany(Task)
-  .dest.hasOne(Person);
+const TaskAssigneeRelation = relation
+  .from(Person)
+  .to(Task)
+  .via("assigned");
 
-const SupervisorRelation = relation("supervisor")
-  .src.hasOne(Person)
-  .dest.hasMany(Person);
+const SupervisorRelation = relation
+  .from(Person)
+  .to(Person)
+  .via("supervisor");
 
 @model(Person)
 class PersonInstance extends ModelInstance<PersonProps> {
-  @src(TaskCreatorRelation)
+  @hasMany(() => Task, TaskCreatorRelation)
   createdTasks: HasManyActions<TaskProps, TaskInstance>;
 
-  @src(TaskAssigneeRelation)
+  @hasMany(() => Task, TaskAssigneeRelation)
   assignedTasks: HasManyActions<TaskProps, TaskInstance>;
 
-  @dest(SupervisorRelation)
+  @hasMany(() => Person, SupervisorRelation, "in")
   epmloyees: HasManyActions<PersonProps, PersonInstance>;
-  @src(SupervisorRelation)
+  @hasOne(() => Person, SupervisorRelation, "out")
   supervisor: HasOneActions<PersonProps, PersonInstance>;
 }
 
 @model(Task)
 class TaskInstance extends ModelInstance<TaskProps> {
-  @dest(TaskCreatorRelation)
+  @hasOne(() => Task, TaskCreatorRelation)
   creator: HasOneActions<PersonProps, PersonInstance>;
 
-  @dest(TaskAssigneeRelation)
+  @hasOne(() => Task, TaskAssigneeRelation)
   assignee: HasOneActions<PersonProps, PersonInstance>;
 }
 

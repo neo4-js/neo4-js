@@ -3,10 +3,10 @@
 import neo4js, {
   Model,
   ModelInstance,
-  src,
   model,
-  dest,
   relation,
+  hasOne,
+  hasMany,
 } from "../index";
 import type {
   StringProperty,
@@ -25,16 +25,17 @@ type ProjectProps = {
 class ProjectModel extends Model<ProjectProps, ProjectInstance> {}
 const Project = new ProjectModel("Project");
 
-const ProjectChildRelation = relation("child")
-  .src.hasMany(Project)
-  .dest.hasOne(Project);
+const ProjectChildRelation = relation
+  .from(() => Project)
+  .to(() => Project)
+  .via("child");
 
 @model(Project)
 class ProjectInstance extends ModelInstance<ProjectProps> {
-  @src(ProjectChildRelation)
+  @hasMany(Project, ProjectChildRelation, "in")
   children: HasManyActions<ProjectProps, ProjectInstance>;
 
-  @dest(ProjectChildRelation)
+  @hasOne(Project, ProjectChildRelation, "out")
   parent: HasOneActions<ProjectProps, ProjectInstance>;
 }
 

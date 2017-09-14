@@ -3,10 +3,10 @@
 import neo4js, {
   Model,
   ModelInstance,
-  src,
   model,
-  dest,
   relation,
+  hasMany,
+  hasOne,
 } from "../index";
 import type {
   StringProperty,
@@ -31,25 +31,28 @@ const Person: PersonModel = new PersonModel("Person");
 class TaskModel extends Model<TaskProps, TaskInstance> {}
 const Task: TaskModel = new TaskModel("Task");
 
-const TaskCreatorRelation = relation("created")
-  .src.hasMany(Task)
-  .dest.hasOne(Person);
+const TaskCreatorRelation = relation
+  .from(() => Person)
+  .to(() => Task)
+  .via("created");
 
-const TaskAssigneeRelation = relation("assigned")
-  .src.hasMany(Task)
-  .dest.hasOne(Person);
+const TaskAssigneeRelation = relation
+  .from(Person)
+  .to(Task)
+  .via("assigned");
 
 @model(Person)
 class PersonInstance extends ModelInstance<PersonProps> {
-  @src(TaskCreatorRelation) tasks: HasManyActions<TaskProps, TaskInstance>;
+  @hasMany(Task, TaskCreatorRelation)
+  tasks: HasManyActions<TaskProps, TaskInstance>;
 
-  @src(TaskAssigneeRelation)
+  @hasMany(Task, TaskAssigneeRelation)
   assignedTasks: HasManyActions<TaskProps, TaskInstance>;
 }
 
 @model(Task)
 class TaskInstance extends ModelInstance<TaskProps> {
-  @dest(TaskCreatorRelation)
+  @hasOne(() => Person, () => TaskCreatorRelation)
   creator: HasOneActions<PersonProps, PersonInstance>;
 }
 

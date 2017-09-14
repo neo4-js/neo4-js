@@ -5,283 +5,98 @@ import idx from "idx";
 import { relationConnectHelper } from "./utils";
 import type { RelationType } from "./Relation";
 
-export type RelationMetaData = {|
-  data: {
-    relationLabel: string,
-    src?: { model: Model<*, *> | (() => Model<*, *>), type: RelationType },
-    dest?: { model: Model<*, *> | (() => Model<*, *>), type: RelationType },
+export type lazyModel = Model<*, *> | (() => Model<*, *>);
+
+export type metaRelation = {
+  from: lazyModel,
+  to: lazyModel,
+  via: string,
+};
+
+export type lazyMetaRelation = metaRelation | (() => metaRelation);
+
+export type relationProperty = {
+  dest: lazyModel,
+  relation: lazyMetaRelation,
+  out: ?boolean,
+  any: ?boolean,
+  propertyName: string,
+  many: boolean,
+};
+
+export const relation = {
+  from: (from: lazyModel) => {
+    return {
+      to: (to: lazyModel) => {
+        return {
+          via: (via: string): metaRelation => {
+            return {
+              from,
+              to,
+              via,
+            };
+          },
+        };
+      },
+    };
   },
-  src: {
-    hasMany: (model: Model<*, *> | (() => Model<*, *>)) => RelationMetaData,
-    hasOne: (model: Model<*, *> | (() => Model<*, *>)) => RelationMetaData,
-  },
-  dest: {
-    hasMany: (model: Model<*, *> | (() => Model<*, *>)) => RelationMetaData,
-    hasOne: (model: Model<*, *> | (() => Model<*, *>)) => RelationMetaData,
-  },
-|};
-
-export const relation = (relationLabel: string): RelationMetaData => {
-  const addData = (model, direction, type): RelationMetaData => {
-    chain.data[direction] = { model, type };
-    return chain;
-  };
-
-  const chain: RelationMetaData = {
-    data: {
-      relationLabel,
-    },
-    src: {
-      hasMany: (model: Model<*, *> | (() => Model<*, *>)): RelationMetaData =>
-        addData(model, "src", { type: "hasMany", reverse: false }),
-      hasOne: (model: Model<*, *> | (() => Model<*, *>)): RelationMetaData =>
-        addData(model, "src", { type: "hasOne", reverse: false }),
-    },
-    dest: {
-      hasMany: (model: Model<*, *> | (() => Model<*, *>)): RelationMetaData =>
-        addData(model, "dest", { type: "hasMany", reverse: true }),
-      hasOne: (model: Model<*, *> | (() => Model<*, *>)): RelationMetaData =>
-        addData(model, "dest", { type: "hasOne", reverse: true }),
-    },
-  };
-
-  return chain;
 };
 
-function addDirectedRelation(
-  direction: "src" | "dest",
-  target: any,
-  name: any,
-  relation: RelationMetaData | (() => RelationMetaData)
-) {
-  let rel = relation;
-  if (typeof relation === "function") {
-    rel = relation();
+function connectRelationToProp(many: boolean) {
+  return (
+    model: lazyModel,
+    relation: lazyMetaRelation,
+    direction?: "in" | "out" | "any"
+  ) => (target: any, name: string, descriptor: any) => {
+    if (descriptor) descriptor.writable = true;
 
-    if (!rel) {
-      relationConnectHelper.lazy.push({
-        fn: relation,
-        target,
-        name,
-        dir: direction,
-      });
-      return;
-    }
-  }
-
-  if (rel.data[direction]) {
-    const { relationLabel } = rel.data;
-    const { model, type } = rel.data[direction];
-    addRelation(target, model, name, type, relationLabel);
-  } else {
-    // TODO: link to guide
-    throw new Error("Source not set on relation see");
-  }
+    if (!target._relations) target._relations = [];
+    target._relations.push({
+      dest: model,
+      relation,
+      out: direction ? direction === "out" : null,
+      any: direction ? direction === "any" : null,
+      propertyName: name,
+      many,
+    });
+  };
 }
 
-export const src = (
-  relation: RelationMetaData | (() => RelationMetaData),
-  instance?: ModelInstance<*>,
-  propertyName?: string
-) => {
-  if (instance && propertyName) {
-    return addDirectedRelation("src", instance, propertyName, relation);
-  }
-  return (target: any, name: string, descriptor: any) => {
-    descriptor.writable = true;
-    addDirectedRelation("src", target, name, relation);
-  };
+export const hasMany = connectRelationToProp(true);
+export const hasOne = connectRelationToProp(false);
+
+export const model = (model: lazyModel) => (target: any, name: string) => {
+  relationConnectHelper.models.push({
+    model,
+    relations: target.prototype._relations,
+    modelInstance: target,
+  });
+  relationConnectHelper.tryInject();
 };
 
-export const dest = (
-  relation: RelationMetaData | (() => RelationMetaData),
-  instance?: ModelInstance<*>,
-  propertyName?: string
-) => {
-  if (instance && propertyName) {
-    return addDirectedRelation("dest", instance, propertyName, relation);
-  }
-  return (target: any, name: string, descriptor: any) => {
-    descriptor.writable = true;
-    addDirectedRelation("dest", target, name, relation);
-  };
-};
-
-function tryLazyRelations() {
-  for (const r of relationConnectHelper.lazy) {
-    const relation = r.fn();
-    if (relation) {
-      let srcModel = relation.data[r.dir === "src" ? "dest" : "src"].model;
-      if (!(srcModel instanceof Model)) {
-        srcModel = srcModel();
-      }
-
-      let destModel = relation.data[r.dir].model;
-      if (!(destModel instanceof Model)) {
-        destModel = destModel();
-      }
-
-      if (srcModel && destModel) {
-        srcModel.addRelation(
-          destModel,
-          r.name,
-          relation.data.relationLabel,
-          relation.data[r.dir].type
-        );
-      } else {
-        relationConnectHelper.relationsToAdd.push({
-          srcModel: relation.data[r.dir === "src" ? "dest" : "src"].model,
-          destModel: relation.data[r.dir].model,
-          propertyName: r.name,
-          relationLabel: relation.data.relationLabel,
-          relationType: relation.relationType,
-        });
-      }
-      r.added = true;
-    }
-  }
-  relationConnectHelper.lazy = relationConnectHelper.lazy.filter(r => !r.added);
-}
-
-function addRelation(
-  target: any,
-  destModel: Model<*, *> | (() => Model<*, *>),
-  name: string,
-  relationType: RelationType,
-  relationLabel: string,
-  tryLazy: boolean = true
-) {
-  if (!target._relations) {
-    target._relations = [];
-  }
-  target._relations.push({ destModel, name, relationType, relationLabel });
-
-  if (tryLazy) {
-    tryLazyRelations();
-  }
-}
-
-export const hasOne = (
-  destModel: Model<*, *> | (() => Model<*, *>),
-  relationLabel: string
-) => (target: any, name: string, descriptor: any) => {
-  descriptor.writable = true;
-  addRelation(
-    target,
-    destModel,
-    name,
-    { type: "hasOne", any: true },
-    relationLabel
-  );
-};
-
-export const hasMany = (
-  destModel: Model<*, *> | (() => Model<*, *>),
-  relationLabel: string
-) => (target: any, name: string, descriptor: any) => {
-  descriptor.writable = true;
-  addRelation(
-    target,
-    destModel,
-    name,
-    { type: "hasMany", any: true },
-    relationLabel
-  );
-};
-
-function tryLazyModels() {
-  for (const r of relationConnectHelper.relationsToAdd) {
-    let srcModel = r.srcModel;
-    if (!(srcModel instanceof Model)) {
-      srcModel = srcModel();
-    }
-
-    let destModel = r.destModel;
-    if (!(destModel instanceof Model)) {
-      destModel = destModel();
-    }
-
-    if (srcModel && destModel) {
-      srcModel.addRelation(
-        destModel,
-        r.propertyName,
-        r.relationLabel,
-        r.relationType
-      );
-      r.added = true;
-    }
-  }
-
-  relationConnectHelper.relationsToAdd = relationConnectHelper.relationsToAdd.filter(
-    r => !r.added
-  );
-}
-
-export const model = (
-  model: Model<*, *>,
-  instance?: Class<ModelInstance<*>>
-) => {
-  const fn = (model: Model<*, *>, target: any) => {
-    if (model) {
-      model.modelInstanceClass = target;
-      if (target.prototype._relations) {
-        for (const t of target.prototype._relations) {
-          let destModel = t.destModel;
-          if (!(destModel instanceof Model)) {
-            destModel = destModel();
-          }
-
-          if (destModel) {
-            model.addRelation(
-              destModel,
-              t.name,
-              t.relationLabel,
-              t.relationType
-            );
-          } else {
-            relationConnectHelper.relationsToAdd.push({
-              srcModel: model,
-              destModel: t.destModel,
-              propertyName: t.name,
-              relationLabel: t.relationLabel,
-              relationType: t.relationType,
-            });
-          }
-        }
-      }
-
-      tryLazyModels();
-    } else {
-      /**
-     * The ModelInstance got called before the model was defined!
-     * TODO: Add link to guide
-     */
-      throw new Error(
-        "Can't define ModelInstance before Model itself, please reorder your code"
-      );
-    }
-  };
-  if (instance) {
-    // $FlowFixMe
-    instance.prototype._relations = instance._relations;
-    // $FlowFixMe
-    delete instance._relations;
-    fn(model, instance);
-    return;
-  }
-  return (target: any, name: string) => {
-    fn(model, target);
-  };
-};
-
-export const defaultProps = (props: any, instance?: ModelInstance<*>) => {
-  if (instance) {
-    // $FlowFixMe
-    instance.prototype._defaultProps = props;
-  }
+export const defaultProps = (props: any) => {
   return (target: any, name: string) => {
     if (props) {
       target.prototype._defaultProps = props;
     }
   };
 };
+
+// Trust me flow, I know that's now optimal...I'm not happy either...
+export function extendModelInstance<T: ModelInstance<*>>(
+  instance: Class<T>
+): Class<T> {
+  // $FlowFixMe
+  instance.hasMany = (propertyName, ...args) =>
+    hasMany(...args)(instance.prototype, propertyName, null);
+  // $FlowFixMe
+  instance.hasOne = (propertyName, ...args) =>
+    hasOne(...args)(instance.prototype, propertyName, null);
+  // $FlowFixMe
+  instance.model = (...args) => model(...args)(instance, "");
+  // $FlowFixMe
+  instance.defaultProps = (...args) => defaultProps(...args)(instance, "");
+
+  // $FlowFixMe
+  return instance;
+}

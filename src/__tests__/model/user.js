@@ -5,8 +5,8 @@ import neo4js, {
   ModelInstance,
   model,
   relation,
-  src,
-  dest,
+  hasOne,
+  hasMany,
 } from "../../index";
 import type {
   StringProperty,
@@ -22,17 +22,18 @@ export type UserProps = {
   lastname?: StringProperty,
 };
 
-export const TaskCreatorRelation = relation("creator")
-  .src.hasMany(() => Task)
-  .dest.hasOne(() => User);
+export const TaskCreatorRelation = relation
+  .from(() => User)
+  .to(() => Task)
+  .via("creator");
 
 export const User: Model<UserProps, UserInstance> = new Model("User");
 
 @model(User)
 export class UserInstance extends ModelInstance<UserProps> {
-  @src(() => TaskCreatorRelation)
+  @hasMany(() => Task, () => TaskCreatorRelation)
   createdTasks: HasManyActions<TaskProps, TaskInstance>;
 
-  @dest(() => TaskAssigneeRelation)
+  @hasMany(() => Task, () => TaskAssigneeRelation)
   tasks: HasManyActions<TaskProps, TaskInstance>;
 }

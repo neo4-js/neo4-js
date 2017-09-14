@@ -4,9 +4,9 @@ import neo4js, {
   Model,
   ModelInstance,
   model,
-  dest,
   relation,
-  src,
+  hasOne,
+  hasMany,
 } from "../../index";
 import type {
   StringProperty,
@@ -22,17 +22,18 @@ export type TaskProps = {
   done?: boolean,
 };
 
-export const TaskAssigneeRelation = relation("assigned")
-  .src.hasOne(() => User)
-  .dest.hasMany(() => Task);
+export const TaskAssigneeRelation = relation
+  .from(() => Task)
+  .to(() => User)
+  .via("assigned");
 
 export const Task: Model<TaskProps, TaskInstance> = new Model("Task");
 
 @model(Task)
 export class TaskInstance extends ModelInstance<TaskProps> {
-  @dest(() => TaskCreatorRelation)
+  @hasOne(() => User, () => TaskCreatorRelation)
   creator: HasOneActions<UserProps, UserInstance>;
 
-  @src(() => TaskAssigneeRelation)
+  @hasOne(() => User, () => TaskAssigneeRelation)
   assignee: HasOneActions<UserProps, UserInstance>;
 }
