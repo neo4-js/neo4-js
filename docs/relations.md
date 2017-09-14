@@ -25,7 +25,7 @@ In this section we'll have a look at how to define relations and how to use them
 ### Example
 
 ```js
-import { Model, ModelInstance, model, relation, src, dest } from "neo4-js";
+import { Model, ModelInstance, model, relation, hasMany, hasOne } from "neo4-js";
 
 type UserProps = {
   name?: string,
@@ -45,31 +45,29 @@ class ProjectModel extends Model<ProjectProps, ProjectInstance> { }
 const Project: ProjectModel = new ProjectModel("Project");
 
 /**
- * Creating relations, reads like "User assigned to Project"
- * Whereas the source (User) has many (Project) and
- * the destination (Project) also has many (User)
+ * Creating relations
+ * Reads like "User assigned to Project"
  */
-const UserProjectRelation = relation("assigned")
-  .src.hasMany(Project)
-  .dest.hasMany(User);
+const UserProjectRelation = relation
+  .from(User)
+  .to(Project)
+  .via("member");
 
 /**
  * Creating the ModelInstances and connecting the properties
- * to its relation. That way you are able to create as many
- * relations to the same source/destination models which are
- * accessible through different properties within its
- * ModelInstance
+ * to the relation. At this point we need to specify if the
+ * relation is 1:n or n:m with the hasOne and hasMany decorators.
  */
 @model(User)
 class UserInstance extends ModelInstance<UserProps> {
-  @src(UserProjectRelation)
+  @hasMany(Project, UserProjectRelation)
   projects: HasManyActions<ProjectProps, ProjectInstance>;
 }
 
 @model(Project)
 class ProjectInstance extends ModelInstance<ProjectProps> {
-  @dest(UserProjectRelation)
-  assignedUsers: HasManyActions<UserProps, UserInstance>;
+  @hasMany(User, UserProjectRelation)
+  members: HasManyActions<UserProps, UserInstance>;
 }
 
 User.create({ name: "Pippi Langstrumpf" })
@@ -86,7 +84,7 @@ User.create({ name: "Pippi Langstrumpf" })
 ### Example
 
 ```js
-import { Model, ModelInstance, model, relation, src, dest } from "neo4-js";
+import { Model, ModelInstance, model, relation, hasMany, hasOne } from "neo4-js";
 
 type UserProps = {
   name?: string,
@@ -110,26 +108,24 @@ const Project: ProjectModel = new ProjectModel("Project");
  * Whereas the source (User) is able to create many (Project)
  * and the destination (Project) has one creator (User)
  */
-const UserProjectRelation = relation("creator")
-  .src.hasMany(Project)
-  .dest.hasOne(User);
+const UserProjectRelation = relation
+  .from(User)
+  .to(Project)
+  .via("creator");
 
 /**
  * Creating the ModelInstances and connecting the properties
- * to its relation. That way you are able to create as many
- * relations to the same source/destination models which are
- * accessible through different properties within its
- * ModelInstance
+ * to its relation.
  */
 @model(User)
 class UserInstance extends ModelInstance<UserProps> {
-  @src(UserProjectRelation)
+  @hasMany(() => Project, () => UserProjectRelation)
   createdProjects: HasManyActions<ProjectProps, ProjectInstance>;
 }
 
 @model(Project)
 class ProjectInstance extends ModelInstance<ProjectProps> {
-  @dest(UserProjectRelation)
+  @hasOne(User, UserProjectRelation)
   creator: HasOneAction<UserProps, UserInstance>;
 }
 
@@ -150,7 +146,7 @@ User.create({ name: "Pippi Langstrumpf" })
 ### Example
 
 ```js
-import { Model, ModelInstance, model, relation, src, dest } from "neo4-js";
+import { Model, ModelInstance, model, relation, hasMany, hasOne } from "neo4-js";
 
 type UserProps = {
   name?: string,
@@ -172,22 +168,23 @@ const Project: ProjectModel = new ProjectModel("Project");
 /**
  * Creating relations
  */
-const UserProjectRelation = relation("creator")
-  .src.hasMany(Project)
-  .dest.hasOne(User);
+const UserProjectRelation = relation
+  .from(User)
+  .to(Project)
+  .via("creator");
 
 /**
  * Creating ModelInstances
  */
 @model(User)
 class UserInstance extends ModelInstance<UserProps> {
-  @src(UserProjectRelation)
+  @hasMany(Project, UserProjectRelation)
   createdProjects: HasManyActions<ProjectProps, ProjectInstance>;
 }
 
 @model(Project)
 class ProjectInstance extends ModelInstance<ProjectProps> {
-  @dest(UserProjectRelation)
+  @hasOne(User, UserProjectRelation)
   creator: HasOneAction<UserProps, UserInstance>;
 }
 

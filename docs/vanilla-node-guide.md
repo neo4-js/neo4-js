@@ -25,9 +25,10 @@ var neo4js = require("neo4-js").default;
 var {
   Model,
   ModelInstance,
-  src,
   model,
-  dest,
+  hasMany,
+  hasOne,
+  extendModelInstance,
   relation,
   defaultProps,
 } = require("neo4-js");
@@ -38,23 +39,31 @@ const Person = new PersonModel("Person");
 class TaskModel extends Model {}
 const Task = new TaskModel("Task");
 
-const TaskCreatorRelation = relation("created").src
-  .hasMany(Task)
-  .dest.hasOne(Person);
+const TaskCreatorRelation = relation
+  .from(Person)
+  .to(Task)
+  .via("created");
 
-const TaskAssigneeRelation = relation("assigned").src
-  .hasMany(Task)
-  .dest.hasOne(Person);
+// Lazy initialisation is also possible, in case you don't want
+// to mind the order of your schema declaration.
+const TaskAssigneeRelation = relation
+  .from(() => Person)
+  .to(() => Task)
+  .via("assigned");
 
 class PersonInstance extends ModelInstance { }
-src(TaskAssigneeRelation, PersonInstance, "assignedTasks");
-src(TaskCreatorRelation, PersonInstance, "tasks");
-model(Person, PersonInstance);
+PersonInstance = extendModelInstance(PersonInstance);
+PersonInstance.hasMany("assignedTasks", Task, TaskAssigneeRelation);
+// Also a possibility of lazy initialisation
+PersonInstance.hasMany("tasks", () => Task, () => TaskCreatorRelation);
+PersonInstance.model(Person);
 
 class TaskInstance extends ModelInstance { }
-dest(TaskCreatorRelation, TaskInstance.creator);
-defaultProps({ title: "(empty)" }, TaskInstance);
-model(Task, TaskInstance);
+TaskInstance = extendModelInstance(TaskInstance);
+TaskInstance.hasOne("creator", Person, TaskCreatorRelation);
+TaskInstance.hasOne("assignee", Person, TaskAssigneeRelation);
+TaskInstance.defaultProps({ title: "(empty)" });
+TaskInstance.model(Task);
 
 neo4js.init({
   boltUri: "localhost",
