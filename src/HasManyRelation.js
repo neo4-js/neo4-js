@@ -21,12 +21,9 @@ function getRelationString(
   if (relationType.any) {
     return `-[r:${label} {${relationPropsStr}}]-`;
   }
-  return `${!relationType.out && !relationType.any
-    ? "<"
-    : ""}-[r:${label} {${relationPropsStr}}]-${!relationType.out &&
-  !relationType.any
-    ? ""
-    : ">"}`;
+  return `${!relationType.out && !relationType.any ? "<" : ""}-[r:${label} {${
+    relationPropsStr
+  }}]-${!relationType.out && !relationType.any ? "" : ">"}`;
 }
 
 export async function get(
@@ -43,8 +40,9 @@ export async function get(
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
-      .label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${
+      this.dest.label
+    })
     ${where}
     RETURN b, r
   `,
@@ -74,8 +72,9 @@ export async function remove(
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
-      .label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${
+      this.dest.label
+    })
     ${where}
     DELETE r
     `,
@@ -161,8 +160,9 @@ export async function count(
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
-      .label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${
+      this.dest.label
+    })
     ${where}
     RETURN COUNT(b) as b
   `,
@@ -197,8 +197,9 @@ export async function update(
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
     `
-    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${this.dest
-      .label})
+    MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${
+      this.dest.label
+    })
     ${where}
     SET ${setPropsStr}
     RETURN b

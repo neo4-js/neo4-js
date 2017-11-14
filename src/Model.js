@@ -71,8 +71,9 @@ export class Model<P, I: ModelInstance<P>> {
     );
     if (!result || result.length !== 1) {
       throw new Error(
-        `Create didn't work, cmd: "CREATE (n:${this
-          .label} {p}) RETURN n" with params: ${JSON.stringify({ p })}`
+        `Create didn't work, cmd: "CREATE (n:${
+          this.label
+        } {p}) RETURN n" with params: ${JSON.stringify({ p })}`
       );
     }
 
@@ -90,8 +91,9 @@ export class Model<P, I: ModelInstance<P>> {
 
     if (!result || result.length > 1) {
       throw new Error(
-        `Match didn't work, cmd: "MATCH (n:${this
-          .label} {guid:{guid}}) RETURN n" with params: ${JSON.stringify({
+        `Match didn't work, cmd: "MATCH (n:${
+          this.label
+        } {guid:{guid}}) RETURN n" with params: ${JSON.stringify({
           guid,
         })}`
       );
