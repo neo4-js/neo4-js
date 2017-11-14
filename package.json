@@ -40,13 +40,13 @@
   "dependencies": {
     "idx": "^1.5.0",
     "lodash": "^4.17.4",
-    "neo4j-driver": "^1.4.0",
+    "neo4j-driver": "^1.5.0",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-jest": "^21.0.2",
+    "babel-jest": "^21.2.0",
     "babel-plugin-idx": "1.5.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
@@ -59,8 +59,8 @@
     "flow-bin": "^0.54.1",
     "flow-copy-source": "^1.2.1",
     "gitbook-cli": "^2.3.2",
-    "jest": "^21.1.0",
-    "prettier": "^1.6.1",
+    "jest": "^21.2.1",
+    "prettier": "^1.8.2",
     "rimraf": "^2.6.2"
   },
   "jest": {
