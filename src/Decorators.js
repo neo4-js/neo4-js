@@ -2,7 +2,7 @@
 
 import neo4js, { Model, ModelInstance } from "./index";
 import idx from "idx";
-import { relationConnectHelper } from "./utils";
+import { connectHelper } from "./utils";
 import type { RelationType } from "./Relation";
 
 export type lazyModel = Model<*, *> | (() => Model<*, *>);
@@ -66,12 +66,12 @@ export const hasMany = connectRelationToProp(true);
 export const hasOne = connectRelationToProp(false);
 
 export const model = (model: lazyModel) => (target: any, name: string) => {
-  relationConnectHelper.models.push({
+  connectHelper.models.push({
     model,
     relations: target.prototype._relations,
     modelInstance: target,
   });
-  relationConnectHelper.tryInject();
+  connectHelper.tryInject();
 };
 
 export const defaultProps = (props: any) => {

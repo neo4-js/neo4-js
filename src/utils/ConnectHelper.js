@@ -6,7 +6,7 @@ import type { lazyModel, relationProperty } from "../Decorators";
 import { Relation } from "../Relation";
 import { lazy } from "./index";
 
-class RelationConnectHelper {
+class ConnectHelper {
   models: {
     model: lazyModel,
     modelInstance: Class<ModelInstance<*>>,
@@ -36,4 +36,4 @@ class RelationConnectHelper {
   }
 }
 
-export const relationConnectHelper = new RelationConnectHelper();
+export const connectHelper = new ConnectHelper();
