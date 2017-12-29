@@ -36,7 +36,7 @@ Array [
 `;
 
 exports[`neo4js should produce an error 1`] = `
-[Neo4jError: Unexpected end of input: expected whitespace, CONSTRAINT, INDEX, UNIQUE or a pattern (line 1, column 7 (offset: 6))
+[Neo4jError: Unexpected end of input: expected whitespace, CONSTRAINT, INDEX, [SNAPSHOT], GRAPH, >>, UNIQUE or a pattern (line 1, column 7 (offset: 6))
 "CREATE"
        ^]
 `;
