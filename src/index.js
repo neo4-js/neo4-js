@@ -4,6 +4,7 @@ import { v1 as neo4j } from "neo4j-driver";
 import idx from "idx";
 import { Model } from "./Model";
 import { ModelInstance } from "./ModelInstance";
+import debug from "debug";
 
 export type Neo4jsOptions = {
   boltUri?: string,
@@ -15,6 +16,8 @@ export type Neo4jsOptions = {
 };
 
 export * from "./types";
+
+const d = debug("neo4js:debug");
 
 class neo4js {
   options: Neo4jsOptions;
@@ -31,19 +34,24 @@ class neo4js {
       auth = neo4j.auth.basic(username, password);
     }
 
+    d("Init neo4js: %O", { ...this.options, uri, username, password });
     if (this.driver) this.close();
     this.driver = neo4j.driver(uri, auth);
   }
 
   close = () => {
+    d("Closing neo4js connection");
     this.driver.close();
   };
 
   run = (cmd: string, params?: any): Promise<any> => {
     let session = this.driver.session();
+    d("Cypher query: %s", cmd);
+    d("Params: %O", params);
     return session
       .run(cmd, params)
       .then(raw => {
+        d("Raw result: %O", raw);
         session.close();
         let result = raw.records.map(r => r.toObject()).map(r => {
           let keys = Object.keys(r);
@@ -53,6 +61,7 @@ class neo4js {
         });
         result._stats = idx(raw, r => r.summary.counters._stats);
         result._raw = raw;
+        d("Prepared result: %O", result);
         return result;
       })
       .catch(err => {
