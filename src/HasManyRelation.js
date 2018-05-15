@@ -3,6 +3,7 @@ import neo4js, { ModelInstance } from "./index";
 import { prepareWhere, prepareSet } from "./utils";
 import { keys } from "lodash";
 import type { RelationType } from "./relation";
+import type { Neo4jResultStats } from "./types";
 
 const relationPropsKey = "relationProps";
 
@@ -64,7 +65,7 @@ export async function remove(
   relationType: RelationType,
   props: any,
   relationProps?: any
-): Promise<any> {
+): Promise<Neo4jResultStats> {
   const { where, flatProps } = prepareWhere({ b: props, r: relationProps }, [
     "b",
     "r",

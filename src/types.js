@@ -26,7 +26,7 @@ export type HasManyActions<Properties, ModelInstance> = {
   remove: (
     props?: Properties,
     relationProps?: PropertiesType
-  ) => Promise<number>,
+  ) => Promise<Neo4jResultStats>,
   count: (
     props?: Properties,
     relationProps?: PropertiesType

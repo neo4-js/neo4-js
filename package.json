@@ -1,6 +1,6 @@
 {
   "name": "neo4-js",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "Neo4j graphdb object graph mapper for javascript",
   "main": "lib/index.js",
   "author": "Jan Schlacher <j.schlacher@trisoft.at>",
@@ -57,7 +57,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-3": "^6.24.1",
-    "flow-bin": "^0.59.0",
+    "flow-bin": "^0.72.0",
     "flow-copy-source": "^1.2.1",
     "gitbook-cli": "^2.3.2",
     "jest": "^21.2.1",

@@ -21,7 +21,8 @@ class ConnectHelper {
     const buf = [];
 
     this.models.forEach(m => {
-      const model = lazy(m.model);
+      // $FlowFixMe
+      const model: Model<*, *> = lazy(m.model);
       if (model) {
         model.modelInstanceClass = m.modelInstance;
         if (m.relations) {

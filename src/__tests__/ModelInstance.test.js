@@ -129,6 +129,7 @@ describe("ModelInstance", () => {
       if (task && task.props.guid) delete task.props.guid;
       expect(task).toMatchSnapshot();
 
+      // $FlowFixMe
       task = await Task.findByGuid(guid);
       if (task && task.props.guid) delete task.props.guid;
       expect(task).toMatchSnapshot();
