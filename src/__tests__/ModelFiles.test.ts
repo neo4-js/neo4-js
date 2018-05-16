@@ -1,10 +1,6 @@
-// @flow
-
 import neo4js, { Model, ModelInstance, hasMany, model, hasOne } from "../index";
-import idx from "idx";
 
-import { User, UserInstance, Task, TaskInstance } from "./model";
-import type { UserProps, TaskProps } from "./model";
+import { User, UserInstance, Task, TaskInstance, UserProps, TaskProps } from "./model";
 
 describe("Models in different files", () => {
   beforeAll(() => {
@@ -15,8 +11,8 @@ describe("Models in different files", () => {
   });
 
   beforeEach(async () => {
-    await User.create({ name: "Olaf" });
-    await User.create({ name: "Ignatz" });
+    await User.create({ firstname: "Olaf" });
+    await User.create({ firstname: "Ignatz" });
     await Task.create({ title: "Learn magic", done: true });
     await Task.create({ title: "Write more test cases", done: false });
     await Task.create({ title: "Write more test cases", done: false });
@@ -32,7 +28,7 @@ describe("Models in different files", () => {
 
   describe("create", () => {
     it("should create a instances of tasks and relate them to person instance", async () => {
-      const paul: UserInstance = await User.create({ name: "Paul" });
+      const paul: UserInstance = await User.create({ firstname: "Paul" });
 
       const propsArray: TaskProps[] = [
         {

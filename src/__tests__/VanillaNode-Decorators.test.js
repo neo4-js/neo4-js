@@ -1,14 +1,11 @@
 import neo4js, {
   Model,
   ModelInstance,
-  src,
   model,
-  dest,
   relation,
   defaultProps,
   extendModelInstance,
 } from "../index";
-import idx from "idx";
 
 class PersonModel extends Model {}
 const Person = new PersonModel("Person");

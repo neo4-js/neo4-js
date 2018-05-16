@@ -1,5 +1,3 @@
-// @flow
-
 import neo4js from "../index";
 
 describe("neo4js", () => {

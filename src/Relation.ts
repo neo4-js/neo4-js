@@ -1,27 +1,26 @@
 // @flow
 
 import neo4js, { Model, ModelInstance } from "./index";
-import type { relationProperty, lazyModel } from "./Decorators";
-import { lazy } from "./utils";
+import { relationProperty, lazyModel } from "./Decorators";
+import { lazy } from "./utils/index";
 import * as HasMany from "./HasManyRelation";
 import * as HasOne from "./HasOneRelation";
-import idx from "idx";
 
-export type RelationType = {|
+export type RelationType = {
   many: boolean,
-  out: ?boolean,
-  any: ?boolean,
-|};
+  out?: boolean,
+  any?: boolean,
+};
 
 export class Relation {
   relationType: RelationType;
-  src: Model<*, *>;
-  dest: lazyModel;
+  src: Model<any, any>;
+  dest: lazyModel<any, any>;
   propertyName: string;
   label: string;
   lazy: relationProperty;
 
-  constructor(src: Model<*, *>, property: relationProperty) {
+  constructor(src: Model<any, any>, property: relationProperty) {
     this.src = src;
     this.lazy = property;
     if (lazy(property.relation)) {
@@ -56,7 +55,7 @@ export class Relation {
     delete this.lazy;
   }
 
-  addFunctionsToInstance<T: ModelInstance<*>>(instance: T): T {
+  addFunctionsToInstance<P, M extends ModelInstance<P>>(instance: M): M {
     if (this.lazy) this.init();
     if (this.relationType.many) {
       return this.addHasManyToInstance(instance);
@@ -64,8 +63,8 @@ export class Relation {
     return this.addHasOneToInstance(instance);
   }
 
-  addHasManyToInstance(instance: ModelInstance<*>): any {
-    // $FlowFixMe
+  addHasManyToInstance<P, M extends ModelInstance<P>>(instance: M): any {
+    // @ts-ignore
     instance[this.propertyName] = {
       get: (props: any, relationProps: any = {}) =>
         HasMany.get.bind(this, instance, this.label, this.relationType)(
@@ -120,8 +119,8 @@ export class Relation {
     return instance;
   }
 
-  addHasOneToInstance(instance: ModelInstance<*>): any {
-    // $FlowFixMe
+  addHasOneToInstance<P, M extends ModelInstance<P>>(instance: M): any {
+    // @ts-ignore
     instance[this.propertyName] = {
       get: () =>
         HasOne.get.bind(this, instance, this.label, this.relationType)(),
@@ -133,7 +132,7 @@ export class Relation {
         HasOne.create.bind(this, instance, this.label, this.relationType)(
           props
         ),
-      add: (destInstance: ModelInstance<*>, label?: string) =>
+      add: (destInstance: ModelInstance<any>, label?: string) =>
         HasOne.add.bind(this, instance, this.label, this.relationType)(
           destInstance
         ),

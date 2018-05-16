@@ -1,43 +1,49 @@
-// @flow
+import { ModelInstance } from "./ModelInstance";
+
+type Optional<T> =
+  T extends object
+  ? { [P in keyof T]+?: T[P]; }
+  : T;
+  
 
 export type PropertiesType = {
   [key: string]: StringProperty | NumberProperty | boolean,
 };
 
-export type HasManyActions<Properties, ModelInstance> = {
+export type HasManyActions<P, M extends ModelInstance<P>> = {
   get: (
-    props?: Properties,
+    props?: Optional<P>,
     relationProps?: PropertiesType
-  ) => Promise<ModelInstance[]>,
+  ) => Promise<M[]>,
   update: (
-    props?: Properties,
-    where?: Properties,
+    props?: Optional<P>,
+    where?: Optional<P>,
     relationProps?: PropertiesType,
     whereRelationProps?: PropertiesType
-  ) => Promise<ModelInstance[]>,
+  ) => Promise<M[]>,
   create: (
-    props: Properties[],
+    props: P[],
     relationProps?: PropertiesType
-  ) => Promise<ModelInstance[]>,
+  ) => Promise<M[]>,
   add: (
-    instances: ModelInstance[],
+    instances: M[],
     relationProps?: PropertiesType
   ) => Promise<number>,
   remove: (
-    props?: Properties,
+    props?: Optional<P>,
     relationProps?: PropertiesType
   ) => Promise<Neo4jResultStats>,
   count: (
-    props?: Properties,
+    props?: Optional<P>,
     relationProps?: PropertiesType
   ) => Promise<number>,
 };
 
-export type HasOneActions<Properties, ModelInstance> = {
-  get: () => Promise<ModelInstance | null>,
-  update: (props: Properties) => Promise<ModelInstance | null>,
-  create: (props: Properties) => Promise<ModelInstance>,
-  add: (instance: ModelInstance) => Promise<boolean>,
+export type HasOneActions<P, M extends ModelInstance<P>> = {
+  get: () => Promise<M | null>,
+  update: (props: Optional<P>) => Promise<M | null>,
+  create: (props: P) => Promise<M>,
+  add: (instance: M) => Promise<boolean>,
   remove: () => Promise<Neo4jResultStats>,
   hasOne: () => Promise<boolean>,
 };

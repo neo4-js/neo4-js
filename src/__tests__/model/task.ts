@@ -1,5 +1,3 @@
-// @flow
-
 import neo4js, {
   Model,
   ModelInstance,
@@ -7,18 +5,15 @@ import neo4js, {
   relation,
   hasOne,
   hasMany,
-} from "../../index";
-import type {
   StringProperty,
   NumberProperty,
   HasManyActions,
   HasOneActions,
 } from "../../index";
-import { User, UserInstance, TaskCreatorRelation } from "./user";
-import type { UserProps } from "./user";
+import { User, UserProps, UserInstance, TaskCreatorRelation } from "./user";
 
 export type TaskProps = {
-  title?: StringProperty,
+  title: StringProperty,
   done?: boolean,
 };
 

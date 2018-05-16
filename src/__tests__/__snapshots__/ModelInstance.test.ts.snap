@@ -3,8 +3,8 @@
 exports[`ModelInstance Default Properties should initialize with default properties 1`] = `
 TaskInstance {
   "props": Object {
-    "done": false,
-    "title": "(empty)",
+    "done": true,
+    "title": "Write more tests boi!",
   },
 }
 `;
@@ -12,8 +12,8 @@ TaskInstance {
 exports[`ModelInstance Default Properties should initialize with default properties 2`] = `
 TaskInstance {
   "props": Object {
-    "done": false,
-    "title": "(empty)",
+    "done": true,
+    "title": "Write more tests boi!",
   },
 }
 `;

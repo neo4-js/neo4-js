@@ -2,14 +2,14 @@
 
 import { Model } from "../Model";
 import { ModelInstance } from "../ModelInstance";
-import type { lazyModel, relationProperty } from "../Decorators";
+import { lazyModel, relationProperty } from "../Decorators";
 import { Relation } from "../Relation";
 import { lazy } from "./index";
 
 class ConnectHelper {
   models: {
-    model: lazyModel,
-    modelInstance: Class<ModelInstance<*>>,
+    model: lazyModel<any, any>,
+    modelInstance: new () => ModelInstance<any>,
     relations: relationProperty[],
   }[];
 
@@ -21,8 +21,7 @@ class ConnectHelper {
     const buf = [];
 
     this.models.forEach(m => {
-      // $FlowFixMe
-      const model: Model<*, *> = lazy(m.model);
+      const model: Model<any, any> = lazy(m.model);
       if (model) {
         model.modelInstanceClass = m.modelInstance;
         if (m.relations) {

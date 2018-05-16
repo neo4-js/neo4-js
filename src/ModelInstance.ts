@@ -10,7 +10,7 @@ export class ModelInstance<T> {
   props: T & BaseProps;
 
   constructor(props: T) {
-    this.props = ({ ...(props: any) }: T & BaseProps);
+    this.props = props;
 
     forIn(this.props, (v, k) => {
       if (typeof v === "object") {

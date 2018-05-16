@@ -1,5 +1,3 @@
-// @flow
-
 let startChar = "a";
 
 export const CharGenerator = {

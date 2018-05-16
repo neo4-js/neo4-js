@@ -8,13 +8,12 @@ import neo4js, {
   hasMany,
   hasOne,
 } from "../index";
-import type {
+import {
   StringProperty,
   NumberProperty,
   HasManyActions,
   HasOneActions,
 } from "../index";
-import idx from "idx";
 
 type PersonProps = {
   name?: StringProperty,
@@ -206,18 +205,6 @@ describe("HasMany", () => {
       ).toMatchSnapshot();
     });
 
-    it("should find all tasks to instance", async () => {
-      await paul.tasks.create(tasksProps);
-      const tasks: TaskInstance[] = await paul.tasks.get();
-
-      expect(
-        tasks.map(t => {
-          delete t.props.guid;
-          return t;
-        })
-      ).toMatchSnapshot();
-    });
-
     it("should find nothing", async () => {
       await paul.tasks.create(tasksProps);
       const tasks: TaskInstance[] = await paul.assignedTasks.get();
@@ -369,7 +356,6 @@ describe("HasMany", () => {
       const relatedTasks = await paul.assignedTasks.get();
 
       const mapSort = t =>
-        // $FlowFixMe
         t.map(a => a.props).sort((a, b) => a.title.localeCompare(b.title));
       expect(mapSort(relatedTasks)).toEqual(mapSort(tasks));
     });
@@ -432,10 +418,10 @@ describe("HasMany", () => {
         assigned: 1502022002035,
       });
 
-      const result: TaskInstance[] = await paul.tasks.update({
-        relationProps: { type: "todo" },
-        whereRelationProps: { assigned: { $gt: 0 } },
-      });
+      const result: TaskInstance[] = await paul.tasks.update({}, {},
+        { type: "todo" },
+        { assigned: { $gt: 0 } },
+      );
 
       expect(
         result.map(r => {

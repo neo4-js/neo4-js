@@ -1,10 +1,10 @@
 // @flow
 
 import { v1 as neo4j } from "neo4j-driver";
-import idx from "idx";
 import { Model } from "./Model";
 import { ModelInstance } from "./ModelInstance";
-import debug from "debug";
+import * as debug from "debug";
+import { Neo4jResultStats } from ".";
 
 export type Neo4jsOptions = {
   boltUri?: string,
@@ -44,7 +44,7 @@ class neo4js {
     this.driver.close();
   };
 
-  run = (cmd: string, params?: any): Promise<any> => {
+  run = (cmd: string, params?: any): Promise<any[] & { _stats: Neo4jResultStats, _raw: any }> => {
     let session = this.driver.session();
     d("Cypher query: %s", cmd);
     d("Params: %O", params);
@@ -59,7 +59,7 @@ class neo4js {
           keys.forEach(k => (o[k] = r[k].properties));
           return o;
         });
-        result._stats = idx(raw, r => r.summary.counters._stats);
+        result._stats = raw.summary.counters._stats;
         result._raw = raw;
         d("Prepared result: %O", result);
         return result;

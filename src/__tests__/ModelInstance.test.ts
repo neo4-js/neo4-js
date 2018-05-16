@@ -8,21 +8,18 @@ import neo4js, {
   relation,
   hasOne,
   defaultProps,
-} from "../index";
-import type {
   StringProperty,
   NumberProperty,
   HasManyActions,
   HasOneActions,
 } from "../index";
-import idx from "idx";
 
 type PersonProps = {
-  name?: StringProperty,
+  name: StringProperty,
 };
 
 type TaskProps = {
-  title?: StringProperty,
+  title: StringProperty,
   done?: boolean,
 };
 
@@ -58,7 +55,7 @@ class PersonInstance extends ModelInstance<PersonProps> {
 
 @defaultProps({
   title: "(empty)",
-  done: () => false,
+  done: () => true,
 })
 @model(Task)
 class TaskInstance extends ModelInstance<TaskProps> {}
@@ -106,12 +103,12 @@ describe("ModelInstance", () => {
 
   describe("ModelInstance functions", () => {
     it("should return friends with starting name 'O'", async () => {
-      const paul: ?PersonInstance = await Person.findOne({ name: "Olaf" });
-      if (!paul) {
+      const olaf: PersonInstance = await Person.findOne({ name: "Olaf" });
+      if (!olaf) {
         expect(1).toEqual(0);
         return;
       }
-      let friends = await paul.getFriendsWithName("O");
+      let friends = await olaf.getFriendsWithName("O");
       friends = friends.map(f => {
         delete f.props.guid;
         return f;
@@ -122,14 +119,12 @@ describe("ModelInstance", () => {
 
   describe("Default Properties", () => {
     it("should initialize with default properties", async () => {
-      let task: ?TaskInstance = await Task.create({});
-      // $FlowFixMe
+      let task: TaskInstance = await Task.create({ title: "Write more tests boi!"});
       const guid = task.props.guid;
 
       if (task && task.props.guid) delete task.props.guid;
       expect(task).toMatchSnapshot();
 
-      // $FlowFixMe
       task = await Task.findByGuid(guid);
       if (task && task.props.guid) delete task.props.guid;
       expect(task).toMatchSnapshot();

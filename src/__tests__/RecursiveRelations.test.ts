@@ -7,17 +7,14 @@ import neo4js, {
   relation,
   hasOne,
   hasMany,
-} from "../index";
-import type {
   StringProperty,
   NumberProperty,
   HasManyActions,
   HasOneActions,
 } from "../index";
-import idx from "idx";
 
 type ProjectProps = {
-  name?: StringProperty,
+  name: StringProperty,
   level?: NumberProperty,
   parentGuid?: StringProperty,
 };
@@ -69,7 +66,7 @@ describe("Recursive relations", () => {
   });
 
   it("should return only parent", async () => {
-    const root = await Project.create({ level: 0 });
+    const root = await Project.create({ name: "root", level: 0 });
     await createChildren([root], 0);
     const all = await Project.find();
 

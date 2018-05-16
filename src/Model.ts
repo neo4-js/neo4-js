@@ -1,49 +1,47 @@
 // @flow
 
 import { forIn, mapValues } from "lodash";
-import uuid from "uuid";
-import idx from "idx";
-import neo4js, { ModelInstance, Relation } from "./index";
-import type { BaseProps, RelationType } from "./index";
+import * as uuid from "uuid";
+import neo4js, { ModelInstance, Relation, BaseProps, RelationType } from "./index";
 import { CharGenerator, prepareWhere, prepareSet } from "./utils";
 
-export class Model<P, I: ModelInstance<P>> {
-  label: string;
+export class Model<P, M extends ModelInstance<P>> {
+  public label: String;
   relations: Relation[];
-  modelInstanceClass: Class<ModelInstance<*>>;
+  modelInstanceClass: new (props: P) => M;
 
-  beforeCreate(props: P): P {
+  protected beforeCreate(props: P): P {
     return props;
   }
-  afterCreate(instance: I): I {
+  protected afterCreate(instance: M): M {
     return instance;
   }
 
-  beforeFind(props?: P & BaseProps): ?(P & BaseProps) {
+  protected beforeFind(props?: P & BaseProps): (P & BaseProps) | null {
     return props;
   }
-  afterFind(instance: I): I {
+  protected afterFind(instance: M): M {
     return instance;
   }
 
-  beforeUpdate(
+  protected beforeUpdate(
     props: P & BaseProps,
     newProps: P
   ): { props: P & BaseProps, newProps: P } {
     return { props, newProps };
   }
-  afterUpdate(instance: I): I {
+  protected afterUpdate(instance: M): M {
     return instance;
   }
 
-  _createModelInstance(props: P & BaseProps): I {
-    let instance = this.modelInstanceClass
+  protected _createModelInstance(props: P & BaseProps): M {
+    let instance: any = this.modelInstanceClass
       ? new this.modelInstanceClass(props)
       : new ModelInstance(props);
     this.relations.forEach(
       r => (instance = r.addFunctionsToInstance(instance))
     );
-    return ((instance: any): I);
+    return instance;
   }
 
   constructor(label: string) {
@@ -51,16 +49,15 @@ export class Model<P, I: ModelInstance<P>> {
     this.relations = [];
   }
 
-  async create(props: P): Promise<I> {
+  public async create(props: P): Promise<M> {
     let defaultProps = mapValues(
-      // $FlowFixMe
-      idx(this.modelInstanceClass, _ => _.prototype._defaultProps) || {},
+      this.modelInstanceClass ? this.modelInstanceClass.prototype._defaultProps : {},
       prop => (typeof prop === "function" ? prop() : prop)
     );
-    let p = this.beforeCreate(
-      ({ guid: uuid(), ...defaultProps, ...(props: any) }: P)
+    let p: P & BaseProps = this.beforeCreate(
+      ({ guid: uuid.v4(), ...defaultProps, ...(props as any) } as P)
     );
-    p = ({ ...(p: any) }: P & BaseProps);
+    p = ({ ...(p as any) } as P & BaseProps);
 
     const result = await neo4js.run(
       `
@@ -80,7 +77,7 @@ export class Model<P, I: ModelInstance<P>> {
     return this.afterCreate(this._createModelInstance(result[0].n));
   }
 
-  async findByGuid(guid: string): Promise<I | null> {
+  public async findByGuid(guid: string): Promise<M | null> {
     const result = await neo4js.run(
       `
         MATCH (n:${this.label} {guid:{guid}})
@@ -106,7 +103,7 @@ export class Model<P, I: ModelInstance<P>> {
     return this._createModelInstance(result[0].n);
   }
 
-  async delete(props: P & BaseProps, detach: boolean = false): Promise<number> {
+  public async delete(props: P & BaseProps, detach: boolean = false): Promise<number> {
     const { where, flatProps } = prepareWhere(props, "n");
 
     const result = await neo4js.run(
@@ -121,7 +118,7 @@ export class Model<P, I: ModelInstance<P>> {
     return result._stats.nodesDeleted;
   }
 
-  async find(props?: P & BaseProps): Promise<I[]> {
+  public async find(props?: P & BaseProps): Promise<M[]> {
     const p = this.beforeFind(props);
     const { where, flatProps } = prepareWhere(p, "n");
 
@@ -138,7 +135,7 @@ export class Model<P, I: ModelInstance<P>> {
     return result;
   }
 
-  async findOne(props?: P & BaseProps): Promise<?I> {
+  public async findOne(props?: P & BaseProps): Promise<M | null> {
     const p = this.beforeFind(props);
     const { where, flatProps } = prepareWhere(p, "n");
 
@@ -157,7 +154,7 @@ export class Model<P, I: ModelInstance<P>> {
     return Promise.resolve(null);
   }
 
-  async update(props: P & BaseProps, newProps: P): Promise<I[]> {
+  public async update(props: P & BaseProps, newProps: P): Promise<M[]> {
     const params = this.beforeUpdate(props, newProps);
     const { where, flatProps } = prepareWhere(params.props, "n");
     const { str: setPropsStr, newProps: _newProps } = prepareSet(

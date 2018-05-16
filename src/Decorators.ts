@@ -1,33 +1,34 @@
 // @flow
 
 import neo4js, { Model, ModelInstance } from "./index";
-import idx from "idx";
 import { connectHelper } from "./utils";
-import type { RelationType } from "./Relation";
+import { RelationType } from "./Relation";
+import { HasManyActions, HasOneActions } from "./types";
 
-export type lazyModel = Model<*, *> | (() => Model<*, *>);
+export type lazyModel<P, M extends ModelInstance<P>> = Model<P, M> | (() => Model<P, M> | null);
 
 export type metaRelation = {
-  from: lazyModel,
-  to: lazyModel,
+  from: lazyModel<any, any>,
+  to: lazyModel<any, any>,
   via: string,
 };
 
-export type lazyMetaRelation = metaRelation | (() => metaRelation);
+export type lazyMetaRelation
+  = metaRelation | (() => metaRelation | null);
 
 export type relationProperty = {
-  dest: lazyModel,
+  dest: lazyModel<any, any>,
   relation: lazyMetaRelation,
-  out: ?boolean,
-  any: ?boolean,
+  out?: boolean,
+  any?: boolean,
   propertyName: string,
   many: boolean,
 };
 
 export const relation = {
-  from: (from: lazyModel) => {
+  from: <P1, M1 extends ModelInstance<P1>>(from: lazyModel<P1, M1>) => {
     return {
-      to: (to: lazyModel) => {
+      to: <P2, M2 extends ModelInstance<P2>>(to: lazyModel<P2, M2>) => {
         return {
           via: (via: string): metaRelation => {
             return {
@@ -43,12 +44,12 @@ export const relation = {
 };
 
 function connectRelationToProp(many: boolean) {
-  return (
-    model: lazyModel,
+  return <P, M extends ModelInstance<P>>(
+    model: lazyModel<P, M>,
     relation: lazyMetaRelation,
     direction?: "in" | "out" | "any"
-  ) => (target: any, name: string, descriptor: any) => {
-    if (descriptor) descriptor.writable = true;
+  ) => (target: any, key: string) => {
+    //if (descriptor) descriptor.writable = true;
 
     if (!target._relations) target._relations = [];
     target._relations.push({
@@ -56,7 +57,7 @@ function connectRelationToProp(many: boolean) {
       relation,
       out: direction ? direction === "out" : null,
       any: direction ? direction === "any" : null,
-      propertyName: name,
+      propertyName: key,
       many,
     });
   };
@@ -65,7 +66,9 @@ function connectRelationToProp(many: boolean) {
 export const hasMany = connectRelationToProp(true);
 export const hasOne = connectRelationToProp(false);
 
-export const model = (model: lazyModel) => (target: any, name: string) => {
+export const model
+  = <P, M extends ModelInstance<P>>(model: lazyModel<P, M>) =>
+    (target: any) => {
   connectHelper.models.push({
     model,
     relations: target.prototype._relations,
@@ -75,28 +78,27 @@ export const model = (model: lazyModel) => (target: any, name: string) => {
 };
 
 export const defaultProps = (props: any) => {
-  return (target: any, name: string) => {
+  return (target: any) => {
     if (props) {
       target.prototype._defaultProps = props;
     }
   };
 };
 
-// Trust me flow, I know that's now optimal...I'm not happy either...
-export function extendModelInstance<T: ModelInstance<*>>(
-  instance: Class<T>
-): Class<T> {
-  // $FlowFixMe
-  instance.hasMany = (propertyName, ...args) =>
+export function extendModelInstance<P, M extends ModelInstance<P>>(
+  instance: new () => M
+): new () => M {
+  const i: any = instance;
+  i.hasMany = (propertyName, ...args) =>
+    // @ts-ignore
     hasMany(...args)(instance.prototype, propertyName, null);
-  // $FlowFixMe
-  instance.hasOne = (propertyName, ...args) =>
+  i.hasOne = (propertyName, ...args) =>
+    // @ts-ignore
     hasOne(...args)(instance.prototype, propertyName, null);
-  // $FlowFixMe
-  instance.model = (...args) => model(...args)(instance, "");
-  // $FlowFixMe
-  instance.defaultProps = (...args) => defaultProps(...args)(instance, "");
+  // @ts-ignore
+  i.model = (...args) => model(...args)(instance, "");
+  // @ts-ignore
+  i.defaultProps = (...args) => defaultProps(...args)(instance, "");
 
-  // $FlowFixMe
-  return instance;
+  return i;
 }

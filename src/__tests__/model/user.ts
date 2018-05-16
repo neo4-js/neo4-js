@@ -7,18 +7,15 @@ import neo4js, {
   relation,
   hasOne,
   hasMany,
-} from "../../index";
-import type {
   StringProperty,
   NumberProperty,
   HasManyActions,
   HasOneActions,
 } from "../../index";
-import { Task, TaskInstance, TaskAssigneeRelation } from "./task";
-import type { TaskProps } from "./task";
+import { Task, TaskProps, TaskInstance, TaskAssigneeRelation } from "./task";
 
 export type UserProps = {
-  firstname?: StringProperty,
+  firstname: StringProperty,
   lastname?: StringProperty,
 };
 

@@ -1,5 +1,3 @@
-// @flow
-
 import { prepareWhere, prepareSet } from "../QueryHelper";
 
 describe("QueryHelper", () => {

@@ -1,16 +1,15 @@
 // @flow
 
 import neo4js, { Model, ModelInstance } from "../index";
-import type {
+import {
   StringProperty,
   NumberProperty,
   HasManyActions,
   HasOneActions,
 } from "../index";
-import idx from "idx";
 
 type Props = {
-  name?: StringProperty,
+  name: StringProperty,
   age?: NumberProperty,
 };
 
@@ -181,12 +180,12 @@ describe("Model", () => {
   describe("update", () => {
     it("should update person with name olaf", async () => {
       let p = await Person.create({ name: "Olaf" });
-      p = await Person.update(p.props, { name: "Hanns" });
-      p = p.map(p => {
+      let persons = await Person.update(p.props, { name: "Hanns" });
+      persons = persons.map(p => {
         delete p.props.guid;
         return p;
       });
-      expect(p).toMatchSnapshot();
+      expect(persons).toMatchSnapshot();
     });
 
     it("should update all persons with name olaf", async () => {
@@ -211,12 +210,12 @@ describe("Model", () => {
 
     it("should update person with name olaf", async () => {
       let p = await Person.create({ name: "Olaf", age: 20 });
-      p = await Person.update(p.props, { name: "Hanns", age: 22 });
-      p = p.map(p => {
+      let persons = await Person.update(p.props, { name: "Hanns", age: 22 });
+      persons = persons.map(p => {
         delete p.props.guid;
         return p;
       });
-      expect(p).toMatchSnapshot();
+      expect(persons).toMatchSnapshot();
     });
   });
 });

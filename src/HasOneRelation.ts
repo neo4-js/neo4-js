@@ -1,6 +1,6 @@
 // @flow
 import neo4js, { ModelInstance } from "./index";
-import type { RelationType } from "./relation";
+import { RelationType } from "./relation";
 
 function getRelationString(
   label: string,
@@ -13,7 +13,7 @@ function getRelationString(
 }
 
 export async function get(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType
 ): Promise<any> {
@@ -40,7 +40,7 @@ export async function get(
 }
 
 export async function create(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType,
   props: any
@@ -72,7 +72,7 @@ export async function create(
 }
 
 export async function remove(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType
 ): Promise<any> {
@@ -91,10 +91,10 @@ export async function remove(
 }
 
 export async function add(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType,
-  destInstance: ModelInstance<*>
+  destInstance: ModelInstance<any>
 ): Promise<boolean> {
   const relationString = getRelationString(label, relationType);
   const result = await neo4js.run(
@@ -115,7 +115,7 @@ export async function add(
 }
 
 export async function hasOne(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType
 ): Promise<boolean> {
@@ -143,13 +143,13 @@ export async function hasOne(
 }
 
 export async function update(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType,
   newProps: any
 ): Promise<any> {
   const relationString = getRelationString(label, relationType);
-  let props = await neo4js.run(
+  let props: any = await neo4js.run(
     `
     MATCH (a:${this.src.label} {guid:{srcGuid}})${relationString}(b:${
       this.dest.label

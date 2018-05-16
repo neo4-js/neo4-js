@@ -2,8 +2,8 @@
 import neo4js, { ModelInstance } from "./index";
 import { prepareWhere, prepareSet } from "./utils";
 import { keys } from "lodash";
-import type { RelationType } from "./relation";
-import type { Neo4jResultStats } from "./types";
+import { RelationType } from "./relation";
+import { Neo4jResultStats } from "./types";
 
 const relationPropsKey = "relationProps";
 
@@ -28,7 +28,7 @@ function getRelationString(
 }
 
 export async function get(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType,
   props: any,
@@ -60,7 +60,7 @@ export async function get(
 }
 
 export async function remove(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType,
   props: any,
@@ -86,7 +86,7 @@ export async function remove(
 }
 
 export async function create(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType,
   propsArray: any[],
@@ -117,10 +117,10 @@ export async function create(
 }
 
 export async function add(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType,
-  instances: ModelInstance<*>[],
+  instances: ModelInstance<any>[],
   relationProps?: any
 ): Promise<number> {
   const relationString = getRelationString(label, relationType, relationProps);
@@ -147,7 +147,7 @@ export async function add(
 }
 
 export async function count(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType,
   props: any,
@@ -170,13 +170,12 @@ export async function count(
     { _srcGuid: instance.props.guid, ...flatProps }
   );
 
-  // $FlowFixMe
-  const low = idx(result, _ => _._raw.records[0]._fields[0].low) || -1;
+  const low = result._raw.records[0]._fields[0].low || -1;
   return Promise.resolve(low);
 }
 
 export async function update(
-  instance: ModelInstance<*>,
+  instance: ModelInstance<any>,
   label: string,
   relationType: RelationType,
   props: any,

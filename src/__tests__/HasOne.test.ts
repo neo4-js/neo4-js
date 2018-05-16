@@ -8,20 +8,19 @@ import neo4js, {
   hasMany,
   hasOne,
 } from "../index";
-import type {
+import {
   StringProperty,
   NumberProperty,
   HasManyActions,
   HasOneActions,
 } from "../index";
-import idx from "idx";
 
 type PersonProps = {
-  name?: string,
+  name: string,
 };
 
 type TaskProps = {
-  title?: string,
+  title: string,
   done?: boolean,
 };
 
@@ -48,6 +47,8 @@ const SupervisorRelation = relation
 
 @model(Person)
 class PersonInstance extends ModelInstance<PersonProps> {
+  static model = Person;
+
   @hasMany(() => Task, TaskCreatorRelation)
   createdTasks: HasManyActions<TaskProps, TaskInstance>;
 
@@ -62,6 +63,8 @@ class PersonInstance extends ModelInstance<PersonProps> {
 
 @model(Task)
 class TaskInstance extends ModelInstance<TaskProps> {
+  static model = Task;
+
   @hasOne(() => Task, TaskCreatorRelation)
   creator: HasOneActions<PersonProps, PersonInstance>;
 
@@ -130,14 +133,14 @@ describe("HasOne", () => {
       const hubert: PersonInstance = await paul.supervisor.create({
         name: "Hubert",
       });
-      const hubert2: ?PersonInstance = await paul.supervisor.get();
-      expect(hubert.props).toEqual(idx(hubert2, _ => _.props));
+      const hubert2: PersonInstance = await paul.supervisor.get();
+      expect(hubert.props).toEqual(hubert2.props);
     });
 
     it("should return null when no relation exists", async () => {
       const paul: PersonInstance = await Person.create({ name: "Paul" });
 
-      const nobody: ?PersonInstance = await paul.supervisor.get();
+      const nobody: PersonInstance = await paul.supervisor.get();
       expect(nobody).toEqual(null);
     });
   });
@@ -150,9 +153,9 @@ describe("HasOne", () => {
         name: "Hubert",
       });
 
-      let result = await paul.supervisor.remove();
-      expect(result).toMatchSnapshot();
-      result = await neo4js.run("MATCH (m) RETURN m");
+      let r = await paul.supervisor.remove();
+      expect(r).toMatchSnapshot();
+      let result: any[] = await neo4js.run("MATCH (m) RETURN m");
       result = result.map(node => {
         delete node.m.guid;
         return node;
@@ -170,7 +173,7 @@ describe("HasOne", () => {
       expect(result).toMatchSnapshot();
 
       expect(olaf.props).toEqual(
-        idx(await paul.supervisor.get(), _ => _.props)
+        (await paul.supervisor.get()).props
       );
     });
   });
@@ -207,7 +210,7 @@ describe("HasOne", () => {
         name: "Olaf",
       });
 
-      const ignatz: ?PersonInstance = await paul.supervisor.update({
+      const ignatz: PersonInstance = await paul.supervisor.update({
         name: "Ignatz",
       });
       if (ignatz) {
