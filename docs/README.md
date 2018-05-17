@@ -3,7 +3,6 @@
 ## Overview
 
 * [Neo4-js](/README.md)
-<!-- * [Installation](/docs/installation.md) -->
 * [Getting started](/docs/getting-started.md)
 * [Vanilla node guide](/docs/vanilla-node-guide.md)
 
