@@ -2,27 +2,34 @@ import { ModelInstance } from "./ModelInstance";
 
 export type Optional<T> = T extends object ? { [P in keyof T]+?: T[P] } : T;
 
-export type PropertiesType = {
-  [key: string]: StringProperty | NumberProperty | boolean;
-};
+export type Property<T> = T extends string
+  ? StringProperty
+  : (T extends number ? NumberProperty : T);
+
+export type PropertiesType<T> = T extends object
+  ? { [P in keyof T]: Property<T[P]> }
+  : T;
 
 export type HasManyActions<P, M extends ModelInstance<P>> = {
-  get: (props?: Optional<P>, relationProps?: PropertiesType) => Promise<M[]>;
+  get: (
+    props?: Optional<PropertiesType<P>>,
+    relationProps?: PropertiesType<any>
+  ) => Promise<M[]>;
   update: (
     props?: Optional<P>,
-    where?: Optional<P>,
-    relationProps?: PropertiesType,
-    whereRelationProps?: PropertiesType
+    where?: Optional<PropertiesType<P>>,
+    relationProps?: PropertiesType<any>,
+    whereRelationProps?: PropertiesType<any>
   ) => Promise<M[]>;
-  create: (props: P[], relationProps?: PropertiesType) => Promise<M[]>;
-  add: (instances: M[], relationProps?: PropertiesType) => Promise<number>;
+  create: (props: P[], relationProps?: PropertiesType<P>) => Promise<M[]>;
+  add: (instances: M[], relationProps?: PropertiesType<P>) => Promise<number>;
   remove: (
-    props?: Optional<P>,
-    relationProps?: PropertiesType
+    props?: Optional<PropertiesType<P>>,
+    relationProps?: PropertiesType<any>
   ) => Promise<Neo4jResultStats>;
   count: (
-    props?: Optional<P>,
-    relationProps?: PropertiesType
+    props?: Optional<PropertiesType<P>>,
+    relationProps?: PropertiesType<any>
   ) => Promise<number>;
 };
 

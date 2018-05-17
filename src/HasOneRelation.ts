@@ -1,5 +1,6 @@
 import neo4js, { ModelInstance } from "./index";
 import { RelationType } from "./Relation";
+import { createModelInstance } from "./Model";
 
 function getRelationString(
   label: string,
@@ -37,7 +38,7 @@ export async function get(
     return Promise.reject("hasOne has more than one relations");
   }
 
-  return Promise.resolve(this.dest._createModelInstance(result[0].b));
+  return Promise.resolve(createModelInstance(this.dest, result[0].b));
 }
 
 export async function create(

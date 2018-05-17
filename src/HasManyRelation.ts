@@ -3,6 +3,7 @@ import { prepareWhere, prepareSet } from "./utils";
 import { keys } from "lodash";
 import { RelationType } from "./Relation";
 import { Neo4jResultStats } from "./Types";
+import { createModelInstance } from "./Model";
 
 const relationPropsKey = "relationProps";
 
@@ -53,7 +54,8 @@ export async function get(
 
   return Promise.resolve(
     result.map(p => {
-      const instance = this.dest._createModelInstance(p.b);
+      const instance = createModelInstance(this.dest, p.b);
+      // @ts-ignore
       instance.relationProps = p.r;
       return instance;
     })
@@ -208,5 +210,5 @@ export async function update(
     { _srcGuid: instance.props.guid, ...flatProps, ...newProps }
   );
 
-  return Promise.resolve(result.map(a => this.dest._createModelInstance(a.b)));
+  return Promise.resolve(result.map(a => createModelInstance(this.dest, a.b)));
 }

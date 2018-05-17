@@ -5,22 +5,40 @@ import neo4js, {
   Relation,
   BaseProps,
   RelationType,
+  Optional,
+  PropertiesType,
 } from "./index";
 import { CharGenerator, prepareWhere, prepareSet } from "./utils";
 
+export function createModelInstance<P, M extends ModelInstance<P>>(
+  model: Model<P, M>,
+  props: P & BaseProps
+): M {
+  // @ts-ignore
+  let instance: any = model.modelInstanceClass
+    ? // @ts-ignore
+      new model.modelInstanceClass(props)
+    : new ModelInstance(props);
+  // @ts-ignore
+  model.relations.forEach(r => (instance = r.addFunctionsToInstance(instance)));
+  return instance;
+}
+
 export class Model<P, M extends ModelInstance<P>> {
   public label: String;
-  relations: Relation[];
-  modelInstanceClass: new (props: P) => M;
+  private relations: Relation[];
+  private modelInstanceClass: new (props: P) => M;
 
-  protected beforeCreate(props: P): P {
+  protected beforeCreate(props: P & BaseProps): P & BaseProps {
     return props;
   }
   protected afterCreate(instance: M): M {
     return instance;
   }
 
-  protected beforeFind(props?: P & BaseProps): (P & BaseProps) | null {
+  protected beforeFind(
+    props?: Optional<PropertiesType<P & BaseProps>>
+  ): (Optional<PropertiesType<P & BaseProps>>) | null {
     return props;
   }
   protected afterFind(instance: M): M {
@@ -28,22 +46,12 @@ export class Model<P, M extends ModelInstance<P>> {
   }
 
   protected beforeUpdate(
-    props: P & BaseProps,
-    newProps: P
-  ): { props: P & BaseProps; newProps: P } {
+    props: Optional<PropertiesType<P & BaseProps>>,
+    newProps: Optional<P>
+  ): { props: Optional<PropertiesType<P & BaseProps>>; newProps: Optional<P> } {
     return { props, newProps };
   }
   protected afterUpdate(instance: M): M {
-    return instance;
-  }
-
-  protected _createModelInstance(props: P & BaseProps): M {
-    let instance: any = this.modelInstanceClass
-      ? new this.modelInstanceClass(props)
-      : new ModelInstance(props);
-    this.relations.forEach(
-      r => (instance = r.addFunctionsToInstance(instance))
-    );
     return instance;
   }
 
@@ -63,7 +71,7 @@ export class Model<P, M extends ModelInstance<P>> {
       guid: uuid.v4(),
       ...defaultProps,
       ...(props as any),
-    } as P);
+    });
     p = { ...(p as any) } as P & BaseProps;
 
     const result = await neo4js.run(
@@ -81,7 +89,7 @@ export class Model<P, M extends ModelInstance<P>> {
       );
     }
 
-    return this.afterCreate(this._createModelInstance(result[0].n));
+    return this.afterCreate(createModelInstance(this, result[0].n));
   }
 
   public async findByGuid(guid: string): Promise<M | null> {
@@ -107,11 +115,11 @@ export class Model<P, M extends ModelInstance<P>> {
       return null;
     }
 
-    return this._createModelInstance(result[0].n);
+    return createModelInstance(this, result[0].n);
   }
 
   public async delete(
-    props: P & BaseProps,
+    props: Optional<PropertiesType<P & BaseProps>>,
     detach: boolean = false
   ): Promise<number> {
     const { where, flatProps } = prepareWhere(props, "n");
@@ -128,7 +136,9 @@ export class Model<P, M extends ModelInstance<P>> {
     return result._stats.nodesDeleted;
   }
 
-  public async find(props?: P & BaseProps): Promise<M[]> {
+  public async find(
+    props?: Optional<PropertiesType<P & BaseProps>>
+  ): Promise<M[]> {
     const p = this.beforeFind(props);
     const { where, flatProps } = prepareWhere(p, "n");
 
@@ -141,10 +151,12 @@ export class Model<P, M extends ModelInstance<P>> {
       flatProps
     );
 
-    return result.map(p => this.afterFind(this._createModelInstance(p.n)));
+    return result.map(p => this.afterFind(createModelInstance(this, p.n)));
   }
 
-  public async findOne(props?: P & BaseProps): Promise<M | null> {
+  public async findOne(
+    props?: Optional<PropertiesType<P & BaseProps>>
+  ): Promise<M | null> {
     const p = this.beforeFind(props);
     const { where, flatProps } = prepareWhere(p, "n");
 
@@ -158,12 +170,15 @@ export class Model<P, M extends ModelInstance<P>> {
     );
 
     if (result.length) {
-      return this.afterFind(this._createModelInstance(result[0].n));
+      return this.afterFind(createModelInstance(this, result[0].n));
     }
     return Promise.resolve(null);
   }
 
-  public async update(props: P & BaseProps, newProps: P): Promise<M[]> {
+  public async update(
+    props: Optional<PropertiesType<P & BaseProps>>,
+    newProps: Optional<P>
+  ): Promise<M[]> {
     const params = this.beforeUpdate(props, newProps);
     const { where, flatProps } = prepareWhere(params.props, "n");
     const { str: setPropsStr, newProps: _newProps } = prepareSet(
@@ -181,6 +196,6 @@ export class Model<P, M extends ModelInstance<P>> {
       { ...flatProps, ..._newProps }
     );
 
-    return result.map(p => this.afterUpdate(this._createModelInstance(p.n)));
+    return result.map(p => this.afterUpdate(createModelInstance(this, p.n)));
   }
 }
