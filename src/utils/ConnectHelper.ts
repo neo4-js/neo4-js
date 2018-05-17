@@ -21,8 +21,10 @@ export class ConnectHelper {
     this.models.forEach(m => {
       const model: Model<any, any> = lazy(m.model);
       if (model) {
+        // @ts-ignore
         model.modelInstanceClass = m.modelInstance;
         if (m.relations) {
+          // @ts-ignore
           model.relations = m.relations.map(r => new Relation(model, r));
         }
       } else {

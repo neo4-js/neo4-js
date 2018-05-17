@@ -14,11 +14,15 @@ export function createModelInstance<P, M extends ModelInstance<P>>(
   model: Model<P, M>,
   props: P & BaseProps
 ): M {
+  let instance: any;
+
   // @ts-ignore
-  let instance: any = model.modelInstanceClass
-    ? // @ts-ignore
-      new model.modelInstanceClass(props)
-    : new ModelInstance(props);
+  if (model.modelInstanceClass) {
+    // @ts-ignore
+    instance = new model.modelInstanceClass(props);
+  } else {
+    instance = new ModelInstance(props);
+  }
   // @ts-ignore
   model.relations.forEach(r => (instance = r.addFunctionsToInstance(instance)));
   return instance;
