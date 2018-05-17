@@ -4,7 +4,7 @@ import { lazyModel, relationProperty } from "../Decorators";
 import { Relation } from "../Relation";
 import { lazy } from "./index";
 
-class ConnectHelper {
+export class ConnectHelper {
   models: {
     model: lazyModel<any, any>;
     modelInstance: new () => ModelInstance<any>;

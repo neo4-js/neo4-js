@@ -1,6 +1,6 @@
 import { ModelInstance } from "./ModelInstance";
 
-type Optional<T> = T extends object ? { [P in keyof T]+?: T[P] } : T;
+export type Optional<T> = T extends object ? { [P in keyof T]+?: T[P] } : T;
 
 export type PropertiesType = {
   [key: string]: StringProperty | NumberProperty | boolean;

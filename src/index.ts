@@ -17,7 +17,7 @@ export * from "./Types";
 
 const d = debug("neo4js:debug");
 
-class neo4js {
+export class neo4js {
   options: Neo4jsOptions;
   driver: any;
 
