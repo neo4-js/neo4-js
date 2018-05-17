@@ -7,10 +7,14 @@ import neo4js, {
   extendModelInstance,
 } from "../index";
 
+// @ts-ignore
 class PersonModel extends Model {}
+// @ts-ignore
 const Person = new PersonModel("Person");
 
+// @ts-ignore
 class TaskModel extends Model {}
+// @ts-ignore
 const Task = new TaskModel("Task");
 
 const TaskCreatorRelation = relation
@@ -23,20 +27,30 @@ const TaskAssigneeRelation = relation
   .to(() => Task)
   .via("assigned");
 
+  // @ts-ignore
 class PersonInstance extends ModelInstance {}
+// @ts-ignore
 PersonInstance = extendModelInstance(PersonInstance);
+// @ts-ignore
 PersonInstance.hasMany("assignedTasks", () => Task, TaskCreatorRelation);
+// @ts-ignore
 PersonInstance.hasMany("tasks", () => Task, TaskAssigneeRelation);
+// @ts-ignore
 PersonInstance.model(Person);
 
+// @ts-ignore
 class TaskInstance extends ModelInstance {
   creator;
 }
+// @ts-ignore
 TaskInstance = extendModelInstance(TaskInstance);
+// @ts-ignore
 TaskInstance.hasOne("creator", () => Person, () => TaskCreatorRelation);
+// @ts-ignore
 TaskInstance.defaultProps({
   title: "(empty)",
 });
+// @ts-ignore
 TaskInstance.model(() => Task);
 
 describe("VanillaNodeDecorators", () => {
