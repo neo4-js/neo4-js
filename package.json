@@ -51,6 +51,7 @@
     "jest": "^21.2.1",
     "prettier": "^1.12.1",
     "rimraf": "^2.6.2",
+    "ts-jest": "^22.4.6",
     "typescript": "^2.8.3"
   },
   "jest": {
@@ -58,8 +59,9 @@
       "ts",
       "js"
     ],
+    "mapCoverage": true,
     "transform": {
-      "^.+\\.ts?$": "<rootDir>/preprocessor.js"
+      "^.+\\.ts?$": "ts-jest"
     },
     "testRegex": "/__tests__/.*\\.test\\.(ts|js)$"
   }

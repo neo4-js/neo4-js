@@ -215,5 +215,14 @@ describe("HasOne", () => {
         expect(1).toEqual(0);
       }
     });
+
+    it("should return true if no supervisor can be updated", async () => {
+      const paul: PersonInstance = await Person.create({ name: "Paul" });
+
+      const ignatz: PersonInstance = await paul.supervisor.update({
+        name: "Ignatz",
+      });
+      expect(ignatz).toEqual(true);
+    });
   });
 });

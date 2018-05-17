@@ -9,13 +9,5 @@ export class ModelInstance<T> {
 
   constructor(props: T) {
     this.props = props;
-
-    forIn(this.props, (v, k) => {
-      if (typeof v === "object") {
-        if (v.low) {
-          this.props[k] = v.low;
-        }
-      }
-    });
   }
 }
