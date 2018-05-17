@@ -1,0 +1,377 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Getting started · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-theme-api/theme-api.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="vanilla-node-guide.html" />
+    
+    
+    <link rel="prev" href="../" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        <li class="header">Overview</li>
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Neo4-js
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.2" data-path="getting-started.html">
+            
+                <a href="getting-started.html">
+            
+                    
+                    Getting started
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="vanilla-node-guide.html">
+            
+                <a href="vanilla-node-guide.html">
+            
+                    
+                    Vanilla node guide
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">API Reference</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="model.html">
+            
+                <a href="model.html">
+            
+                    
+                    Model
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="modelinstance.html">
+            
+                <a href="modelinstance.html">
+            
+                    
+                    ModelInstance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="relations.html">
+            
+                <a href="relations.html">
+            
+                    
+                    Relations
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >Getting started</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="getting-upn-running-with-neo4-js">Getting up&apos;n running with Neo4-js</h1>
+<p>At this point you should already have done the installation guide for your platform. Otherwise I can&apos;t promise that your autocomplete results are satisfying. For the purpose of simplicity we are going to create a simple database model for a todo application (I know, at this point anybody is sick of todo tutorials in the JavaScript world, but bear with me ;).</p>
+<p>To get started you can clone or download the zip of the neo4js git repository with the following commands:</p>
+<pre class="language-"><code class="lang-bash"><span class="token function">git</span> clone https://github.com/JanPeter/neo4js
+<span class="token function">cd</span> neo4js/examples/starter
+yarn <span class="token function">install</span>
+</code></pre>
+<p>If you prefer to use <code>npm</code> or any other JavaScript package manager, just go with it instead of <code>yarn</code> ;)</p>
+<p>The first thing we need to specify is, which properties our model will have. To keep it simple we just have a <code>User</code> and <code>Todo</code> entity. The user has the properties name of the type <code>string</code> and <code>age</code> of the type <code>number</code>(the age is just to have at least one property of the type number, I agree that it wouldn&apos;t make a lot of sense to store this information for a todo-app, but anyways). The properties are stored in the file <code>./flow/model.js</code> and looks like the following:</p>
+<pre class="language-"><code class="lang-js">declare type UserProps <span class="token operator">=</span> <span class="token punctuation">{</span>
+  name<span class="token operator">?</span><span class="token punctuation">:</span> string<span class="token punctuation">,</span>
+  age<span class="token operator">?</span><span class="token punctuation">:</span> number<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+declare type TodoProps <span class="token operator">=</span> <span class="token punctuation">{</span>
+  description<span class="token operator">?</span><span class="token punctuation">:</span> string<span class="token punctuation">,</span>
+  done<span class="token operator">?</span><span class="token punctuation">:</span> boolean<span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>Why do we need to specify each property as an optional value? Because we use this type to validate the parameters when we create, search, update or delete our model. I&apos;m going to explain this later when we actually create an entity, it&apos;ll make more sense if you have a look at the code below in a minute. Now that we have defined our property types we can start defining our Model itself. Go into the file <code>./src/model.js</code> and paste the following code into it:</p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// @flow</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> Model<span class="token punctuation">,</span> ModelInstance<span class="token punctuation">,</span> <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&apos;neo4-js&apos;</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">UserModel</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>UserProps<span class="token punctuation">,</span> UserInstance<span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> User<span class="token punctuation">:</span> UserModel <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">UserModel</span><span class="token punctuation">(</span><span class="token string">&quot;User&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">UserInstance</span> <span class="token keyword">extends</span> <span class="token class-name">ModelInstance</span><span class="token operator">&lt;</span>UserProps<span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">TodoModel</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>TodoProps<span class="token punctuation">,</span> TodoInstance<span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+<span class="token keyword">export</span> <span class="token keyword">const</span> Todo<span class="token punctuation">:</span> TodoModel <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TodoModel</span><span class="token punctuation">(</span><span class="token string">&quot;Todo&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">export</span> <span class="token keyword">class</span> <span class="token class-name">TodoInstance</span> <span class="token keyword">extends</span> <span class="token class-name">ModelInstance</span><span class="token operator">&lt;</span>TodoProps<span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+</code></pre>
+<p>In <code>neo4-js</code> a model consists of two parts. The first part is the <code>Model</code> class, which let&apos;s you do basic CRUD interactions with the neo4j database and the second one is the <code>ModelInstance</code> class. Each time the <code>Model</code> returns an instance, it will be an instance of the <code>ModelInstance</code>. So if we call <code>User.findOne({ name: &quot;Olaf&quot; })</code> we will get an instance of <code>UserInstance</code> with the properties of the <code>UserProps</code> type (actually we will get a <code>Promise</code> which resolves a <code>UserInstance</code>).</p>
+<p>Great, that&apos;s actually everything we need to test our small model for the first time! &#x1F64C;</p>
+<p>To do that we need to go into our <code>./src/index.js</code> file and paste the following code into it. At this point you can try out the autocomplete stuff and check if flow is working for you (to test if flow is working, just try to change the type of the <code>age</code> property to a <code>string</code> instead of a <code>number</code>, flow should report an error)!</p>
+<pre class="language-"><code class="lang-js"><span class="token comment" spellcheck="true">// @flow</span>
+
+<span class="token keyword">import</span> neo4js <span class="token keyword">from</span> <span class="token string">&quot;neo4-js&quot;</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> User<span class="token punctuation">,</span> Todo <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;./model.js&quot;</span><span class="token punctuation">;</span>
+
+neo4js<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  boltUri<span class="token punctuation">:</span> <span class="token string">&quot;localhost&quot;</span><span class="token punctuation">,</span>
+  boltPort<span class="token punctuation">:</span> <span class="token number">10001</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> olaf <span class="token operator">=</span> <span class="token keyword">await</span> User<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token punctuation">:</span> <span class="token string">&quot;Olaf&quot;</span><span class="token punctuation">,</span> age<span class="token punctuation">:</span> <span class="token number">22</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>olaf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">const</span> todo <span class="token operator">=</span> <span class="token keyword">await</span> Todo<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    description<span class="token punctuation">:</span> <span class="token string">&quot;Create an awesome application with neo4-js!&quot;</span><span class="token punctuation">,</span>
+    done<span class="token punctuation">:</span> <span class="token boolean">false</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>todo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  neo4js<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>Before you start the application, make sure that docker is running and that you are running the <code>yarn start-db</code> command in another command line interface. Now go to your command line and run the app with the <code>yarn start</code> command.</p>
+<p>After running the <code>start</code> command you should see that the create function returns instances of our ModelInstance classes whereas the properties are stored in a <code>props</code> property within the instance. At this point you should recognize the <code>guid</code> property! In typical relational databases you&apos;ll almost end up creating an artificial auto incrementing primary key. I chose to use guid&apos;s as the primary key for each model instance. So when you create an instance of your model, the <code>guid</code> will be created automatically for you. I think that guid&apos;s are a great way to identify entities in a database and simplify the communication with other applications a lot!</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Getting started","level":"1.2","depth":1,"next":{"title":"Vanilla node guide","level":"1.3","depth":1,"path":"docs/vanilla-node-guide.md","ref":"docs/vanilla-node-guide.md","articles":[]},"previous":{"title":"Neo4-js","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["theme-api","edit-link","prism","-highlight","github","anchorjs"],"pluginsConfig":{"prism":{},"github":{"url":"https://github.com/JanPeter/neo4js/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-api":{"languages":[{"lang":"js","name":"JavaScript","default":true}],"split":true,"theme":"light"},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/JanPeter/neo4js/tree/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"docs/getting-started.md","mtime":"2017-08-28T08:08:17.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-17T09:01:24.387Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-anchorjs/anchor-style.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-theme-api/theme-api.js"></script>
+        
+    
+
+    </body>
+</html>
+

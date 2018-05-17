@@ -1,0 +1,75 @@
+{
+  "name": "neo4-js",
+  "version": "3.1.0",
+  "description": "Neo4j graphdb object graph mapper for javascript",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "author": "Jan Schlacher <j.schlacher@trisoft.at>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/neo4-js/neo4-js"
+  },
+  "keywords": [
+    "neo4j",
+    "typescript",
+    "neo4js",
+    "neo4-js",
+    "orm",
+    "ogm",
+    "object relation mapper",
+    "object graph mapper",
+    "library",
+    "graphdb",
+    "database"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn build:clean && yarn build:lib",
+    "build:clean": "rimraf lib",
+    "build:lib": "tsc",
+    "prepublish": "yarn build",
+    "test": "jest --runInBand",
+    "test:watch": "yarn test -- --watch",
+    "start-db": "./scripts/neo4j-startup.sh",
+    "prettier": "prettier --trailing-comma es5 --write 'src/**/*.ts'",
+    "docs:clean": "rimraf _book",
+    "docs:prepare": "gitbook install",
+    "docs:watch": "npm run docs:prepare && gitbook serve",
+    "docs:build": "npm run docs:prepare && npm run docs:clean && gitbook build",
+    "docs:publish": "npm run docs:clean && npm run docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:janpeter/neo4js gh-pages --force"
+  },
+  "dependencies": {
+    "debug": "^3.1.0",
+    "gitbook-plugin-anchorjs": "^2.0.0",
+    "gitbook-plugin-edit-link": "^2.0.2",
+    "gitbook-plugin-github": "^2.0.0",
+    "gitbook-plugin-prism": "^2.3.0",
+    "gitbook-plugin-theme-api": "^1.1.2",
+    "lodash": "^4.17.10",
+    "neo4j-driver": "^1.5.0",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/debug": "^0.0.30",
+    "@types/jest": "^22.2.3",
+    "@types/lodash": "^4.14.108",
+    "@types/uuid": "^3.4.3",
+    "gitbook-cli": "^2.3.2",
+    "jest": "^21.2.1",
+    "prettier": "^1.12.1",
+    "rimraf": "^2.6.2",
+    "ts-jest": "^22.4.6",
+    "typescript": "^2.8.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "mapCoverage": true,
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    },
+    "testRegex": "/__tests__/.*\\.test\\.(ts|js)$"
+  }
+}

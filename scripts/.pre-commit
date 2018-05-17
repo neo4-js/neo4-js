@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo "start pre-commit hook"
+
+staged="$(git diff --staged --diff-filter=dx --name-only HEAD | grep ".*\.ts$")"
+
+count="$(echo "$staged" | grep -c .)"
+
+echo "$staged" | xargs -I % sh -c './node_modules/.bin/prettier --trailing-comma es5 --write %; git add %'
+
+echo "run prettier on ${count} files"
+echo "pre-commit hook done"

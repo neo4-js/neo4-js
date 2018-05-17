@@ -1,0 +1,144 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HasOne add should add created supervisor 1`] = `true`;
+
+exports[`HasOne create should create one supervisor 1`] = `
+PersonInstance {
+  "assignedTasks": Object {
+    "add": [Function],
+    "count": [Function],
+    "create": [Function],
+    "get": [Function],
+    "remove": [Function],
+    "update": [Function],
+  },
+  "createdTasks": Object {
+    "add": [Function],
+    "count": [Function],
+    "create": [Function],
+    "get": [Function],
+    "remove": [Function],
+    "update": [Function],
+  },
+  "epmloyees": Object {
+    "add": [Function],
+    "count": [Function],
+    "create": [Function],
+    "get": [Function],
+    "remove": [Function],
+    "update": [Function],
+  },
+  "props": Object {
+    "name": "Hubert",
+  },
+  "supervisor": Object {
+    "add": [Function],
+    "create": [Function],
+    "get": [Function],
+    "hasOne": [Function],
+    "remove": [Function],
+    "update": [Function],
+  },
+}
+`;
+
+exports[`HasOne hasOne should return true 1`] = `true`;
+
+exports[`HasOne remove should remove supervisor relation without deleting supervisor 1`] = `
+Object {
+  "constraintsAdded": 0,
+  "constraintsRemoved": 0,
+  "indexesAdded": 0,
+  "indexesRemoved": 0,
+  "labelsAdded": 0,
+  "labelsRemoved": 0,
+  "nodesCreated": 0,
+  "nodesDeleted": 0,
+  "propertiesSet": 0,
+  "relationshipsCreated": 0,
+  "relationshipsDeleted": 1,
+}
+`;
+
+exports[`HasOne remove should remove supervisor relation without deleting supervisor 2`] = `
+Array [
+  Object {
+    "m": Object {
+      "name": "Olaf",
+    },
+  },
+  Object {
+    "m": Object {
+      "name": "Ignatz",
+    },
+  },
+  Object {
+    "m": Object {
+      "done": true,
+      "title": "Learn magic",
+    },
+  },
+  Object {
+    "m": Object {
+      "done": false,
+      "title": "Write more test cases",
+    },
+  },
+  Object {
+    "m": Object {
+      "done": false,
+      "title": "Write more test cases",
+    },
+  },
+  Object {
+    "m": Object {
+      "name": "Paul",
+    },
+  },
+  Object {
+    "m": Object {
+      "name": "Hubert",
+    },
+  },
+]
+`;
+
+exports[`HasOne update should update supervisor 1`] = `
+PersonInstance {
+  "assignedTasks": Object {
+    "add": [Function],
+    "count": [Function],
+    "create": [Function],
+    "get": [Function],
+    "remove": [Function],
+    "update": [Function],
+  },
+  "createdTasks": Object {
+    "add": [Function],
+    "count": [Function],
+    "create": [Function],
+    "get": [Function],
+    "remove": [Function],
+    "update": [Function],
+  },
+  "epmloyees": Object {
+    "add": [Function],
+    "count": [Function],
+    "create": [Function],
+    "get": [Function],
+    "remove": [Function],
+    "update": [Function],
+  },
+  "props": Object {
+    "name": "Ignatz",
+  },
+  "supervisor": Object {
+    "add": [Function],
+    "create": [Function],
+    "get": [Function],
+    "hasOne": [Function],
+    "remove": [Function],
+    "update": [Function],
+  },
+}
+`;

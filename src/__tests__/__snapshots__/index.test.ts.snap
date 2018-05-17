@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`neo4js should create a bunch of persons and select them 1`] = `
+Array [
+  Object {
+    "n": Object {
+      "name": "Hanns",
+    },
+  },
+  Object {
+    "n": Object {
+      "name": "Huber",
+    },
+  },
+]
+`;
+
+exports[`neo4js should create a person 1`] = `
+Array [
+  Object {
+    "n": Object {
+      "name": "Hanns",
+    },
+  },
+]
+`;
+
+exports[`neo4js should create a person with params 1`] = `
+Array [
+  Object {
+    "n": Object {
+      "name": "Hanns",
+    },
+  },
+]
+`;
+
+exports[`neo4js should produce an error 1`] = `
+[Neo4jError: Unexpected end of input: expected whitespace, CONSTRAINT, INDEX, [SNAPSHOT], GRAPH, >>, UNIQUE or a pattern (line 1, column 7 (offset: 6))
+"CREATE"
+       ^]
+`;

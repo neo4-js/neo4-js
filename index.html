@@ -1,0 +1,408 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Neo4-js · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="gitbook/gitbook-plugin-theme-api/theme-api.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="docs/getting-started.html" />
+    
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        <li class="header">Overview</li>
+        
+        
+    
+        <li class="chapter active" data-level="1.1" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Neo4-js
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="docs/getting-started.html">
+            
+                <a href="docs/getting-started.html">
+            
+                    
+                    Getting started
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="docs/vanilla-node-guide.html">
+            
+                <a href="docs/vanilla-node-guide.html">
+            
+                    
+                    Vanilla node guide
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">API Reference</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="docs/model.html">
+            
+                <a href="docs/model.html">
+            
+                    
+                    Model
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="docs/modelinstance.html">
+            
+                <a href="docs/modelinstance.html">
+            
+                    
+                    ModelInstance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.3" data-path="docs/relations.html">
+            
+                <a href="docs/relations.html">
+            
+                    
+                    Relations
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="." >Neo4-js</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="neo4-js">Neo4-js</h1>
+<p><a href="https://travis-ci.org/neo4-js/neo4-js" target="_blank"><img src="https://travis-ci.org/neo4-js/neo4-js.svg?branch=master" alt="Build Status"></a> <a href="https://david-dm.org/janpeter/neo4js" target="_blank"><img src="https://david-dm.org/neo4-js/neo4-js/status.svg" alt="dependencies Status"></a> <a href="https://david-dm.org/neo4-js/neo4-js?type=dev" target="_blank"><img src="https://david-dm.org/neo4-js/neo4-js/dev-status.svg" alt="devDependencies Status"></a> <a href="https://github.com/prettier/prettier" target="_blank"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg" alt="styled with prettier"></a></p>
+<p>Neo4-js is a object-graph mapper for JavaScript and neo4j with full TypeScript support. Neo4-js hides repetitive queries such as the basic CRUD operations to the developer. For best development experience use TypeScript to obtain good autocomplete results.</p>
+<h2 id="usage">Usage</h2>
+<p>With neo4-js you are able to quickly define your data model but maintain complete control over your models. The following code snipped shows how you can work with neo4-js.</p>
+<pre class="language-"><code>type PersonProps = {
+  name?: StringProperty;
+};
+
+type TaskProps = {
+  title?: StringProperty;
+  done?: boolean;
+};
+
+class PersonModel extends Model<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PersonProps,</span> <span class="token attr-name">PersonInstance</span><span class="token punctuation">&gt;</span></span> {}
+const Person: PersonModel = new PersonModel(&quot;Person&quot;);
+
+class TaskModel extends Model<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>TaskProps,</span> <span class="token attr-name">TaskInstance</span><span class="token punctuation">&gt;</span></span> {}
+const Task: TaskModel = new TaskModel(&quot;Task&quot;);
+
+const TaskCreatorRelation = relation
+  .from(() =&gt; Person)
+  .to(() =&gt; Task)
+  .via(&quot;created&quot;);
+
+const TaskAssigneeRelation = relation
+  .from(Person)
+  .to(Task)
+  .via(&quot;assigned&quot;);
+
+@model(Person)
+class PersonInstance extends ModelInstance<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PersonProps</span><span class="token punctuation">&gt;</span></span> {
+  @hasMany(Task, TaskCreatorRelation)
+  tasks: HasManyActions<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>TaskProps,</span> <span class="token attr-name">TaskInstance</span><span class="token punctuation">&gt;</span></span>;
+
+  @hasMany(Task, TaskAssigneeRelation)
+  assignedTasks: HasManyActions<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>TaskProps,</span> <span class="token attr-name">TaskInstance</span><span class="token punctuation">&gt;</span></span>;
+}
+
+@model(Task)
+class TaskInstance extends ModelInstance<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>TaskProps</span><span class="token punctuation">&gt;</span></span> {
+  @hasOne(() =&gt; Person, () =&gt; TaskCreatorRelation)
+  creator: HasOneActions<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PersonProps,</span> <span class="token attr-name">PersonInstance</span><span class="token punctuation">&gt;</span></span>;
+}
+
+(async () =&gt; {
+  const paul: PersonInstance = await Person.create({ name: &quot;Paul&quot; });
+
+  const propsArray: TaskProps[] = [
+    {
+      title: &quot;Buy milk&quot;,
+    },
+    {
+      title: &quot;Buy beer&quot;,
+      done: false,
+    },
+  ];
+
+  const tasks: TaskInstance[] = await paul.tasks.create(propsArray);
+})();
+</code></pre><h2 id="documentation">Documentation</h2>
+<p>The documentation is not completed yet but you&apos;ll find the basics on <a href="https://neo4.js.org" target="_blank">neo4.js.org</a>. Any help is very much appreciated!</p>
+<h2 id="installing">Installing</h2>
+<p>To use neo4-js properly you need to add TypeScript to your project. For now we also install <code>ts-node</code> so that we are able to run our code without compiling it manually before running.</p>
+<pre class="language-"><code>yarn add -D typescript ts-node
+</code></pre><p>I recommend using the following <code>tsconfig.json</code> configuration.</p>
+<pre class="language-"><code>{
+  &quot;compilerOptions&quot;: {
+    &quot;module&quot;: &quot;commonjs&quot;,
+    &quot;moduleResolution&quot;: &quot;node&quot;,
+    &quot;target&quot;: &quot;ES6&quot;,
+    &quot;experimentalDecorators&quot;: true,
+  }
+}
+</code></pre><p>You might also install Docker to quickly create a neo4j database without any further installations. For neo4-js I used the following bash script to start a neo4j instance in docker. To run it you might create a scripts directory and add the following to <code>neo4j-startup.sh</code>, make sure you can execute the script with <code>chmod 777 neo4j-startup.sh</code> (because why not 777 on my local machine :P).</p>
+<pre class="language-"><code># REST PORT: 10000
+# BOLT PORT: 10001
+echo &quot;docker run -p 10000:7474 -p 10001:7687 --rm --env=NEO4J_AUTH=none neo4j&quot;
+docker run -p 10000:7474 -p 10001:7687 --rm --env=NEO4J_AUTH=none neo4j
+</code></pre><p>The only runtime dependency you need to start using neo4-js is neo4-js itself.</p>
+<pre class="language-"><code>yarn add neo4-js
+</code></pre><h2 id="built-with">Built With</h2>
+<ul>
+<li><a href="https://www.typescriptlang.org/" target="_blank">TypeScript</a> - TypeScript is a typed superset of Javascript that compiles to plain Javascript. </li>
+</ul>
+<h2 id="contributing">Contributing</h2>
+<p>Feel free to send a pull request or create an issue for bugs or feature requests.</p>
+<h2 id="authors">Authors</h2>
+<ul>
+<li><strong>Jan Schlacher</strong> - <em>Initial work</em></li>
+</ul>
+<h2 id="license">License</h2>
+<p>This project is licensed under the MIT License - see the <a href="LICENSE.md">LICENSE.md</a> file for details</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Neo4-js","level":"1.1","depth":1,"next":{"title":"Getting started","level":"1.2","depth":1,"path":"docs/getting-started.md","ref":"docs/getting-started.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["theme-api","edit-link","prism","-highlight","github","anchorjs"],"pluginsConfig":{"prism":{},"github":{"url":"https://github.com/JanPeter/neo4js/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-api":{"languages":[{"lang":"js","name":"JavaScript","default":true}],"split":true,"theme":"light"},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/JanPeter/neo4js/tree/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2018-05-17T08:58:52.803Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-17T09:01:24.387Z"},"basePath":".","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="gitbook/gitbook.js"></script>
+    <script src="gitbook/theme.js"></script>
+    
+        
+        <script src="gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-anchorjs/anchor-style.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+        
+        <script src="gitbook/gitbook-plugin-theme-api/theme-api.js"></script>
+        
+    
+
+    </body>
+</html>
+

@@ -1,0 +1,12 @@
+lib/
+node_modules/
+.nyc_output/
+coverage/
+.idea/
+jsconfig.json
+npm-debug.log
+.vscode/
+.DS_Store
+_book
+*.swp
+legacy/

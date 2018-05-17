@@ -1,0 +1,503 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Relations · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-prism/prism.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-theme-api/theme-api.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="modelinstance.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        <li class="header">Overview</li>
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Neo4-js
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="getting-started.html">
+            
+                <a href="getting-started.html">
+            
+                    
+                    Getting started
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="vanilla-node-guide.html">
+            
+                <a href="vanilla-node-guide.html">
+            
+                    
+                    Vanilla node guide
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+        
+        <li class="header">API Reference</li>
+        
+        
+    
+        <li class="chapter " data-level="2.1" data-path="model.html">
+            
+                <a href="model.html">
+            
+                    
+                    Model
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="2.2" data-path="modelinstance.html">
+            
+                <a href="modelinstance.html">
+            
+                    
+                    ModelInstance
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="2.3" data-path="relations.html">
+            
+                <a href="relations.html">
+            
+                    
+                    Relations
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >Relations</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="relations">Relations</h1>
+<p>In this section we&apos;ll have a look at how to define relations and how to use them in our applications. In neo4-js exist two types of relations, HasMany and HasOne relations. With those two relation types you&apos;ll be able to create <a href="#mton"><code>m:n</code></a> and <a href="#oneton"><code>1:n</code></a> relations.</p>
+<h2 id="hasmany-functions">HasMany functions</h2>
+<ul>
+<li><a href="#hmcreate"><code>create(props[], relationProps?)</code></a></li>
+<li><a href="#hmadd"><code>add(instances[], relationProps?)</code></a></li>
+<li><a href="#hmupdate"><code>update(props, where?, relationProps?)</code></a></li>
+<li><a href="#hmget"><code>get(props?, relationProps?)</code></a></li>
+<li><a href="#hmremove"><code>remove(props?, relationProps?)</code></a></li>
+<li><a href="#hmcount"><code>count(props?, relationProps?)</code></a></li>
+</ul>
+<h2 id="hasone-functions">HasOne functions</h2>
+<ul>
+<li><a href="#hocreate"><code>create(props)</code></a></li>
+<li><a href="#hoadd"><code>add(instance)</code></a></li>
+<li><a href="#houpdate"><code>update(props)</code></a></li>
+<li><a href="#hoget"><code>get()</code></a></li>
+<li><a href="#horemove"><code>remove()</code></a></li>
+<li><a href="#hocount"><code>hasOne()</code></a></li>
+</ul>
+<h2 id="mton">Defining m:n relations </h2>
+<h3 id="example">Example</h3>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> Model<span class="token punctuation">,</span> ModelInstance<span class="token punctuation">,</span> model<span class="token punctuation">,</span> relation<span class="token punctuation">,</span> hasMany<span class="token punctuation">,</span> hasOne <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;neo4-js&quot;</span><span class="token punctuation">;</span>
+
+type UserProps <span class="token operator">=</span> <span class="token punctuation">{</span>
+  name<span class="token operator">?</span><span class="token punctuation">:</span> string<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+type ProjectProps <span class="token operator">=</span> <span class="token punctuation">{</span>
+  title<span class="token operator">?</span><span class="token punctuation">:</span> string<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * Creating Models
+ */</span>
+<span class="token keyword">class</span> <span class="token class-name">UserModel</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>UserProps<span class="token punctuation">,</span> UserInstance<span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+<span class="token keyword">const</span> User<span class="token punctuation">:</span> UserModel <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">UserModel</span><span class="token punctuation">(</span><span class="token string">&quot;User&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">ProjectModel</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>ProjectProps<span class="token punctuation">,</span> ProjectInstance<span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+<span class="token keyword">const</span> Project<span class="token punctuation">:</span> ProjectModel <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProjectModel</span><span class="token punctuation">(</span><span class="token string">&quot;Project&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * Creating relations
+ * Reads like &quot;User assigned to Project&quot;
+ */</span>
+<span class="token keyword">const</span> UserProjectRelation <span class="token operator">=</span> relation
+  <span class="token punctuation">.</span><span class="token keyword">from</span><span class="token punctuation">(</span>User<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span>Project<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">via</span><span class="token punctuation">(</span><span class="token string">&quot;member&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * Creating the ModelInstances and connecting the properties
+ * to the relation. At this point we need to specify if the
+ * relation is 1:n or n:m with the hasOne and hasMany decorators.
+ */</span>
+@<span class="token function">model</span><span class="token punctuation">(</span>User<span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">UserInstance</span> <span class="token keyword">extends</span> <span class="token class-name">ModelInstance</span><span class="token operator">&lt;</span>UserProps<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  @<span class="token function">hasMany</span><span class="token punctuation">(</span>Project<span class="token punctuation">,</span> UserProjectRelation<span class="token punctuation">)</span>
+  projects<span class="token punctuation">:</span> HasManyActions<span class="token operator">&lt;</span>ProjectProps<span class="token punctuation">,</span> ProjectInstance<span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+@<span class="token function">model</span><span class="token punctuation">(</span>Project<span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">ProjectInstance</span> <span class="token keyword">extends</span> <span class="token class-name">ModelInstance</span><span class="token operator">&lt;</span>ProjectProps<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  @<span class="token function">hasMany</span><span class="token punctuation">(</span>User<span class="token punctuation">,</span> UserProjectRelation<span class="token punctuation">)</span>
+  members<span class="token punctuation">:</span> HasManyActions<span class="token operator">&lt;</span>UserProps<span class="token punctuation">,</span> UserInstance<span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+User<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token punctuation">:</span> <span class="token string">&quot;Pippi Langstrumpf&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>user<span class="token punctuation">:</span> UserInstance<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> user<span class="token punctuation">.</span>projects<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">{</span> title<span class="token punctuation">:</span> <span class="token string">&quot;Pippi on the Run&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>projects<span class="token punctuation">:</span> ProjectInstance<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token operator">...</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h2 id="oneton">Defining 1:n relations </h2>
+<h3 id="example">Example</h3>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> Model<span class="token punctuation">,</span> ModelInstance<span class="token punctuation">,</span> model<span class="token punctuation">,</span> relation<span class="token punctuation">,</span> hasMany<span class="token punctuation">,</span> hasOne <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;neo4-js&quot;</span><span class="token punctuation">;</span>
+
+type UserProps <span class="token operator">=</span> <span class="token punctuation">{</span>
+  name<span class="token operator">?</span><span class="token punctuation">:</span> string<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+type ProjectProps <span class="token operator">=</span> <span class="token punctuation">{</span>
+  title<span class="token operator">?</span><span class="token punctuation">:</span> string<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * Creating Models
+ */</span>
+<span class="token keyword">class</span> <span class="token class-name">UserModel</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>UserProps<span class="token punctuation">,</span> UserInstance<span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+<span class="token keyword">const</span> User<span class="token punctuation">:</span> UserModel <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">UserModel</span><span class="token punctuation">(</span><span class="token string">&quot;User&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">ProjectModel</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>ProjectProps<span class="token punctuation">,</span> ProjectInstance<span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+<span class="token keyword">const</span> Project<span class="token punctuation">:</span> ProjectModel <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProjectModel</span><span class="token punctuation">(</span><span class="token string">&quot;Project&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * Creating relations, reads like &quot;User created Project&quot;
+ * Whereas the source (User) is able to create many (Project)
+ * and the destination (Project) has one creator (User)
+ */</span>
+<span class="token keyword">const</span> UserProjectRelation <span class="token operator">=</span> relation
+  <span class="token punctuation">.</span><span class="token keyword">from</span><span class="token punctuation">(</span>User<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span>Project<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">via</span><span class="token punctuation">(</span><span class="token string">&quot;creator&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * Creating the ModelInstances and connecting the properties
+ * to its relation.
+ */</span>
+@<span class="token function">model</span><span class="token punctuation">(</span>User<span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">UserInstance</span> <span class="token keyword">extends</span> <span class="token class-name">ModelInstance</span><span class="token operator">&lt;</span>UserProps<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  @<span class="token function">hasMany</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> Project<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> UserProjectRelation<span class="token punctuation">)</span>
+  createdProjects<span class="token punctuation">:</span> HasManyActions<span class="token operator">&lt;</span>ProjectProps<span class="token punctuation">,</span> ProjectInstance<span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+@<span class="token function">model</span><span class="token punctuation">(</span>Project<span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">ProjectInstance</span> <span class="token keyword">extends</span> <span class="token class-name">ModelInstance</span><span class="token operator">&lt;</span>ProjectProps<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  @<span class="token function">hasOne</span><span class="token punctuation">(</span>User<span class="token punctuation">,</span> UserProjectRelation<span class="token punctuation">)</span>
+  creator<span class="token punctuation">:</span> HasOneAction<span class="token operator">&lt;</span>UserProps<span class="token punctuation">,</span> UserInstance<span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+User<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token punctuation">:</span> <span class="token string">&quot;Pippi Langstrumpf&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>user<span class="token punctuation">:</span> UserInstance<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> user<span class="token punctuation">.</span>createdProjects<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">{</span> title<span class="token punctuation">:</span> <span class="token string">&quot;Pippi on the Run&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>project<span class="token punctuation">:</span> ProjectInstance<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> project<span class="token punctuation">.</span>creator<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>pippi<span class="token punctuation">:</span> UserInstance<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token operator">...</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h2 id="relationProps">Working with relation properties </h2>
+<h3 id="example">Example</h3>
+<pre class="language-"><code class="lang-js"><span class="token keyword">import</span> <span class="token punctuation">{</span> Model<span class="token punctuation">,</span> ModelInstance<span class="token punctuation">,</span> model<span class="token punctuation">,</span> relation<span class="token punctuation">,</span> hasMany<span class="token punctuation">,</span> hasOne <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&quot;neo4-js&quot;</span><span class="token punctuation">;</span>
+
+type UserProps <span class="token operator">=</span> <span class="token punctuation">{</span>
+  name<span class="token operator">?</span><span class="token punctuation">:</span> string<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+type ProjectProps <span class="token operator">=</span> <span class="token punctuation">{</span>
+  title<span class="token operator">?</span><span class="token punctuation">:</span> string<span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * Creating Models
+ */</span>
+<span class="token keyword">class</span> <span class="token class-name">UserModel</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>UserProps<span class="token punctuation">,</span> UserInstance<span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+<span class="token keyword">const</span> User<span class="token punctuation">:</span> UserModel <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">UserModel</span><span class="token punctuation">(</span><span class="token string">&quot;User&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">ProjectModel</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token operator">&lt;</span>ProjectProps<span class="token punctuation">,</span> ProjectInstance<span class="token operator">&gt;</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+<span class="token keyword">const</span> Project<span class="token punctuation">:</span> ProjectModel <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProjectModel</span><span class="token punctuation">(</span><span class="token string">&quot;Project&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * Creating relations
+ */</span>
+<span class="token keyword">const</span> UserProjectRelation <span class="token operator">=</span> relation
+  <span class="token punctuation">.</span><span class="token keyword">from</span><span class="token punctuation">(</span>User<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span>Project<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">via</span><span class="token punctuation">(</span><span class="token string">&quot;creator&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * Creating ModelInstances
+ */</span>
+@<span class="token function">model</span><span class="token punctuation">(</span>User<span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">UserInstance</span> <span class="token keyword">extends</span> <span class="token class-name">ModelInstance</span><span class="token operator">&lt;</span>UserProps<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  @<span class="token function">hasMany</span><span class="token punctuation">(</span>Project<span class="token punctuation">,</span> UserProjectRelation<span class="token punctuation">)</span>
+  createdProjects<span class="token punctuation">:</span> HasManyActions<span class="token operator">&lt;</span>ProjectProps<span class="token punctuation">,</span> ProjectInstance<span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+@<span class="token function">model</span><span class="token punctuation">(</span>Project<span class="token punctuation">)</span>
+<span class="token keyword">class</span> <span class="token class-name">ProjectInstance</span> <span class="token keyword">extends</span> <span class="token class-name">ModelInstance</span><span class="token operator">&lt;</span>ProjectProps<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  @<span class="token function">hasOne</span><span class="token punctuation">(</span>User<span class="token punctuation">,</span> UserProjectRelation<span class="token punctuation">)</span>
+  creator<span class="token punctuation">:</span> HasOneAction<span class="token operator">&lt;</span>UserProps<span class="token punctuation">,</span> UserInstance<span class="token operator">&gt;</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+User<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span> name<span class="token punctuation">:</span> <span class="token string">&quot;Pippi Langstrumpf&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>user<span class="token punctuation">:</span> UserInstance<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> user<span class="token punctuation">.</span>createdProjects<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">{</span> title<span class="token punctuation">:</span> <span class="token string">&quot;Pippi on the Run&quot;</span> <span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> creationDate<span class="token punctuation">:</span> Date<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> user<span class="token punctuation">.</span>createdProjects<span class="token punctuation">.</span><span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> creationDate<span class="token punctuation">:</span> <span class="token punctuation">{</span> $between<span class="token punctuation">:</span> <span class="token punctuation">[</span> Date<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">10000</span><span class="token punctuation">,</span> Date<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">]</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span>projects<span class="token punctuation">:</span> ProjectInstance<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token operator">...</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Relations","level":"2.3","depth":1,"previous":{"title":"ModelInstance","level":"2.2","depth":1,"path":"docs/modelinstance.md","ref":"docs/modelinstance.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["theme-api","edit-link","prism","-highlight","github","anchorjs"],"pluginsConfig":{"prism":{},"github":{"url":"https://github.com/JanPeter/neo4js/"},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-api":{"languages":[{"lang":"js","name":"JavaScript","default":true}],"split":true,"theme":"light"},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"edit-link":{"label":"Edit This Page","base":"https://github.com/JanPeter/neo4js/tree/master"},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchorjs":{}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"docs/relations.md","mtime":"2017-09-14T15:34:29.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-17T09:01:24.387Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-edit-link/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-github/plugin.js"></script>
+        
+    
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-anchorjs/anchor-style.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-theme-api/theme-api.js"></script>
+        
+    
+
+    </body>
+</html>
+

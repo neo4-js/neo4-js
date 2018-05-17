@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Model create should create a instance of specific model 1`] = `
+ModelInstance {
+  "props": Object {
+    "age": 21,
+    "name": "Paul",
+  },
+}
+`;
+
+exports[`Model delete should return number of deleted olafs 1`] = `3`;
+
+exports[`Model delete should return number of deleted olafs 2`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "name": "Hubert",
+    },
+  },
+]
+`;
+
+exports[`Model delete should return number of deleted persons 1`] = `1`;
+
+exports[`Model find should find all persons 1`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "name": "Olaf",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Olaf",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Hubert",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Olaf",
+    },
+  },
+]
+`;
+
+exports[`Model find should find all persons by name 1`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "name": "Olaf",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Olaf",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Olaf",
+    },
+  },
+]
+`;
+
+exports[`Model find should find all persons starting with 'O' 1`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "name": "Olaf",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Olga",
+    },
+  },
+]
+`;
+
+exports[`Model find should find no persons 1`] = `Array []`;
+
+exports[`Model findOne should find all persons starting with 'O' 1`] = `
+ModelInstance {
+  "props": Object {
+    "name": "Olga",
+  },
+}
+`;
+
+exports[`Model findOne should find first person with name 1`] = `
+ModelInstance {
+  "props": Object {
+    "name": "Hubert",
+  },
+}
+`;
+
+exports[`Model findOne should find no persons 1`] = `null`;
+
+exports[`Model update should update all persons with name olaf 1`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "name": "Hanns",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Hanns",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Hanns",
+    },
+  },
+]
+`;
+
+exports[`Model update should update all persons with name olaf 2`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "name": "Hanns",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Hanns",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Hubert",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Ignatz",
+    },
+  },
+  ModelInstance {
+    "props": Object {
+      "name": "Hanns",
+    },
+  },
+]
+`;
+
+exports[`Model update should update person with name olaf 1`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "name": "Hanns",
+    },
+  },
+]
+`;
+
+exports[`Model update should update person with name olaf 2`] = `
+Array [
+  ModelInstance {
+    "props": Object {
+      "age": 22,
+      "name": "Hanns",
+    },
+  },
+]
+`;

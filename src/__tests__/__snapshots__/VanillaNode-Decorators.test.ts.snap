@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VanillaNodeDecorators create should create instances of tasks and relate them to a person instance 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+  },
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "done": false,
+      "title": "Buy beer",
+    },
+  },
+]
+`;
+
+exports[`VanillaNodeDecorators defaultProps should define default props for the task 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "(empty)",
+    },
+  },
+]
+`;

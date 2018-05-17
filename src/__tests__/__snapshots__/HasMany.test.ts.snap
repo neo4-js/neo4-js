@@ -1,0 +1,423 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HasMany add should add only a relation of instances to instance 1`] = `2`;
+
+exports[`HasMany count should count all tasks to instance 1`] = `2`;
+
+exports[`HasMany count should count all tasks which are assigned 1`] = `1`;
+
+exports[`HasMany count should count all tasks with property done equals true to instance 1`] = `1`;
+
+exports[`HasMany create should create instances of tasks and relate them to a person instance 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+  },
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "done": false,
+      "title": "Buy beer",
+    },
+  },
+]
+`;
+
+exports[`HasMany create should create instances of tasks and relate them to a person instance with multiple relation properties 1`] = `
+Array [
+  Object {
+    "from": Object {
+      "name": "Paul",
+    },
+    "props": Object {
+      "relationCreated": "today",
+      "type": "todo",
+    },
+    "to": Object {
+      "done": false,
+      "title": "Buy beer",
+    },
+  },
+  Object {
+    "from": Object {
+      "name": "Paul",
+    },
+    "props": Object {
+      "relationCreated": "today",
+      "type": "todo",
+    },
+    "to": Object {
+      "title": "Buy milk",
+    },
+  },
+]
+`;
+
+exports[`HasMany create should create instances of tasks and relate them to a person instance with relation properties 1`] = `
+Array [
+  Object {
+    "from": Object {
+      "name": "Paul",
+    },
+    "props": Object {
+      "relationCreated": "today",
+    },
+    "to": Object {
+      "done": false,
+      "title": "Buy beer",
+    },
+  },
+  Object {
+    "from": Object {
+      "name": "Paul",
+    },
+    "props": Object {
+      "relationCreated": "today",
+    },
+    "to": Object {
+      "title": "Buy milk",
+    },
+  },
+]
+`;
+
+exports[`HasMany get should find all tasks assigned 10 seconds ago 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+    "relationProps": Object {
+      "assigned": 1502022002035,
+    },
+  },
+]
+`;
+
+exports[`HasMany get should find all tasks assigned 10 seconds ago, type of todo and starts with 'B' 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+    "relationProps": Object {
+      "assigned": 1502022002035,
+      "type": "todo",
+    },
+  },
+]
+`;
+
+exports[`HasMany get should find all tasks starting with character 'B' and are done 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "done": true,
+      "title": "Buy beer",
+    },
+    "relationProps": Object {},
+  },
+]
+`;
+
+exports[`HasMany get should find all tasks starting with character 'B' and are done with relationProp type todo 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "done": true,
+      "title": "Buy milk",
+    },
+    "relationProps": Object {
+      "type": "todo",
+    },
+  },
+]
+`;
+
+exports[`HasMany get should find all tasks to instance 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "done": true,
+      "title": "Buy beer",
+    },
+    "relationProps": Object {},
+  },
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+    "relationProps": Object {},
+  },
+]
+`;
+
+exports[`HasMany get should find all tasks to instance where task property done equals true 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "done": true,
+      "title": "Buy beer",
+    },
+    "relationProps": Object {},
+  },
+]
+`;
+
+exports[`HasMany get should find nothing 1`] = `Array []`;
+
+exports[`HasMany remove should remove all relations between paul and all his tasks 1`] = `
+Object {
+  "constraintsAdded": 0,
+  "constraintsRemoved": 0,
+  "indexesAdded": 0,
+  "indexesRemoved": 0,
+  "labelsAdded": 0,
+  "labelsRemoved": 0,
+  "nodesCreated": 0,
+  "nodesDeleted": 0,
+  "propertiesSet": 0,
+  "relationshipsCreated": 0,
+  "relationshipsDeleted": 2,
+}
+`;
+
+exports[`HasMany remove should remove all relations between paul and all his tasks 2`] = `Array []`;
+
+exports[`HasMany remove should remove relations between paul and all tasks ending with 'beer' 1`] = `
+Object {
+  "constraintsAdded": 0,
+  "constraintsRemoved": 0,
+  "indexesAdded": 0,
+  "indexesRemoved": 0,
+  "labelsAdded": 0,
+  "labelsRemoved": 0,
+  "nodesCreated": 0,
+  "nodesDeleted": 0,
+  "propertiesSet": 0,
+  "relationshipsCreated": 0,
+  "relationshipsDeleted": 1,
+}
+`;
+
+exports[`HasMany remove should remove relations between paul and all tasks ending with 'beer' 2`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+    "relationProps": Object {},
+  },
+]
+`;
+
+exports[`HasMany remove should remove relations between paul and all tasks ending with 'beer' or starting with 'Read' 1`] = `
+Object {
+  "constraintsAdded": 0,
+  "constraintsRemoved": 0,
+  "indexesAdded": 0,
+  "indexesRemoved": 0,
+  "labelsAdded": 0,
+  "labelsRemoved": 0,
+  "nodesCreated": 0,
+  "nodesDeleted": 0,
+  "propertiesSet": 0,
+  "relationshipsCreated": 0,
+  "relationshipsDeleted": 2,
+}
+`;
+
+exports[`HasMany remove should remove relations between paul and all tasks ending with 'beer' or starting with 'Read' 2`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Buy milk",
+    },
+    "relationProps": Object {
+      "since": "today",
+    },
+  },
+]
+`;
+
+exports[`HasMany remove should remove relations between paul and all tasks since today 1`] = `
+Object {
+  "constraintsAdded": 0,
+  "constraintsRemoved": 0,
+  "indexesAdded": 0,
+  "indexesRemoved": 0,
+  "labelsAdded": 0,
+  "labelsRemoved": 0,
+  "nodesCreated": 0,
+  "nodesDeleted": 0,
+  "propertiesSet": 0,
+  "relationshipsCreated": 0,
+  "relationshipsDeleted": 2,
+}
+`;
+
+exports[`HasMany remove should remove relations between paul and all tasks since today 2`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Read an awesome book",
+    },
+    "relationProps": Object {
+      "since": "yesterday",
+    },
+  },
+]
+`;
+
+exports[`HasMany update should set tasks to done 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "done": true,
+      "title": "Buy milk",
+    },
+  },
+]
+`;
+
+exports[`HasMany update should set tasks to done if task is assigned 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "done": true,
+      "title": "Read a book",
+    },
+  },
+]
+`;
+
+exports[`HasMany update should set tasks to type todo if task is assigned 1`] = `
+Array [
+  TaskInstance {
+    "creator": Object {
+      "add": [Function],
+      "create": [Function],
+      "get": [Function],
+      "hasOne": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+    "props": Object {
+      "title": "Read a book",
+    },
+  },
+]
+`;
