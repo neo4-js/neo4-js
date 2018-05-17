@@ -16,12 +16,12 @@ import {
 } from "../index";
 
 type PersonProps = {
-  name?: StringProperty,
+  name?: StringProperty;
 };
 
 type TaskProps = {
-  title?: StringProperty,
-  done?: boolean,
+  title?: StringProperty;
+  done?: boolean;
 };
 
 class PersonModel extends Model<PersonProps, PersonInstance> {}
@@ -418,9 +418,11 @@ describe("HasMany", () => {
         assigned: 1502022002035,
       });
 
-      const result: TaskInstance[] = await paul.tasks.update({}, {},
+      const result: TaskInstance[] = await paul.tasks.update(
+        {},
+        {},
         { type: "todo" },
-        { assigned: { $gt: 0 } },
+        { assigned: { $gt: 0 } }
       );
 
       expect(

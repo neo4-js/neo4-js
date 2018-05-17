@@ -2,7 +2,12 @@
 
 import { forIn, mapValues } from "lodash";
 import * as uuid from "uuid";
-import neo4js, { ModelInstance, Relation, BaseProps, RelationType } from "./index";
+import neo4js, {
+  ModelInstance,
+  Relation,
+  BaseProps,
+  RelationType,
+} from "./index";
 import { CharGenerator, prepareWhere, prepareSet } from "./utils";
 
 export class Model<P, M extends ModelInstance<P>> {
@@ -27,7 +32,7 @@ export class Model<P, M extends ModelInstance<P>> {
   protected beforeUpdate(
     props: P & BaseProps,
     newProps: P
-  ): { props: P & BaseProps, newProps: P } {
+  ): { props: P & BaseProps; newProps: P } {
     return { props, newProps };
   }
   protected afterUpdate(instance: M): M {
@@ -51,13 +56,17 @@ export class Model<P, M extends ModelInstance<P>> {
 
   public async create(props: P): Promise<M> {
     let defaultProps = mapValues(
-      this.modelInstanceClass ? this.modelInstanceClass.prototype._defaultProps : {},
+      this.modelInstanceClass
+        ? this.modelInstanceClass.prototype._defaultProps
+        : {},
       prop => (typeof prop === "function" ? prop() : prop)
     );
-    let p: P & BaseProps = this.beforeCreate(
-      ({ guid: uuid.v4(), ...defaultProps, ...(props as any) } as P)
-    );
-    p = ({ ...(p as any) } as P & BaseProps);
+    let p: P & BaseProps = this.beforeCreate({
+      guid: uuid.v4(),
+      ...defaultProps,
+      ...(props as any),
+    } as P);
+    p = { ...(p as any) } as P & BaseProps;
 
     const result = await neo4js.run(
       `
@@ -103,7 +112,10 @@ export class Model<P, M extends ModelInstance<P>> {
     return this._createModelInstance(result[0].n);
   }
 
-  public async delete(props: P & BaseProps, detach: boolean = false): Promise<number> {
+  public async delete(
+    props: P & BaseProps,
+    detach: boolean = false
+  ): Promise<number> {
     const { where, flatProps } = prepareWhere(props, "n");
 
     const result = await neo4js.run(
@@ -131,8 +143,7 @@ export class Model<P, M extends ModelInstance<P>> {
       flatProps
     );
 
-    result = result.map(p => this.afterFind(this._createModelInstance(p.n)));
-    return result;
+    return result.map(p => this.afterFind(this._createModelInstance(p.n)));
   }
 
   public async findOne(props?: P & BaseProps): Promise<M | null> {
@@ -172,7 +183,6 @@ export class Model<P, M extends ModelInstance<P>> {
       { ...flatProps, ..._newProps }
     );
 
-    result = result.map(p => this.afterUpdate(this._createModelInstance(p.n)));
-    return result;
+    return result.map(p => this.afterUpdate(this._createModelInstance(p.n)));
   }
 }

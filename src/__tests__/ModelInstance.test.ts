@@ -15,12 +15,12 @@ import neo4js, {
 } from "../index";
 
 type PersonProps = {
-  name: StringProperty,
+  name: StringProperty;
 };
 
 type TaskProps = {
-  title: StringProperty,
-  done?: boolean,
+  title: StringProperty;
+  done?: boolean;
 };
 
 type TodoProps = TaskProps;
@@ -119,7 +119,9 @@ describe("ModelInstance", () => {
 
   describe("Default Properties", () => {
     it("should initialize with default properties", async () => {
-      let task: TaskInstance = await Task.create({ title: "Write more tests boi!"});
+      let task: TaskInstance = await Task.create({
+        title: "Write more tests boi!",
+      });
       const guid = task.props.guid;
 
       if (task && task.props.guid) delete task.props.guid;

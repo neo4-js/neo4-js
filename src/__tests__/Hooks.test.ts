@@ -3,8 +3,8 @@
 import neo4js, { Model, ModelInstance } from "../index";
 
 type Props = {
-  name?: string,
-  age?: number,
+  name?: string;
+  age?: number;
 };
 
 class PersonInstance extends ModelInstance<Props> {}
@@ -12,8 +12,8 @@ class PersonModel extends Model<Props, PersonInstance> {}
 let Person = new PersonModel("Person");
 
 type TaskProps = {
-  title: string,
-  done?: boolean,
+  title: string;
+  done?: boolean;
 };
 
 class TaskInstance extends ModelInstance<TaskProps> {}

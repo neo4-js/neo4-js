@@ -1,6 +1,13 @@
 import neo4js, { Model, ModelInstance, hasMany, model, hasOne } from "../index";
 
-import { User, UserInstance, Task, TaskInstance, UserProps, TaskProps } from "./model";
+import {
+  User,
+  UserInstance,
+  Task,
+  TaskInstance,
+  UserProps,
+  TaskProps,
+} from "./model";
 
 describe("Models in different files", () => {
   beforeAll(() => {

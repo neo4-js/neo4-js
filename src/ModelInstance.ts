@@ -3,7 +3,7 @@
 import { forIn } from "lodash";
 
 export type BaseProps = {
-  guid?: string,
+  guid?: string;
 };
 
 export class ModelInstance<T> {

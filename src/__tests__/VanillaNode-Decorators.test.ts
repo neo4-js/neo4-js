@@ -27,7 +27,7 @@ const TaskAssigneeRelation = relation
   .to(() => Task)
   .via("assigned");
 
-  // @ts-ignore
+// @ts-ignore
 class PersonInstance extends ModelInstance {}
 // @ts-ignore
 PersonInstance = extendModelInstance(PersonInstance);

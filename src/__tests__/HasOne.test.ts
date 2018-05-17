@@ -16,12 +16,12 @@ import {
 } from "../index";
 
 type PersonProps = {
-  name: string,
+  name: string;
 };
 
 type TaskProps = {
-  title: string,
-  done?: boolean,
+  title: string;
+  done?: boolean;
 };
 
 class PersonModel extends Model<PersonProps, PersonInstance> {}
@@ -172,9 +172,7 @@ describe("HasOne", () => {
       const result = await paul.supervisor.add(olaf);
       expect(result).toMatchSnapshot();
 
-      expect(olaf.props).toEqual(
-        (await paul.supervisor.get()).props
-      );
+      expect(olaf.props).toEqual((await paul.supervisor.get()).props);
     });
   });
 

@@ -7,9 +7,9 @@ import * as HasMany from "./HasManyRelation";
 import * as HasOne from "./HasOneRelation";
 
 export type RelationType = {
-  many: boolean,
-  out?: boolean,
-  any?: boolean,
+  many: boolean;
+  out?: boolean;
+  any?: boolean;
 };
 
 export class Relation {

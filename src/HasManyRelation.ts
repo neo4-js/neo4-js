@@ -22,9 +22,11 @@ function getRelationString(
   if (relationType.any) {
     return `-[r:${label} {${relationPropsStr}}]-`;
   }
-  return `${!relationType.out && !relationType.any ? "<" : ""}-[r:${label} {${
-    relationPropsStr
-  }}]-${!relationType.out && !relationType.any ? "" : ">"}`;
+  return `${
+    !relationType.out && !relationType.any ? "<" : ""
+  }-[r:${label} {${relationPropsStr}}]-${
+    !relationType.out && !relationType.any ? "" : ">"
+  }`;
 }
 
 export async function get(

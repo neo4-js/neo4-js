@@ -21,7 +21,7 @@ const singlePredicates = {
 function _prepareWhere(
   props: any,
   variable: string
-): { where: string[], flatProps: any } {
+): { where: string[]; flatProps: any } {
   const where = [];
   let flatProps = {};
 
@@ -92,7 +92,7 @@ function _prepareWhere(
 export function prepareWhere(
   properties: any,
   variables: string | string[]
-): { where: string, flatProps: any } {
+): { where: string; flatProps: any } {
   CharGenerator.start("a");
   let vars: string[] = [];
   let props: any = {};
@@ -122,7 +122,7 @@ export function prepareWhere(
 export function prepareSet(
   properties: any,
   variables: string | string[]
-): { str: string, newProps: any } {
+): { str: string; newProps: any } {
   const sets = [];
   const newProps: any = {};
   let vars: string[] = [];

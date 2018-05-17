@@ -7,12 +7,12 @@ import * as debug from "debug";
 import { Neo4jResultStats } from ".";
 
 export type Neo4jsOptions = {
-  boltUri?: string,
-  boltPort?: number,
-  restUri?: string,
-  restPort?: number,
-  username?: string,
-  password?: string,
+  boltUri?: string;
+  boltPort?: number;
+  restUri?: string;
+  restPort?: number;
+  username?: string;
+  password?: string;
 };
 
 export * from "./types";
@@ -44,7 +44,10 @@ class neo4js {
     this.driver.close();
   };
 
-  run = (cmd: string, params?: any): Promise<any[] & { _stats: Neo4jResultStats, _raw: any }> => {
+  run = (
+    cmd: string,
+    params?: any
+  ): Promise<any[] & { _stats: Neo4jResultStats; _raw: any }> => {
     let session = this.driver.session();
     d("Cypher query: %s", cmd);
     d("Params: %O", params);

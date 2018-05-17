@@ -9,8 +9,8 @@ import {
 } from "../index";
 
 type Props = {
-  name: StringProperty,
-  age?: NumberProperty,
+  name: StringProperty;
+  age?: NumberProperty;
 };
 
 class PersonInstance extends ModelInstance<Props> {}

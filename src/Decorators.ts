@@ -5,24 +5,25 @@ import { connectHelper } from "./utils";
 import { RelationType } from "./Relation";
 import { HasManyActions, HasOneActions } from "./types";
 
-export type lazyModel<P, M extends ModelInstance<P>> = Model<P, M> | (() => Model<P, M> | null);
+export type lazyModel<P, M extends ModelInstance<P>> =
+  | Model<P, M>
+  | (() => Model<P, M> | null);
 
 export type metaRelation = {
-  from: lazyModel<any, any>,
-  to: lazyModel<any, any>,
-  via: string,
+  from: lazyModel<any, any>;
+  to: lazyModel<any, any>;
+  via: string;
 };
 
-export type lazyMetaRelation
-  = metaRelation | (() => metaRelation | null);
+export type lazyMetaRelation = metaRelation | (() => metaRelation | null);
 
 export type relationProperty = {
-  dest: lazyModel<any, any>,
-  relation: lazyMetaRelation,
-  out?: boolean,
-  any?: boolean,
-  propertyName: string,
-  many: boolean,
+  dest: lazyModel<any, any>;
+  relation: lazyMetaRelation;
+  out?: boolean;
+  any?: boolean;
+  propertyName: string;
+  many: boolean;
 };
 
 export const relation = {
@@ -66,9 +67,9 @@ function connectRelationToProp(many: boolean) {
 export const hasMany = connectRelationToProp(true);
 export const hasOne = connectRelationToProp(false);
 
-export const model
-  = <P, M extends ModelInstance<P>>(model: lazyModel<P, M>) =>
-    (target: any) => {
+export const model = <P, M extends ModelInstance<P>>(
+  model: lazyModel<P, M>
+) => (target: any) => {
   connectHelper.models.push({
     model,
     relations: target.prototype._relations,

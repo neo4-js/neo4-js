@@ -8,9 +8,9 @@ import { lazy } from "./index";
 
 class ConnectHelper {
   models: {
-    model: lazyModel<any, any>,
-    modelInstance: new () => ModelInstance<any>,
-    relations: relationProperty[],
+    model: lazyModel<any, any>;
+    modelInstance: new () => ModelInstance<any>;
+    relations: relationProperty[];
   }[];
 
   constructor() {

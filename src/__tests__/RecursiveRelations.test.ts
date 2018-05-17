@@ -14,9 +14,9 @@ import neo4js, {
 } from "../index";
 
 type ProjectProps = {
-  name: StringProperty,
-  level?: NumberProperty,
-  parentGuid?: StringProperty,
+  name: StringProperty;
+  level?: NumberProperty;
+  parentGuid?: StringProperty;
 };
 
 class ProjectModel extends Model<ProjectProps, ProjectInstance> {}

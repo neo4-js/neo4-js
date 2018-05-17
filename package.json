@@ -29,7 +29,7 @@
     "test": "jest --runInBand",
     "test:watch": "yarn test -- --watch",
     "start-db": "./scripts/neo4j-startup.sh",
-    "prettier": "prettier --trailing-comma es5 --write 'src/**/*.js'",
+    "prettier": "prettier --trailing-comma es5 --write 'src/**/*.ts'",
     "docs:clean": "rimraf _book",
     "docs:prepare": "gitbook install",
     "docs:watch": "npm run docs:prepare && gitbook serve",
@@ -49,7 +49,7 @@
     "@types/uuid": "^3.4.3",
     "gitbook-cli": "^2.3.2",
     "jest": "^21.2.1",
-    "prettier": "^1.8.2",
+    "prettier": "^1.12.1",
     "rimraf": "^2.6.2",
     "typescript": "^2.8.3"
   },

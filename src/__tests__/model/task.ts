@@ -13,8 +13,8 @@ import neo4js, {
 import { User, UserProps, UserInstance, TaskCreatorRelation } from "./user";
 
 export type TaskProps = {
-  title: StringProperty,
-  done?: boolean,
+  title: StringProperty;
+  done?: boolean;
 };
 
 export const TaskAssigneeRelation = relation
