@@ -2,7 +2,7 @@
 
 echo "start pre-commit hook"
 
-staged="$(git diff --staged --diff-filter=dx --name-only HEAD | grep ".*\.js$")"
+staged="$(git diff --staged --diff-filter=dx --name-only HEAD | grep ".*\.ts$")"
 
 count="$(echo "$staged" | grep -c .)"
 

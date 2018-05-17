@@ -1,8 +1,9 @@
 {
   "name": "neo4-js",
-  "version": "3.0.4",
+  "version": "3.1.0",
   "description": "Neo4j graphdb object graph mapper for javascript",
   "main": "lib/index.js",
+  "types" : "lib/index.d.ts",
   "author": "Jan Schlacher <j.schlacher@trisoft.at>",
   "repository": {
     "type": "git",
@@ -10,6 +11,7 @@
   },
   "keywords": [
     "neo4j",
+    "typescript",
     "neo4js",
     "neo4-js",
     "orm",
