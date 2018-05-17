@@ -1,11 +1,9 @@
-// @flow
-
 import neo4js from "neo4-js";
 import { User, Todo } from "./model";
 
 neo4js.init({
   boltUri: "localhost",
-  boltPort: 10001
+  boltPort: 10001,
 });
 
 async function run() {
@@ -13,7 +11,7 @@ async function run() {
   console.log(olaf);
   const todo = await Todo.create({
     description: "Create an awesome application with neo4-js!",
-    done: false
+    done: false,
   });
   console.log(todo);
   neo4js.close();
