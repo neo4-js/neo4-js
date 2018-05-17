@@ -1,5 +1,3 @@
-// @flow
-
 import { forIn } from "lodash";
 import { CharGenerator } from "./CharGenerator";
 
@@ -68,7 +66,6 @@ function _prepareWhere(
         flatProps[a] = num1 > num2 ? num2 : num1;
         flatProps[b] = num1 > num2 ? num1 : num2;
       }
-      // TODO error? flow should actually be able to handle this...
     } else {
       forIn(singlePredicates, (predicateString, predicateKey) => {
         const val = v[predicateKey];

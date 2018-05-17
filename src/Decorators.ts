@@ -1,9 +1,7 @@
-// @flow
-
 import neo4js, { Model, ModelInstance } from "./index";
 import { connectHelper } from "./utils";
 import { RelationType } from "./Relation";
-import { HasManyActions, HasOneActions } from "./types";
+import { HasManyActions, HasOneActions } from "./Types";
 
 export type lazyModel<P, M extends ModelInstance<P>> =
   | Model<P, M>

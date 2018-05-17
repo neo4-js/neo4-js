@@ -1,5 +1,3 @@
-// @flow
-
 import neo4js, {
   Model,
   ModelInstance,

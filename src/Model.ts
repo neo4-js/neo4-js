@@ -1,5 +1,3 @@
-// @flow
-
 import { forIn, mapValues } from "lodash";
 import * as uuid from "uuid";
 import neo4js, {

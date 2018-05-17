@@ -1,8 +1,6 @@
-// @flow
-
 import neo4js, { Model, ModelInstance } from "./index";
 import { relationProperty, lazyModel } from "./Decorators";
-import { lazy } from "./utils/index";
+import { lazy } from "./utils";
 import * as HasMany from "./HasManyRelation";
 import * as HasOne from "./HasOneRelation";
 

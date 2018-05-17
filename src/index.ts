@@ -1,10 +1,8 @@
-// @flow
-
 import { v1 as neo4j } from "neo4j-driver";
 import { Model } from "./Model";
 import { ModelInstance } from "./ModelInstance";
 import * as debug from "debug";
-import { Neo4jResultStats } from ".";
+import { Neo4jResultStats } from "./Types";
 
 export type Neo4jsOptions = {
   boltUri?: string;
@@ -15,7 +13,7 @@ export type Neo4jsOptions = {
   password?: string;
 };
 
-export * from "./types";
+export * from "./Types";
 
 const d = debug("neo4js:debug");
 

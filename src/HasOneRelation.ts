@@ -1,6 +1,5 @@
-// @flow
 import neo4js, { ModelInstance } from "./index";
-import { RelationType } from "./relation";
+import { RelationType } from "./Relation";
 
 function getRelationString(
   label: string,

@@ -1,5 +1,3 @@
-// @flow
-
 import neo4js, {
   Model,
   ModelInstance,
@@ -7,8 +5,6 @@ import neo4js, {
   relation,
   hasMany,
   hasOne,
-} from "../index";
-import {
   StringProperty,
   NumberProperty,
   HasManyActions,

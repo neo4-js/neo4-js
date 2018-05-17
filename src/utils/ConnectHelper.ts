@@ -1,5 +1,3 @@
-// @flow
-
 import { Model } from "../Model";
 import { ModelInstance } from "../ModelInstance";
 import { lazyModel, relationProperty } from "../Decorators";

@@ -1,9 +1,8 @@
-// @flow
 import neo4js, { ModelInstance } from "./index";
 import { prepareWhere, prepareSet } from "./utils";
 import { keys } from "lodash";
-import { RelationType } from "./relation";
-import { Neo4jResultStats } from "./types";
+import { RelationType } from "./Relation";
+import { Neo4jResultStats } from "./Types";
 
 const relationPropsKey = "relationProps";
 

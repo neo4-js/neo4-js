@@ -1,7 +1,6 @@
-// @flow
-
-import neo4js, { Model, ModelInstance } from "../index";
-import {
+import neo4js, {
+  Model,
+  ModelInstance,
   StringProperty,
   NumberProperty,
   HasManyActions,

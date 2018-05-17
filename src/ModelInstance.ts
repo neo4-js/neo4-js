@@ -1,5 +1,3 @@
-// @flow
-
 import { forIn } from "lodash";
 
 export type BaseProps = {
