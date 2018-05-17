@@ -1,7 +1,0 @@
-{
-  "presets": ["stage-3", "es2015", "flow"],
-  "plugins": [
-    "transform-decorators-legacy",
-    "transform-class-properties"
-  ]
-}
