@@ -21,8 +21,8 @@ export type HasManyActions<P, M extends ModelInstance<P>> = {
     relationProps?: PropertiesType<any>,
     whereRelationProps?: PropertiesType<any>
   ) => Promise<M[]>;
-  create: (props: P[], relationProps?: PropertiesType<P>) => Promise<M[]>;
-  add: (instances: M[], relationProps?: PropertiesType<P>) => Promise<number>;
+  create: (props: P[], relationProps?: PropertiesType<any>) => Promise<M[]>;
+  add: (instances: M[], relationProps?: PropertiesType<any>) => Promise<number>;
   remove: (
     props?: Optional<PropertiesType<P>>,
     relationProps?: PropertiesType<any>
