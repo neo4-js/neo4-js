@@ -1,5 +1,5 @@
 import { forIn } from "lodash";
-import { CharGenerator } from "./CharGenerator";
+import charGenerator, { CharGenerator } from "./CharGenerator";
 
 const singlePredicates = {
   $sw: "STARTS WITH",
@@ -18,7 +18,8 @@ const singlePredicates = {
 
 function _prepareWhere(
   props: any,
-  variable: string
+  variable: string,
+  cg?: CharGenerator
 ): { where: string[]; flatProps: any } {
   const where = [];
   let flatProps = {};
@@ -28,14 +29,14 @@ function _prepareWhere(
   }
 
   forIn(props, (v, k) => {
-    const propChar = CharGenerator.next();
+    const propChar = cg ? cg.next() : charGenerator.next();
     let found = false;
 
     if (v.$or) {
       found = true;
       const whereOr = [];
       for (const predicate of v.$or) {
-        const tmp = _prepareWhere({ [k]: predicate }, variable);
+        const tmp = _prepareWhere({ [k]: predicate }, variable, cg);
         whereOr.push(...tmp.where);
         flatProps = { ...flatProps, ...tmp.flatProps };
       }
@@ -44,14 +45,14 @@ function _prepareWhere(
       found = true;
       const whereAnd = [];
       for (const predicate of v.$and) {
-        const tmp = _prepareWhere({ [k]: predicate }, variable);
+        const tmp = _prepareWhere({ [k]: predicate }, variable, cg);
         whereAnd.push(...tmp.where);
         flatProps = { ...flatProps, ...tmp.flatProps };
       }
       where.push(`(${whereAnd.join(" AND ")})`);
     } else if (v.$not) {
       found = true;
-      const tmp = _prepareWhere({ [k]: v.$not }, variable);
+      const tmp = _prepareWhere({ [k]: v.$not }, variable, cg);
       if (tmp.where.length) {
         where.push(`NOT ${tmp.where[0]}`);
         flatProps = { ...flatProps, ...tmp.flatProps };
@@ -61,7 +62,7 @@ function _prepareWhere(
       if (v.$between.length === 2) {
         const [num1, num2] = v.$between;
         const a = propChar;
-        const b = CharGenerator.next();
+        const b = cg ? cg.next() : charGenerator.next();
         where.push(`{${a}} <= ${variable}.${k} <= {${b}}`);
         flatProps[a] = num1 > num2 ? num2 : num1;
         flatProps[b] = num1 > num2 ? num1 : num2;
@@ -88,9 +89,10 @@ function _prepareWhere(
 
 export function prepareWhere(
   properties: any,
-  variables: string | string[]
-): { where: string; flatProps: any } {
-  CharGenerator.start("a");
+  variables: string | string[],
+  cg?: CharGenerator
+): { where: string | string[]; flatProps: any } {
+  if (!cg) charGenerator.start("a");
   let vars: string[] = [];
   let props: any = {};
   if (typeof variables === "string") {
@@ -104,7 +106,7 @@ export function prepareWhere(
   let where = [];
   let flatProps = {};
   vars.forEach(variable => {
-    const result = _prepareWhere(props[variable], variable);
+    const result = _prepareWhere(props[variable], variable, cg);
     where = where.concat(result.where);
     Object.assign(flatProps, result.flatProps);
   });

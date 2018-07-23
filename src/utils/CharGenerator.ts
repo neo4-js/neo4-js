@@ -1,14 +1,17 @@
-let startChar = "a";
+export class CharGenerator {
+  startChar = "a";
 
-export const CharGenerator = {
-  start: (value: string) => (startChar = value),
-  next: (): string => {
-    const char = startChar;
-    startChar = (parseInt(startChar, 36) + 1)
+  start = (value: string) => (this.startChar = value);
+
+  next = (): string => {
+    const char = this.startChar;
+    this.startChar = (parseInt(this.startChar, 36) + 1)
       .toString(36)
       .replace(/10/g, "aa")
       .replace(/0/g, "a");
-    if (startChar === "zzzz") startChar = "a";
+    if (this.startChar === "zzzz") this.startChar = "a";
     return char;
-  },
-};
+  };
+}
+
+export default new CharGenerator();

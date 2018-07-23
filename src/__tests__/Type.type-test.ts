@@ -90,4 +90,7 @@ class TaskInstance extends ModelInstance<TaskProps> {
   t.creator.hasOne();
   t.creator.remove();
   t.creator.update({ name: "Huber" });
+  p1.assignedTasks.update({ done: true }, { guid: "asdf" });
+  p1.assignedTasks.remove({ guid: "asdf " });
+  p1.assignedTasks.get({ guid: "asdf" });
 })();

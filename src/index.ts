@@ -57,7 +57,7 @@ export class neo4js {
         let result = raw.records.map(r => r.toObject()).map(r => {
           let keys = Object.keys(r);
           let o = {};
-          keys.forEach(k => (o[k] = r[k].properties));
+          keys.forEach(k => (o[k] = r[k] ? r[k].properties : null));
           return o;
         });
         result._stats = raw.summary.counters._stats;

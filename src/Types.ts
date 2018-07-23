@@ -1,4 +1,4 @@
-import { ModelInstance } from "./ModelInstance";
+import { ModelInstance, BaseProps } from "./ModelInstance";
 
 export type Optional<T> = T extends object ? { [P in keyof T]+?: T[P] } : T;
 
@@ -12,23 +12,23 @@ export type PropertiesType<T> = T extends object
 
 export type HasManyActions<P, M extends ModelInstance<P>> = {
   get: (
-    props?: Optional<PropertiesType<P>>,
+    props?: Optional<PropertiesType<P & BaseProps>>,
     relationProps?: PropertiesType<any>
   ) => Promise<M[]>;
   update: (
     props?: Optional<P>,
-    where?: Optional<PropertiesType<P>>,
+    where?: Optional<PropertiesType<P & BaseProps>>,
     relationProps?: PropertiesType<any>,
     whereRelationProps?: PropertiesType<any>
   ) => Promise<M[]>;
   create: (props: P[], relationProps?: PropertiesType<any>) => Promise<M[]>;
   add: (instances: M[], relationProps?: PropertiesType<any>) => Promise<number>;
   remove: (
-    props?: Optional<PropertiesType<P>>,
+    props?: Optional<PropertiesType<P & BaseProps>>,
     relationProps?: PropertiesType<any>
   ) => Promise<Neo4jResultStats>;
   count: (
-    props?: Optional<PropertiesType<P>>,
+    props?: Optional<PropertiesType<P & BaseProps>>,
     relationProps?: PropertiesType<any>
   ) => Promise<number>;
 };

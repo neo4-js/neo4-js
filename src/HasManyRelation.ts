@@ -1,16 +1,17 @@
 import neo4js, { ModelInstance } from "./index";
-import { prepareWhere, prepareSet } from "./utils";
+import { prepareWhere, prepareSet, CharGenerator } from "./utils";
 import { keys } from "lodash";
 import { RelationType } from "./Relation";
 import { Neo4jResultStats } from "./Types";
-import { createModelInstance } from "./Model";
+import { createModelInstance, createFakeModelInstance } from "./Model";
 
 const relationPropsKey = "relationProps";
 
 function getRelationString(
   label: string,
   relationType: RelationType,
-  relationProps?: any
+  relationProps?: any,
+  variable?: string
 ) {
   let relationPropsStr = "";
   if (relationProps) {
@@ -22,44 +23,73 @@ function getRelationString(
   if (relationType.any) {
     return `-[r:${label} {${relationPropsStr}}]-`;
   }
-  return `${
-    !relationType.out && !relationType.any ? "<" : ""
-  }-[r:${label} {${relationPropsStr}}]-${
+  return `${!relationType.out && !relationType.any ? "<" : ""}-[${variable ||
+    "r"}:${label} {${relationPropsStr}}]-${
     !relationType.out && !relationType.any ? "" : ">"
   }`;
 }
 
-export async function get(
+export function get(
   instance: ModelInstance<any>,
   label: string,
   relationType: RelationType,
   props: any,
-  relationProps?: any
-): Promise<any> {
+  relationProps?: any,
+  charGenerator?: CharGenerator,
+  propertyName?: string
+): Promise<any> | any {
+  if (charGenerator) {
+    // Return this to build a query with include
+    const variable = charGenerator.next();
+    const relationVariable = charGenerator.next();
+    const relationString = getRelationString(
+      label,
+      relationType,
+      null,
+      relationVariable
+    );
+    const { where, flatProps } = prepareWhere(
+      { [variable]: props, [relationVariable]: relationProps },
+      [variable, relationVariable],
+      charGenerator
+    );
+
+    return {
+      model: this.dest,
+      fakeInstance: createFakeModelInstance(this.dest, charGenerator),
+      match: `${relationString}(${variable}:${this.dest.label}) ${where}`,
+      flatProps,
+      result: [variable, relationVariable],
+      variable,
+      relationVariable,
+      propertyName,
+    };
+  }
+
+  const relationString = getRelationString(label, relationType);
   const { where, flatProps } = prepareWhere({ b: props, r: relationProps }, [
     "b",
     "r",
   ]);
-  const relationString = getRelationString(label, relationType);
-  const result = await neo4js.run(
-    `
+  return neo4js
+    .run(
+      `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${
-      this.dest.label
-    })
+        this.dest.label
+      })
     ${where}
     RETURN b, r
   `,
-    { _srcGuid: instance.props.guid, ...flatProps }
-  );
-
-  return Promise.resolve(
-    result.map(p => {
-      const instance = createModelInstance(this.dest, p.b);
-      // @ts-ignore
-      instance.relationProps = p.r;
-      return instance;
-    })
-  );
+      { _srcGuid: instance.props.guid, ...flatProps }
+    )
+    .then(result =>
+      result.map(p => {
+        const instance = createModelInstance(this.dest, p.b);
+        // @ts-ignore
+        instance.relationProps = p.r;
+        return instance;
+      })
+    );
 }
 
 export async function remove(

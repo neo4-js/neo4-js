@@ -1,0 +1,195 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Includes find with include should return all active users with done assigned tasks and the creators 1`] = `
+Array [
+  PersonInstance {
+    "assignedTasks": Array [
+      TaskInstance {
+        "creator": PersonInstance {
+          "assignedTasks": Object {
+            "add": [Function],
+            "count": [Function],
+            "create": [Function],
+            "get": [Function],
+            "remove": [Function],
+            "update": [Function],
+          },
+          "props": Object {
+            "active": true,
+            "name": "Olaf",
+          },
+          "tasks": Object {
+            "add": [Function],
+            "count": [Function],
+            "create": [Function],
+            "get": [Function],
+            "remove": [Function],
+            "update": [Function],
+          },
+        },
+        "props": Object {
+          "done": true,
+          "title": "Write more test cases 2",
+        },
+        "relationProps": Object {
+          "favorite": true,
+        },
+      },
+      TaskInstance {
+        "creator": PersonInstance {
+          "assignedTasks": Object {
+            "add": [Function],
+            "count": [Function],
+            "create": [Function],
+            "get": [Function],
+            "remove": [Function],
+            "update": [Function],
+          },
+          "props": Object {
+            "active": true,
+            "name": "Olaf",
+          },
+          "tasks": Object {
+            "add": [Function],
+            "count": [Function],
+            "create": [Function],
+            "get": [Function],
+            "remove": [Function],
+            "update": [Function],
+          },
+        },
+        "props": Object {
+          "done": true,
+          "title": "Learn magic",
+        },
+        "relationProps": Object {
+          "favorite": true,
+        },
+      },
+    ],
+    "props": Object {
+      "active": true,
+      "name": "Olaf",
+    },
+    "tasks": Object {
+      "add": [Function],
+      "count": [Function],
+      "create": [Function],
+      "get": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+  },
+  PersonInstance {
+    "assignedTasks": Array [
+      TaskInstance {
+        "creator": null,
+        "props": Object {
+          "done": true,
+          "title": "Write more test cases 4",
+        },
+      },
+      TaskInstance {
+        "creator": null,
+        "props": Object {
+          "done": true,
+          "title": "Learn magic 2",
+        },
+      },
+    ],
+    "props": Object {
+      "active": true,
+      "name": "Ignatz",
+    },
+    "tasks": Object {
+      "add": [Function],
+      "count": [Function],
+      "create": [Function],
+      "get": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+  },
+]
+`;
+
+exports[`Includes find with include should return olaf with all assigned tasks and the creators 1`] = `
+PersonInstance {
+  "assignedTasks": Array [
+    TaskInstance {
+      "creator": PersonInstance {
+        "assignedTasks": Object {
+          "add": [Function],
+          "count": [Function],
+          "create": [Function],
+          "get": [Function],
+          "remove": [Function],
+          "update": [Function],
+        },
+        "props": Object {
+          "active": true,
+          "name": "Olaf",
+        },
+        "tasks": Object {
+          "add": [Function],
+          "count": [Function],
+          "create": [Function],
+          "get": [Function],
+          "remove": [Function],
+          "update": [Function],
+        },
+      },
+      "props": Object {
+        "done": true,
+        "title": "Write more test cases 2",
+      },
+      "relationProps": Object {
+        "favorite": true,
+      },
+    },
+    TaskInstance {
+      "creator": PersonInstance {
+        "assignedTasks": Object {
+          "add": [Function],
+          "count": [Function],
+          "create": [Function],
+          "get": [Function],
+          "remove": [Function],
+          "update": [Function],
+        },
+        "props": Object {
+          "active": true,
+          "name": "Olaf",
+        },
+        "tasks": Object {
+          "add": [Function],
+          "count": [Function],
+          "create": [Function],
+          "get": [Function],
+          "remove": [Function],
+          "update": [Function],
+        },
+      },
+      "props": Object {
+        "done": true,
+        "title": "Learn magic",
+      },
+      "relationProps": Object {
+        "favorite": true,
+      },
+    },
+  ],
+  "props": Object {
+    "active": true,
+    "name": "Olaf",
+  },
+  "tasks": Object {
+    "add": [Function],
+    "count": [Function],
+    "create": [Function],
+    "get": [Function],
+    "remove": [Function],
+    "update": [Function],
+  },
+}
+`;

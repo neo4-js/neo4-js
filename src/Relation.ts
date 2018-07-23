@@ -1,6 +1,6 @@
 import neo4js, { Model, ModelInstance } from "./index";
 import { relationProperty, lazyModel } from "./Decorators";
-import { lazy } from "./utils";
+import { lazy, CharGenerator } from "./utils";
 import * as HasMany from "./HasManyRelation";
 import * as HasOne from "./HasOneRelation";
 
@@ -53,21 +53,32 @@ export class Relation {
     delete this.lazy;
   }
 
-  addFunctionsToInstance<P, M extends ModelInstance<P>>(instance: M): M {
+  addFunctionsToInstance<P, M extends ModelInstance<P>>(
+    instance: M,
+    charGenerator?: CharGenerator
+  ): M {
     if (this.lazy) this.init();
     if (this.relationType.many) {
-      return this.addHasManyToInstance(instance);
+      return this.addHasManyToInstance(instance, charGenerator);
     }
-    return this.addHasOneToInstance(instance);
+    return this.addHasOneToInstance(instance, charGenerator);
   }
 
-  addHasManyToInstance<P, M extends ModelInstance<P>>(instance: M): any {
+  addHasManyToInstance<P, M extends ModelInstance<P>>(
+    instance: M,
+    charGenerator?: CharGenerator
+  ): any {
     // @ts-ignore
     instance[this.propertyName] = {
       get: (props: any, relationProps: any = {}) =>
-        HasMany.get.bind(this, instance, this.label, this.relationType)(
+        HasMany.get.bind(this)(
+          instance,
+          this.label,
+          this.relationType,
           props,
-          relationProps
+          relationProps,
+          charGenerator,
+          this.propertyName
         ),
       update: (
         options: any,
@@ -117,11 +128,20 @@ export class Relation {
     return instance;
   }
 
-  addHasOneToInstance<P, M extends ModelInstance<P>>(instance: M): any {
+  addHasOneToInstance<P, M extends ModelInstance<P>>(
+    instance: M,
+    charGenerator?: CharGenerator
+  ): any {
     // @ts-ignore
     instance[this.propertyName] = {
       get: () =>
-        HasOne.get.bind(this, instance, this.label, this.relationType)(),
+        HasOne.get.bind(this)(
+          instance,
+          this.label,
+          this.relationType,
+          charGenerator,
+          this.propertyName
+        ),
       update: (props: any, label?: string) =>
         HasOne.update.bind(this, instance, this.label, this.relationType)(
           props

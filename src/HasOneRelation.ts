@@ -1,6 +1,7 @@
 import neo4js, { ModelInstance } from "./index";
 import { RelationType } from "./Relation";
-import { createModelInstance } from "./Model";
+import { createModelInstance, createFakeModelInstance } from "./Model";
+import { CharGenerator } from "./utils";
 
 function getRelationString(
   label: string,
@@ -14,31 +15,58 @@ function getRelationString(
   }`;
 }
 
-export async function get(
+export function get(
   instance: ModelInstance<any>,
   label: string,
-  relationType: RelationType
-): Promise<any> {
+  relationType: RelationType,
+  charGenerator?: CharGenerator,
+  propertyName?: string
+): Promise<any> | any {
+  if (charGenerator) {
+    // Return this to build a query with include
+    const variable = charGenerator.next();
+    const relationVariable = charGenerator.next();
+    const relationString = getRelationString(
+      label,
+      relationType,
+      relationVariable
+    );
+    return {
+      model: this.dest,
+      fakeInstance: createFakeModelInstance(this.dest, charGenerator),
+      match: `${relationString}(${variable}:${this.dest.label})`,
+      where: [],
+      flatProps: [],
+      result: [variable],
+      variable,
+      relationVariable,
+      propertyName,
+      hasOne: true,
+    };
+  }
+
   const relationString = getRelationString(label, relationType);
-  const result = await neo4js.run(
-    `
+  return neo4js
+    .run(
+      `
     MATCH (a:${this.src.label} {guid:{_srcGuid}})${relationString}(b:${
-      this.dest.label
-    })
+        this.dest.label
+      })
     RETURN b
   `,
-    { _srcGuid: instance.props.guid }
-  );
+      { _srcGuid: instance.props.guid }
+    )
+    .then(result => {
+      if (result.length === 0) {
+        return null;
+      }
 
-  if (result.length === 0) {
-    return Promise.resolve(null);
-  }
+      if (result.length > 1) {
+        throw new Error("hasOne has more than one relations");
+      }
 
-  if (result.length > 1) {
-    return Promise.reject("hasOne has more than one relations");
-  }
-
-  return Promise.resolve(createModelInstance(this.dest, result[0].b));
+      return createModelInstance(this.dest, result[0].b);
+    });
 }
 
 export async function create(
