@@ -89,7 +89,7 @@ function addChildValues(parents: any[], all: any[], node: ChainItem) {
   });
 }
 
-type ChainItem = {
+export type ChainItem = {
   model: Model<any, any>;
   fakeInstance: ModelInstance<any>;
   match: string;
