@@ -10,7 +10,7 @@ import neo4js, {
 } from "./index";
 import { CharGenerator, prepareWhere, prepareSet } from "./utils";
 
-export function createModelInstance<P, M extends ModelInstance<P>>(
+export function createModelInstance<P, M extends ModelInstance<P, R>, R = {}>(
   model: Model<P, M>,
   props: P & BaseProps | null
 ): M {
