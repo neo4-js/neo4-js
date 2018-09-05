@@ -47,7 +47,7 @@ Array [
       "name": "Paul",
     },
     "props": Object {
-      "relationCreated": "today",
+      "since": "today",
       "type": "todo",
     },
     "to": Object {
@@ -60,7 +60,7 @@ Array [
       "name": "Paul",
     },
     "props": Object {
-      "relationCreated": "today",
+      "since": "today",
       "type": "todo",
     },
     "to": Object {
@@ -77,7 +77,7 @@ Array [
       "name": "Paul",
     },
     "props": Object {
-      "relationCreated": "today",
+      "since": "today",
     },
     "to": Object {
       "done": false,
@@ -89,7 +89,7 @@ Array [
       "name": "Paul",
     },
     "props": Object {
-      "relationCreated": "today",
+      "since": "today",
     },
     "to": Object {
       "title": "Buy milk",
@@ -381,6 +381,7 @@ Array [
       "done": true,
       "title": "Buy milk",
     },
+    "relationProps": Object {},
   },
 ]
 `;
@@ -400,6 +401,9 @@ Array [
       "done": true,
       "title": "Read a book",
     },
+    "relationProps": Object {
+      "assigned": 1502022002035,
+    },
   },
 ]
 `;
@@ -417,6 +421,10 @@ Array [
     },
     "props": Object {
       "title": "Read a book",
+    },
+    "relationProps": Object {
+      "assigned": 1502022002035,
+      "type": "todo",
     },
   },
 ]

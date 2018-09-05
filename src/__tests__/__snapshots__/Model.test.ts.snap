@@ -137,17 +137,17 @@ Array [
   },
   ModelInstance {
     "props": Object {
+      "name": "Hanns",
+    },
+  },
+  ModelInstance {
+    "props": Object {
       "name": "Hubert",
     },
   },
   ModelInstance {
     "props": Object {
       "name": "Ignatz",
-    },
-  },
-  ModelInstance {
-    "props": Object {
-      "name": "Hanns",
     },
   },
 ]

@@ -20,6 +20,12 @@ type TaskProps = {
   done?: boolean;
 };
 
+type HasManyTasksProps = {
+  assigned?: NumberProperty;
+  since?: StringProperty;
+  type?: StringProperty;
+};
+
 class PersonModel extends Model<PersonProps, PersonInstance> {}
 const Person: PersonModel = new PersonModel("Person");
 
@@ -37,16 +43,16 @@ const TaskAssigneeRelation = relation
   .via("assigned");
 
 @model(Person)
-class PersonInstance extends ModelInstance<PersonProps> {
+class PersonInstance<R = {}> extends ModelInstance<PersonProps, R> {
   @hasMany(Task, TaskCreatorRelation)
-  tasks: HasManyActions<TaskProps, TaskInstance>;
+  tasks: HasManyActions<TaskProps, TaskInstance, HasManyTasksProps>;
 
   @hasMany(Task, TaskAssigneeRelation)
   assignedTasks: HasManyActions<TaskProps, TaskInstance>;
 }
 
 @model(Task)
-class TaskInstance extends ModelInstance<TaskProps> {
+class TaskInstance<R = {}> extends ModelInstance<TaskProps, R> {
   @hasOne(() => Person, () => TaskCreatorRelation)
   creator: HasOneActions<PersonProps, PersonInstance>;
 }
@@ -99,6 +105,21 @@ describe("HasMany", () => {
       ).toMatchSnapshot();
     });
 
+    it("should be possible to create a single instance to a has many relation", async () => {
+      const paul: PersonInstance = await Person.create({ name: "Paul" });
+      const result: TaskInstance<
+        HasManyTasksProps
+      >[] = await paul.assignedTasks.create({ title: "Buy beer " });
+      expect(result.length).toEqual(1);
+
+      const relatedTasks: TaskInstance<
+        HasManyTasksProps
+      >[] = await paul.assignedTasks.get();
+
+      expect(relatedTasks.length).toEqual(1);
+      expect(relatedTasks[0].props.guid).toEqual(result[0].props.guid);
+    });
+
     it("should create instances of tasks and relate them to a person instance with relation properties", async () => {
       const paul: PersonInstance = await Person.create({ name: "Paul" });
 
@@ -113,7 +134,7 @@ describe("HasMany", () => {
       ];
 
       const tasks: TaskInstance[] = await paul.tasks.create(propsArray, {
-        relationCreated: "today",
+        since: "today",
       });
 
       const db = await neo4js.run("MATCH (a)-[b]->(c) RETURN a, b, c");
@@ -140,7 +161,7 @@ describe("HasMany", () => {
       ];
 
       const tasks: TaskInstance[] = await paul.tasks.create(propsArray, {
-        relationCreated: "today",
+        since: "today",
         type: "todo",
       });
 
@@ -340,6 +361,22 @@ describe("HasMany", () => {
       },
     ];
 
+    it("should be possible to add single instance to a has many relation", async () => {
+      const paul: PersonInstance = await Person.create({ name: "Paul" });
+      const task: TaskInstance<HasManyTasksProps> = await Task.create({
+        title: "Buy beer",
+      });
+      const t: number = await paul.assignedTasks.add(task);
+      expect(t).toEqual(1);
+
+      const relatedTasks: TaskInstance<
+        HasManyTasksProps
+      >[] = await paul.assignedTasks.get();
+
+      expect(relatedTasks.length).toEqual(1);
+      expect(relatedTasks[0].props.guid).toEqual(task.props.guid);
+    });
+
     it("should add only a relation of instances to instance", async () => {
       const paul: PersonInstance = await Person.create({ name: "Paul" });
       const tasks: TaskInstance[] = [];
@@ -414,7 +451,7 @@ describe("HasMany", () => {
         assigned: 1502022002035,
       });
 
-      const result: TaskInstance[] = await paul.tasks.update(
+      const result: TaskInstance<HasManyTasksProps>[] = await paul.tasks.update(
         {},
         {},
         { type: "todo" },

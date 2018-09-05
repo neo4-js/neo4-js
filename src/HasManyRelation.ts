@@ -126,9 +126,14 @@ export async function create(
   relationProps?: any
 ): Promise<any> {
   const destInstances = [];
-
   const relationString = getRelationString(label, relationType, relationProps);
-  for (const props of propsArray) {
+
+  let _propsArray = propsArray;
+  if (!Array.isArray(_propsArray)) {
+    _propsArray = [_propsArray];
+  }
+
+  for (const props of _propsArray) {
     const destInstance = await this.dest.create(props);
     destInstances.push(destInstance);
     await neo4js.run(
@@ -153,12 +158,17 @@ export async function add(
   instance: ModelInstance<any>,
   label: string,
   relationType: RelationType,
-  instances: ModelInstance<any>[],
+  instances: ModelInstance<any>[] | ModelInstance<any>,
   relationProps?: any
 ): Promise<number> {
   const relationString = getRelationString(label, relationType, relationProps);
   let relationshipsCreated = 0;
-  for (const destInstance of instances) {
+  let _instances = instances;
+  if (!Array.isArray(_instances)) {
+    _instances = [_instances];
+  }
+
+  for (const destInstance of _instances) {
     const result = await neo4js.run(
       `
       MATCH
@@ -235,10 +245,17 @@ export async function update(
     })
     ${where}
     SET ${setPropsStr}
-    RETURN b
+    RETURN b, r
   `,
     { _srcGuid: instance.props.guid, ...flatProps, ...newProps }
   );
 
-  return Promise.resolve(result.map(a => createModelInstance(this.dest, a.b)));
+  return Promise.resolve(
+    result.map(p => {
+      const instance = createModelInstance(this.dest, p.b);
+      // @ts-ignore
+      instance.relationProps = p.r;
+      return instance;
+    })
+  );
 }

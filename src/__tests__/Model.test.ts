@@ -8,8 +8,8 @@ import neo4js, {
 } from "../index";
 
 type Props = {
-  name: StringProperty;
-  age?: NumberProperty;
+  name: string;
+  age?: number;
 };
 
 class PersonInstance extends ModelInstance<Props> {}
@@ -200,10 +200,12 @@ describe("Model", () => {
       });
       expect(p).toMatchSnapshot();
       let persons = await Person.find();
-      persons = persons.map(p => {
-        delete p.props.guid;
-        return p;
-      });
+      persons = persons
+        .map(p => {
+          delete p.props.guid;
+          return p;
+        })
+        .sort((a, b) => a.props.name.localeCompare(b.props.name));
       expect(persons).toMatchSnapshot();
     });
 

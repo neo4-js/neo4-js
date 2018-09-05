@@ -152,10 +152,13 @@ describe("HasOne", () => {
       let r = await paul.supervisor.remove();
       expect(r).toMatchSnapshot();
       let result: any[] = await neo4js.run("MATCH (m) RETURN m");
-      result = result.map(node => {
-        delete node.m.guid;
-        return node;
-      });
+      result = result
+        .map(node => {
+          delete node.m.guid;
+          node.m.val = node.m.name ? node.m.name : node.m.title;
+          return node;
+        })
+        .sort((a, b) => a.m.val.localeCompare(b.m.val));
       expect(result).toMatchSnapshot();
     });
   });

@@ -5,6 +5,36 @@ Array [
   PersonInstance {
     "assignedTasks": Array [
       TaskInstance {
+        "creator": null,
+        "props": Object {
+          "done": true,
+          "title": "Write more test cases 4",
+        },
+      },
+      TaskInstance {
+        "creator": null,
+        "props": Object {
+          "done": true,
+          "title": "Learn magic 2",
+        },
+      },
+    ],
+    "props": Object {
+      "active": true,
+      "name": "Ignatz",
+    },
+    "tasks": Object {
+      "add": [Function],
+      "count": [Function],
+      "create": [Function],
+      "get": [Function],
+      "remove": [Function],
+      "update": [Function],
+    },
+  },
+  PersonInstance {
+    "assignedTasks": Array [
+      TaskInstance {
         "creator": PersonInstance {
           "assignedTasks": Object {
             "add": [Function],
@@ -70,36 +100,6 @@ Array [
     "props": Object {
       "active": true,
       "name": "Olaf",
-    },
-    "tasks": Object {
-      "add": [Function],
-      "count": [Function],
-      "create": [Function],
-      "get": [Function],
-      "remove": [Function],
-      "update": [Function],
-    },
-  },
-  PersonInstance {
-    "assignedTasks": Array [
-      TaskInstance {
-        "creator": null,
-        "props": Object {
-          "done": true,
-          "title": "Write more test cases 4",
-        },
-      },
-      TaskInstance {
-        "creator": null,
-        "props": Object {
-          "done": true,
-          "title": "Learn magic 2",
-        },
-      },
-    ],
-    "props": Object {
-      "active": true,
-      "name": "Ignatz",
     },
     "tasks": Object {
       "add": [Function],

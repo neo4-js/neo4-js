@@ -136,17 +136,19 @@ describe("Includes", () => {
         expect(result[0].assignedTasks.length).toEqual(2);
         expect(result[0].assignedTasks[0]).toBeInstanceOf(TaskInstance);
 
-        result = result.map(r => {
-          delete r.props.guid;
-          r.assignedTasks = r.assignedTasks.map(t => {
-            delete t.props.guid;
-            if (t.creator) {
-              delete t.creator.props.guid;
-            }
-            return t;
-          });
-          return r;
-        });
+        result = result
+          .map(r => {
+            delete r.props.guid;
+            r.assignedTasks = r.assignedTasks.map(t => {
+              delete t.props.guid;
+              if (t.creator) {
+                delete t.creator.props.guid;
+              }
+              return t;
+            });
+            return r;
+          })
+          .sort((a, b) => a.props.name.localeCompare(b.props.name));
 
         expect(result).toMatchSnapshot();
       } else {

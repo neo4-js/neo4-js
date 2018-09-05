@@ -64,40 +64,47 @@ exports[`HasOne remove should remove supervisor relation without deleting superv
 Array [
   Object {
     "m": Object {
-      "name": "Olaf",
+      "name": "Hubert",
+      "val": "Hubert",
     },
   },
   Object {
     "m": Object {
       "name": "Ignatz",
+      "val": "Ignatz",
     },
   },
   Object {
     "m": Object {
       "done": true,
       "title": "Learn magic",
+      "val": "Learn magic",
     },
   },
   Object {
     "m": Object {
-      "done": false,
-      "title": "Write more test cases",
-    },
-  },
-  Object {
-    "m": Object {
-      "done": false,
-      "title": "Write more test cases",
+      "name": "Olaf",
+      "val": "Olaf",
     },
   },
   Object {
     "m": Object {
       "name": "Paul",
+      "val": "Paul",
     },
   },
   Object {
     "m": Object {
-      "name": "Hubert",
+      "done": false,
+      "title": "Write more test cases",
+      "val": "Write more test cases",
+    },
+  },
+  Object {
+    "m": Object {
+      "done": false,
+      "title": "Write more test cases",
+      "val": "Write more test cases",
     },
   },
 ]

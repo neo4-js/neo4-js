@@ -4,7 +4,7 @@ describe("neo4js", () => {
   beforeAll(() => {
     neo4js.init({
       boltUri: "localhost",
-      boltPort: 10001,
+      boltPort: 10006,
     });
   });
 
